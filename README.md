@@ -1,3 +1,6 @@
+# Notion Documentation
+[![✗](https://www.notion.so/Documentation-1c754017cf6f81e89480f7398588c3a9?pvs=4)
+
 [![✗](https://img.shields.io/badge/Release-v1.1.0-ffb600.svg?style=for-the-badge)](https://github.com/agustin-golmar/Flex-Bison-Compiler/releases)
 
 [![✗](https://github.com/agustin-golmar/Flex-Bison-Compiler/actions/workflows/pipeline.yaml/badge.svg?branch=production)](https://github.com/agustin-golmar/Flex-Bison-Compiler/actions/workflows/pipeline.yaml)
