@@ -3,8 +3,9 @@
 [![✗](https://github.com/agustin-golmar/Flex-Bison-Compiler/actions/workflows/pipeline.yaml/badge.svg?branch=production)](https://github.com/agustin-golmar/Flex-Bison-Compiler/actions/workflows/pipeline.yaml)
 
 # Arcana Script Documentation
-[Ir a la documentacion]([https://link.com](https://www.notion.so/Unit-Testing-1c754017cf6f8163823ddaa8fa80ef0f?pvs=4))
+[Ir a la documentacion]((https://www.notion.so/Unit-Testing-1c754017cf6f8163823ddaa8fa80ef0f?pvs=4))
 https://www.notion.so/The-Great-Hall-1c754017cf6f8195baf4e966089621e3?pvs=4
+
 # Flex-Bison-Compiler
 
 A base compiler example, developed with Flex and Bison.
