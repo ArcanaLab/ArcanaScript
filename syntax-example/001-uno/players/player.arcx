@@ -1,0 +1,13 @@
+@export class Player is ArcanaPlayer {
+	
+    hand: List<UnoCard>;
+
+    constructor(
+        @hidden
+        hand: List<UnoCard>,
+    ) {
+		super();
+
+        this.hand = hand;
+	}
+}

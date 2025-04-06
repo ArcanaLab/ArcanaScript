@@ -1,0 +1,48 @@
+@export class DrawCardAction using ArcanaAction {
+    @exposed
+    dispatch: Function<void> = () {
+        #! Roba una carta del mazo !#
+    }
+}
+
+@export class PlayCardAction using ArcanaAction {
+    @exposed
+    dispatch: Function<void> = () {
+        #! Juega una carta !#
+    }  
+}
+
+@export class DrawTwoAction using ArcanaAction {
+    @exposed
+    dispatch: Function<void> = () {
+        #! El siguiente jugador roba dos cartas y pierde su turno !#
+    }
+}
+
+@export class ReverseAction using ArcanaAction {
+    @exposed
+    dispatch: Function<void> = () {
+        #! Invierte la dirección del juego !#
+    }
+}
+
+@export class SkipAction using ArcanaAction {
+    @exposed
+    dispatch: Function<void> = () {
+        #! El siguiente jugador pierde su turno !#
+    }
+}
+
+@export class WildAction using ArcanaAction {
+    @exposed
+    dispatch: Function<void> = () {
+        #! Permite al jugador cambiar el color en juego !#
+    }
+}
+
+@export class WildDrawFourAction using ArcanaAction {
+    @exposed
+    dispatch: Function<void> = () {
+        #! El jugador elige el color y el siguiente roba cuatro cartas y pierde su turno !#
+    }
+}

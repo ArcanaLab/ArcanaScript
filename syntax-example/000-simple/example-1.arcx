@@ -1,0 +1,41 @@
+class SimpleCardGame is ArcanaGame {
+    cards: SimpleDeck<SimpleCard>;
+    table: SimpleTable;
+
+    constructor(
+        @hidden
+        players: List<Player>,
+    ) {
+        super();
+    }
+
+    @override
+    init: Function<void> = () {
+        // Generar todas las cartas
+        @eternal
+        allCards: List<SimpleCard> = [
+            ...this._generateNumberCards(),
+        ];
+        
+        this.cards = SimpleDeck(allCards);
+        this.table = SimpleTable(this.cards, this.players);
+    }
+
+    @hidden
+    _generateNumberCards(): List<SimpleCard> {
+        @eternal
+        colors: List<String> = ["red", "blue"];
+        
+        @eternal
+        cards: List<SimpleCard> = [];
+        
+        for (color: String in colors) {
+            // Una carta de cada número (1-3) por color
+            for (num: int in 1..3) {
+                cards.add(SimpleCard(`${color}_${num}`, null, color, num, PlayCardAction()));
+            }
+        }
+        
+        return cards;
+    }
+}

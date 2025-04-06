@@ -1,0 +1,21 @@
+@export class UnoCard is ArcanaCard {
+	constructor(
+		art: Texture, 
+		borderTexture: Texture, 
+		value: int,
+		color: String,
+		action: ArcanaAction
+	) {
+		super(art, borderTexture, value);
+	}
+
+	setColor(color: String) {
+		this.color = color;
+	}
+
+	onClick: Function<void> = () {
+		action.dispatch(
+			// Acá debería
+		);
+	}
+}

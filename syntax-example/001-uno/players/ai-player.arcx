@@ -1,0 +1,11 @@
+@export class AIPlayer is ArcanaPlayer {
+	
+    @override
+    play: Function<void> = () {
+        #! Picks a random card from the player's hand and plays it !#
+
+		const card = this.hand.pickRandom();
+		this.playCard(card);
+    }
+	
+}

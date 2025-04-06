@@ -1,0 +1,103 @@
+class UnoGame is ArcanaGame {
+	cards: UnoDeck<UnoCard>;
+	table: UnoTable;
+
+    constructor(
+		@hidden
+		players: List<Player>,
+	) {
+		super();
+	}
+
+	#!
+		Se debe inicializar la mesa, los jugadores y las cartas.
+		En el caso de que no exista la función init en esta clase, Arcana lanzará un error durante
+		la ejecución del programa.
+
+		En el constructor de ArcanaGame se llama a la función init.
+	!#
+	@override
+	init: Function<void> = () {
+		// Generar todas las cartas
+		@eternal
+		allCards: List<UnoCard> = [
+			...this._generateNumberCards(),
+			...this._generateActionCards(),
+			...this._generateWildCards()
+		];
+		
+		this.cards = UnoDeck(allCards);
+		
+		this.table = UnoTable(
+			this.cards, 
+			this.players
+		);
+	}
+
+	#!
+		Genera las cartas de números.
+	!#
+	@hidden
+	_generateNumberCards(): List<UnoCard> {
+		@eternal
+		colors: List<String> = ["blue", "green", "red", "yellow"];
+		
+		@eternal
+		cards: List<UnoCard> = [];
+		
+		for (color: String in colors) {
+			// Una carta 0 por color
+			cards.add(UnoCard(`${color}_0`, null, color, 0, PlayCardAction()));
+			
+			// Dos cartas del 1-9 por color
+			for (num: int in 1..9) {
+				cards.add(UnoCard(`${color}_${num}`, null, color, num, PlayCardAction()));
+				cards.add(UnoCard(`${color}_${num}`, null, color, num, PlayCardAction()));
+			}
+		}
+		
+		return cards;
+	}
+
+	#!
+		Genera las cartas de acción.
+	!#
+	@hidden
+	_generateActionCards(): List<UnoCard> {
+
+		@eternal
+		colors: List<String> = ["blue", "green", "red", "yellow"];
+
+		@eternal
+		cards: List<UnoCard> = [];
+		
+		for (color: String in colors) {
+			// Dos cartas de cada acción por color
+			for (i: int in 0..2) {
+				cards.add(UnoCard(`${color}_draw2`, null, color, "draw2", DrawTwoAction()));
+				cards.add(UnoCard(`${color}_reverse`, null, color, "reverse", ReverseAction()));
+				cards.add(UnoCard(`${color}_skip`, null, color, "skip", SkipAction()));
+			}
+		}
+		
+		return cards;
+	}
+
+	#!
+		Genera las cartas de comodín.
+	!#
+	@hidden
+	_generateWildCards(): List<UnoCard> {
+		@eternal
+		cards: List<UnoCard> = [];
+		
+		// 4 de cada tipo de comodín
+		for (i: int in 0..4) {
+			cards.add(UnoCard("wild", null, "special", "wild", WildAction()));
+			cards.add(UnoCard("wild_draw4", null, "special", "wild_draw4", WildDrawFourAction()));
+		}
+		
+		return cards;
+	}
+
+}
