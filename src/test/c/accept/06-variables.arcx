@@ -1,0 +1,7 @@
+class GondorClass
+{
+	@exposed @eternal
+	whiteTower : String;
+	@shielded 
+	silverTree : String;
+}

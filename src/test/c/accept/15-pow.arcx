@@ -1,0 +1,11 @@
+class Mordor
+{
+		 mountDoom : Function<void> = ()
+		 {
+				 sam : int = 1;
+				 frodo : int = 4;
+				 gollum : int = 4;
+		 
+				 print(frodo ** gollum); #Potencia, Imprime 16.
+		 }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "arcana-syntax",
+  "displayName": "ArcanaScript Syntax",
+  "description": "Syntax highlighting for ArcanaScript (.arcx)",
+  "version": "0.0.1",
+  "publisher": "arcana",
+  "engines": {
+    "vscode": "^1.50.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "arcana",
+        "aliases": [
+          "ArcanaScript",
+          "arcana"
+        ],
+        "extensions": [
+          ".arcx"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "arcana",
+        "scopeName": "source.arcana",
+        "path": "./syntaxes/arcana.tmLanguage.json"
+      }
+    ]
+  }
+}

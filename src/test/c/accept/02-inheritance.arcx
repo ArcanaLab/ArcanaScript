@@ -1,0 +1,11 @@
+class ShireClass is FatherClass
+{
+		constructor(hasSecondBreakfast:bool, hungerMeter:float)
+		{
+			if(hasSecondBreakfast == false)
+			{
+				print("What about second breakfast");
+			}
+			super(hungerMeter);
+		}
+}

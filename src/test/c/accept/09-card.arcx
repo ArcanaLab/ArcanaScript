@@ -1,0 +1,30 @@
+class MyCustomCard is ArcanaCard 
+{
+	 props: UIProperties; #Estructura con las propiedades de UIElement que nos perimte 
+												# cambiar el tamaño o la posicion de la carta
+	 constructor(Texture art, Texture borderTexture, V value)
+	 {
+		 super(art, borderTexture, value);
+	 }
+	 
+	 props:UIProperties = new UIProperties; 
+	 props.size = new Vector2 (100,150);
+	 props.position = new Vector2 (0,0);
+	 
+	 @overload
+	 constructor(art:Texture, borderTexture: Texture,value:V, properties:UIProperties)
+	 {
+		 super(art, borderTexture, value, properties);
+	 }
+	 onHover: Function<void> = () => {
+			print("The eye is watching...");
+	 }
+	
+	 onClick: Function<void> = () => {
+			print("It is mine... my own... my precious.");
+	 }
+	
+	 onFocus: Function<void> = () => {
+			print("One ring to rule them all.");
+	 }
+}

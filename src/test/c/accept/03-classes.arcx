@@ -1,0 +1,13 @@
+class GondorClass
+{
+	@exposed @eternal
+	whiteTower : String;
+	@shielded 
+	silverTree : String;
+}
+
+class RohirrimClass{
+	@shielded 
+	goldenHall : String;
+	mearas : String;
+}
