@@ -21,17 +21,16 @@ void releaseProgram(Program * program) {
 		free(program);
 	}
 }
-#pragma region "Unused Code"
 /** PUBLIC FUNCTIONS */
-/**
-void releaseConstant(Constant * constant) {
+
+void releaseConstant(ConstantNode * constant) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (constant != NULL) {
 		free(constant);
 	}
 }
 
-void releaseExpression(Expression * expression) {
+void releaseExpression(ExpressionNode * expression) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (expression != NULL) {
 		switch (expression->type) {
@@ -42,27 +41,23 @@ void releaseExpression(Expression * expression) {
 				releaseExpression(expression->leftExpression);
 				releaseExpression(expression->rightExpression);
 				break;
-			case FACTOR:
-				releaseFactor(expression->factor);
-				break;
 		}
 		free(expression);
 	}
 }
 
-void releaseFactor(Factor * factor) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (factor != NULL) {
-		switch (factor->type) {
-			case CONSTANT:
-				releaseConstant(factor->constant);
-				break;
-			case EXPRESSION:
-				releaseExpression(factor->expression);
-				break;
-		}
-		free(factor);
-	}
-}
-*/
-#pragma endregion
+// void releaseFactor(FactorNode * factor) {
+// 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+// 	if (factor != NULL) {
+// 		switch (factor->type) {
+// 			case CONSTANT:
+// 				releaseConstant(factor->constant);
+// 				break;
+// 			case EXPRESSION:
+// 				releaseExpression(factor->expression);
+// 				break;
+// 		}
+// 		free(factor);
+// 	}
+// }
+

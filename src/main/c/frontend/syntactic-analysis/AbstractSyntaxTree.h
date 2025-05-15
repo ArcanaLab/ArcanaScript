@@ -15,19 +15,16 @@ void shutdownAbstractSyntaxTreeModule();
  */
 
  //@TODO: Destructors
-
-#pragma region Nodes
+	
 	typedef struct Program Program;
 	typedef struct ConstantNode ConstantNode;
 	typedef struct VariableDeclarationNode VariableDeclarationNode;
 	typedef struct ExpressionNode ExpressionNode;
-#pragma endregion
 
-#pragma region Types
-
-typedef enum TypeExpression {
+	
+ typedef enum TypeExpression {
 	ADDITION,
-	DIVISION,
+ 	DIVISION,
 	MULTIPLICATION,
 	SUBTRACTION,
 	EQUAL,
@@ -49,7 +46,6 @@ typedef enum TypeEnum {
     SHORT_TYPE
 } TypeEnum;
 
-#pragma endregion
 
 
 struct ConstantNode {
@@ -69,11 +65,12 @@ struct ConstantNode {
 
 struct Program {
 	VariableDeclarationNode * variableDeclaration;
+
 };
 
 struct VariableDeclarationNode {
-	char * name;
-	TypeEnum type;
+	char * identifier;
+	TypeEnum * type;
 	ExpressionNode * expression;
 };
 
@@ -92,57 +89,53 @@ struct ExpressionNode {
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
-/**
- * 
- * enum ExpressionType {
-	ADDITION,
-	DIVISION,
-	FACTOR,
-	MULTIPLICATION,
-	SUBTRACTION
-};
+// enum ExpressionType {
+// 	DIVISION,
+// 	FACTOR,
+// 	MULTIPLICATION,
+// 	SUBTRACTION
+// };
 
-enum FactorType {
-	CONSTANT,
-	EXPRESSION
-};
+// enum FactorType {
+// 	CONSTANT,
+// 	EXPRESSION
+// };
 
-struct Constant {
-	int value;
-};
+// struct Constant {
+// 	int value;
+// };
 
-struct Factor {
-	union {
-		Constant * constant;
-		Expression * expression;
-	};
-	FactorType type;
-};
+// struct Factor {
+// 	union {
+// 		ConstantNode * constant;
+// 		ExpressionType * expression;
+// 	};
+// 	FactorType type;
+// };
 
-struct Expression {
-	union {
-		Factor * factor;
-		struct {
-			Expression * leftExpression;
-			Expression * rightExpression;
-		};
-	};
-	ExpressionType type;
-};
+// struct Expression {
+// 	union {
+// 		Factor * factor;
+// 		struct {
+// 			Expression * leftExpression;
+// 			Expression * rightExpression;
+// 		};
+// 	};
+// 	TypeExpression type;
+// };
 
-struct Program {
-	Expression * expression;
-};
+// struct Program {
+// 	Expression * expression;
+// };
 
- */
 
 /**
  * Node recursive destructors.
+ */
 
-void releaseConstant(Constant * constant);
-void releaseExpression(Expression * expression);
-void releaseFactor(Factor * factor);
+void releaseConstant(ConstantNode * constant);
+void releaseExpression(ExpressionNode * expression);
+//void releaseFactor(Factor * factor);
 void releaseProgram(Program * program);
-*/
 
 #endif

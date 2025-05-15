@@ -16,15 +16,18 @@ void shutdownBisonActionsModule();
 
 /**
  * Bison semantic actions.
- */
-
-
+ */ 
 Program * ProgramSemanticAction(CompilerState * compilerState, ExpressionNode * expression);
-VariableDeclarationNode * VariableSemanticAction(char * name, TypeEnum * type, ExpressionNode * expression);
+VariableDeclarationNode * VariableDeclarationSemanticAction(char * name, TypeEnum * type, ExpressionNode * expression);
 ExpressionNode * ComparisonExpressionSemanticAction(ExpressionNode * leftExpression, ExpressionNode * rightExpression, TypeExpression comparisonOperator);
 ExpressionNode * ArithmeticExpressionSemanticAction(ExpressionNode * leftExpression, ExpressionNode * rightExpression, TypeExpression arithmeticOperator);
 
+
+// ConstantNode * ConstantExpressionSemanticAction(const char value);
+//VariableDeclarationNode * IdentifierExpressionSemanticAction(char * identifier, TypeEnum * type, ExpressionNode * expression);
 /** ===== Constants ===== */
+ConstantNode * ConstantExpressionSemanticAction(const char value);
+
 ConstantNode * CharConstantSemanticAction(const char value);
 ConstantNode * IntConstantSemanticAction(const int value);
 ConstantNode * FloatConstantSemanticAction(const float value);
@@ -35,15 +38,9 @@ ConstantNode * LongConstantSemanticAction(const long value);
 ConstantNode * ShortConstantSemanticAction(const short value);
 
 
-#pragma region "Unused Code"
-/*
-Constant * IntegerConstantSemanticAction(const int value);
-Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
-Expression * FactorExpressionSemanticAction(Factor * factor);
-Factor * ConstantFactorSemanticAction(Constant * constant);
-Factor * ExpressionFactorSemanticAction(Expression * expression);
-Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
-*/
-#pragma endregion 
+/** ===== Expressions ===== */
+// ExpressionNode * IdentifierExpressionSemanticAction(const char value);
+// ExpressionNode * ParenthesisExpressionSemanticAction(const char value);
+
 
 #endif

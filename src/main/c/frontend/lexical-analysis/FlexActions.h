@@ -17,35 +17,35 @@ void initializeFlexActionsModule();
 /** Shutdown module's internal state. */
 void shutdownFlexActionsModule();
 
-#pragma region Base TP Lexeme Actions
 
-   Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
-   Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-   Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
-
-#pragma endregion
+   // Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+   // Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+   // Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
 
-#pragma region Comment Lexeme Actions
 
-void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+   // void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+   // void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+   // Token ComparisonOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+
+Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-#pragma endregion
+Token CharLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token StringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token FloatLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token DoubleLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ShortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token LongLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token BooleanLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-VariableDeclarationNode * VariableSemanticAction(char * name, TypeEnum * type);
-
-#pragma region Comparison Lexeme Actions
-
-Token ComparisonOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
-
-#pragma endregion
-
-#pragma region Unknown Lexeme Actions
 
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-#pragma endregion
+Token SemicolonLexemeAction();
+
+Token ColonLexemeAction();
 
 #endif

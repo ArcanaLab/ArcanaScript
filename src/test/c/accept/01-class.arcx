@@ -1,8 +1,0 @@
-@exposed
-class MoriaClass 
-{
-	@exposed
-	sendMSG: Function<void> = () {
-		print("My cousin Balin would give us a royal welcome.");
-	}
-}

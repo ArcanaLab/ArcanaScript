@@ -1,5 +1,4 @@
 #include "backend/code-generation/Generator.h"
-#include "backend/domain-specific/Calculator.h"
 #include "frontend/lexical-analysis/FlexActions.h"
 #include "frontend/syntactic-analysis/AbstractSyntaxTree.h"
 #include "frontend/syntactic-analysis/BisonActions.h"
@@ -20,7 +19,6 @@ const int main(const int count, const char ** arguments) {
 	initializeBisonActionsModule();
 	initializeSyntacticAnalyzerModule();
 	initializeAbstractSyntaxTreeModule();
-	initializeCalculatorModule();
 	initializeGeneratorModule();
 
 	// Logs the arguments of the application.
@@ -41,15 +39,15 @@ const int main(const int count, const char ** arguments) {
 		// ----------------------------------------------------------------------------------------
 		// Beginning of the Backend... ------------------------------------------------------------
 		logDebugging(logger, "Computing expression value...");
-		ComputationResult computationResult = computeExpression(program->expression);
-		if (computationResult.succeed) {
-			compilerState.value = computationResult.value;
-			generate(&compilerState);
-		}
-		else {
-			logError(logger, "The computation phase rejects the input program.");
-			compilationStatus = FAILED;
-		}
+		// ComputationResult computationResult = computeExpression(program->expression);
+		// if (computationResult.succeed) {
+		// 	compilerState.value = computationResult.value;
+		// 	generate(&compilerState);
+		// }
+		// else {
+		// 	logError(logger, "The computation phase rejects the input program.");
+		// 	compilationStatus = FAILED;
+		// }
 		// ...end of the Backend. -----------------------------------------------------------------
 		// ----------------------------------------------------------------------------------------
 	}
@@ -61,7 +59,6 @@ const int main(const int count, const char ** arguments) {
 	releaseProgram(program);
 	logDebugging(logger, "Releasing modules resources...");
 	shutdownGeneratorModule();
-	shutdownCalculatorModule();
 	shutdownAbstractSyntaxTreeModule();
 	shutdownSyntacticAnalyzerModule();
 	shutdownBisonActionsModule();

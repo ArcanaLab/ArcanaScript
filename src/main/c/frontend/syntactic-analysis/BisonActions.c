@@ -46,10 +46,10 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 	return program;
 }
 
-VariableDeclarationNode * VariableSemanticAction(char * name, TypeEnum * type, ExpressionNode * expression) {	
+VariableDeclarationNode * VariableDeclarationSemanticAction(char * identifier, TypeEnum * type, ExpressionNode * expression) {	
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	VariableDeclarationNode * variableDeclaration = calloc(1, sizeof(VariableDeclarationNode));
-	variableDeclaration->name = name;
+	variableDeclaration->identifier = identifier;
 	variableDeclaration->type = type;
 	variableDeclaration->expression = expression;
 	return variableDeclaration;
@@ -85,6 +85,12 @@ Program * ProgramSemanticAction(CompilerState * compilerState, ExpressionNode * 
 
  /*============================== CONSTANT SEMANTIC ACTIONS ====================================*/
 
+ConstantNode * ConstantExpressionSemanticAction(const char value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
+	return constant;
+}
+
 ConstantNode * CharConstantSemanticAction(const char value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
@@ -92,6 +98,7 @@ ConstantNode * CharConstantSemanticAction(const char value) {
 	constant->type = CHAR_TYPE;
 	return constant;
 }
+
 ConstantNode * IntConstantSemanticAction(const int value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
@@ -99,6 +106,7 @@ ConstantNode * IntConstantSemanticAction(const int value) {
 	constant->type = INT_TYPE;
 	return constant;
 }
+
 ConstantNode * FloatConstantSemanticAction(const float value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
@@ -142,7 +150,6 @@ ConstantNode * ShortConstantSemanticAction(const short value) {
 	return constant;
 }
 
-#pragma region "Unused Code"
 // /* PUBLIC FUNCTIONS */
 
 // Constant * IntegerConstantSemanticAction(const int value) {
@@ -193,4 +200,3 @@ ConstantNode * ShortConstantSemanticAction(const short value) {
 // 	factor->type = EXPRESSION;
 // 	return factor;
 // }
-#pragma endregion

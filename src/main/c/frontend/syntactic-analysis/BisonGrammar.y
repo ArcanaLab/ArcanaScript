@@ -11,7 +11,8 @@
 %union {
 	/** Terminals. */
 	// Variables
-	char * varname;
+	int varType;
+	char * identifier;
 
 	// Variable types
 	int intType;
@@ -19,7 +20,8 @@
 	float floatType;
 	double doubleType;
 	char * stringType;
-	bool boolType;
+
+	boolean boolType;
 	long longType;
 	short shortType;
 	void * ptr;
@@ -28,10 +30,10 @@
 
 	/** Non-terminals. */
 	VariableDeclarationNode *variable_declaration;
-	VariableTypeNode *variable_type;
-	ExpresionNode *comparison_expression;
-	ExpresionNode *arithmetic_expression;
-	ExpresionNode *expression;
+	// VariableTypeNode *variable_type;
+	ExpressionNode *comparison_expression;
+	ExpressionNode *arithmetic_expression;
+	ExpressionNode *expression;
 	ConstantNode *constant;
 	Program *program;
 }
@@ -50,8 +52,8 @@
  */
 
 /** Terminals. */
-%token <varname> IDENTIFIER
-%token INT_TYPE CHAR_TYPE DOUBLE_TYPE FLOAT_TYPE STRING_TYPE BOOLEAN_TYPE LONG_TYPE SHORT_TYPE
+%token <identifier> IDENTIFIER
+%token <varType> TYPE
 /** ===== Variable Types ===== */
 %token <charType> CHAR
 %token <intType> INTEGER
@@ -67,23 +69,29 @@
 %token <token> SEMICOLON
 %token <token> COLON
 
-/** ===== Assignartion ===== */
+/** ===== Assignment ===== */
 %token <token> ASIGNATION
+%token <token> ADD_ASIGNATION
+%token <token> SUB_ASIGNATION
+%token <token> MUL_ASIGNATION
 
 /** ===== Comparison ===== */
-%token <token> EQUAL
-%token <token> GREATER
-%token <token> GREATER_EQUAL
-%token <token> LESS
-%token <token> LESS_EQUAL
-%token <token> NOT_EQUAL
+ %token <token> EQUAL_SYMBOL 
+%token <token> GREATER_SYMBOL
+%token <token> GREATER_EQUAL_SYMBOL
+%token <token> LESS_SYMBOL
+%token <token> LESS_EQUAL_SYMBOL
+%token <token> NOT_EQUAL_SYMBOL
 
 /** ===== Arithmetic ===== */
-%token <token> ADDITION
-%token <token> DIVISION
-%token <token> MULTIPLICATION
-%token <token> SUBTRACTION
+%token <token> ADD
+%token <token> DIV
+%token <token> MUL
+%token <token> SUB
 
+/** ===== Parenthesis ===== */
+%token <token> OPEN_PARENTHESIS
+%token <token> CLOSE_PARENTHESIS
 
 %token <token> UNKNOWN
 
@@ -91,9 +99,9 @@
 %type <variable_declaration> variable_declaration
 %type <expression> expression
 %type <comparison_expression> comparison_expression
-%type <arithmetic_expression> arithmetic_expression
+%type <arithmetic_expression> arithmetic_expression 
 %type <constant> constant
-%type <variable_type> variable_type
+%type <varType> variable_type
 %type <program> program
 /**
  * Precedence and associativity.
@@ -101,31 +109,14 @@
  * @see https://www.gnu.org/software/bison/manual/html_node/Precedence.html
  */
  
-%left EQUAL NOT_EQUAL
+/* %left EQUAL NOT_EQUAL
 %left LESS LESS_EQUAL GREATER GREATER_EQUAL
+%left ADD SUB
+%left MUL DIV
+%left OPEN_PARENTHESIS CLOSE_PARENTHESIS */
 
 %%
 
-// IMPORTANT: To use λ in the following grammar, use the %empty symbol.
-/**
-program: expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
-	;
-
-expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
-	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
-	| expression[left] MUL expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
-	| expression[left] SUB expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
-	        4           +         3
-	| factor														{ $$ = FactorExpressionSemanticAction($1); } // FACTOR Y NO LA COMIDA
-	;
-factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
-	| constant														{ $$ = ConstantFactorSemanticAction($1); }
-	;
-
-constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
-	;
-
- */
 program: 
 	variable_declaration																{$$ = ProgramSemanticAction(currentCompilerState(),$1);}
 	;
@@ -142,60 +133,39 @@ variable_declaration:
 	;
 
 variable_type:
-	INT_TYPE 																	{ $$ = INT_TYPE; }
-	| CHAR_TYPE 																{ $$ = CHAR_TYPE }
-	| FLOAT_TYPE 																{ $$ = DOUBLE_TYPE; }
-	| DOUBLE_TYPE 																{ $$ = FLOAT_TYPE; }
-	| STRING_TYPE 																{ $$ = STRING_TYPE; }
-	| BOOLEAN_TYPE 																{ $$ = BOOLEAN_TYPE; }
-	| LONG_TYPE 																{ $$ = LONG_TYPE; }
-	| SHORT_TYPE 																{ $$ = LONG_TYPE; }
+	TYPE 																	{ $$ = $1; }
+	;
 
 expression:
-	arithmetic_expression { $$ = $1; }
-    | comparison_expression { $$ = $1; }
-    | constant              { $$ = ConstantExpressionSemanticAction($1); }
-    | IDENTIFIER            { /* Handle variable references */ }
+     constant              { $$ = ConstantExpressionSemanticAction($1); }
+    //| IDENTIFIER            { $$ = IdentifierExpressionSemanticAction($1); }
+    //| OPEN_PARENTHESIS expression CLOSE_PARENTHESIS { $$ = ParenthesisExpressionSemanticAction($2); }
     ;
 
-comparison_expression:
-//True or False  
-	comparison_expression[left] EQUAL comparison_expression[right]	 					{ $$ = ComparisonExpressionSemanticAction($left, $right, EQUAL); }
-	|comparison_expression[left] GREATER comparison_expression[right]					{ $$ = ComparisonExpressionSemanticAction($left, $right, GREATER); }
-	|comparison_expression[left] GREATER_EQUAL comparison_expression[right]				{ $$ = ComparisonExpressionSemanticAction($left, $right, GREATER_EQUAL); }
-	|comparison_expression[left] LESS comparison_expression[right]						{ $$ = ComparisonExpressionSemanticAction($left, $right, LESS); } 
-	|comparison_expression[left] LESS_EQUAL comparison_expression[right]				{ $$ = ComparisonExpressionSemanticAction($left, $right, LESS_EQUAL); } 
-	|comparison_expression[left] NOT_EQUAL comparison_expression[right]					{ $$ = ComparisonExpressionSemanticAction($left, $right, NOT_EQUAL); } 
-	|constant																			{ $$ = ConstantExpresionSemanticAction($1); }	
+ comparison_expression:
+    expression EQUAL_SYMBOL expression	 					{ $$ = ComparisonExpressionSemanticAction($1, $3, EQUAL); }
+	| expression GREATER_SYMBOL expression					{ $$ = ComparisonExpressionSemanticAction($1, $3, GREATER); }
+	| expression GREATER_EQUAL_SYMBOL expression			{ $$ = ComparisonExpressionSemanticAction($1, $3, GREATER_EQUAL); }
+	| expression LESS_SYMBOL expression						{ $$ = ComparisonExpressionSemanticAction($1, $3, LESS); } 
+	| expression LESS_EQUAL_SYMBOL expression				{ $$ = ComparisonExpressionSemanticAction($1, $3, LESS_EQUAL); } 
+	| expression NOT_EQUAL_SYMBOL expression				{ $$ = ComparisonExpressionSemanticAction($1, $3, NOT_EQUAL); } 
 	;
 
 arithmetic_expression:
-// exp op exp = something
-	arithmetic_expression[left] ADDITION arithmetic_expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); } 
-	|arithmetic_expression[left] DIVISION arithmetic_expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
- 	|arithmetic_expression[left] MULTIPLICATION arithmetic_expression[right]			{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
-	|arithmetic_expression[left] SUBTRACTION arithmetic_expression[right]				{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
-	|constant																			{ $$ = ConstantExpresionSemanticAction($1); }	
+	expression ADD expression					{ $$ = ArithmeticExpressionSemanticAction($1, $3, ADD); } 
+	| expression DIV expression					{ $$ = ArithmeticExpressionSemanticAction($1, $3, DIV); }
+ 	| expression MUL expression					{ $$ = ArithmeticExpressionSemanticAction($1, $3, MUL); }
+	| expression SUB expression					{ $$ = ArithmeticExpressionSemanticAction($1, $3, SUB); } 
 	;
 
 constant:
-	//char: 'x'
-	CHAR 																			{ $$ = CharConstantSemanticAction($1); }
-	//Integer: 3
-	|INTEGER 																	    { $$ = IntegerConstantSemanticAction($1); }
-	//Double: 3.0
-	|DOUBLE																	        { $$ = FloatConstantSemanticAction($1); }
-	//Float: 3.0f
-	|FLOAT 																			{ $$ = DoubleConstantSemanticAction($1); }
-	//String: "Tres"
-	|STRING										 									{ $$ = StringConstantSemanticAction($1); }
-	//Boolean: true or false
-	|BOOLEAN																		{ $$ = BooleanConstantSemanticAction($1); }
-	//Long: 3L
-	|LONG																			{ $$ = LongConstantSemanticAction($1); }
-	//Short: 3S
-	|SHORT 																			{ $$ = ShortConstantSemanticAction($1); }
-	//Null: "NULL"
-	|NULL_LITERAL																	{ $$ = NullConstantSemanticAction($1); }
+	CHAR 										{ $$ = CharConstantSemanticAction($1); }
+	| INTEGER 									{ $$ = IntConstantSemanticAction($1); }
+	| DOUBLE									{ $$ = DoubleConstantSemanticAction($1); }
+	| FLOAT 									{ $$ = FloatConstantSemanticAction($1); }
+	| STRING									{ $$ = StringConstantSemanticAction($1); }
+	| BOOLEAN									{ $$ = BooleanConstantSemanticAction($1); }
+	| LONG										{ $$ = LongConstantSemanticAction($1); }
+	| SHORT 									{ $$ = ShortConstantSemanticAction($1); }
 	;
 %%
