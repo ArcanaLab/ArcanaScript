@@ -68,7 +68,11 @@ char * concatenate(const unsigned int count, ...) {
 	va_end(arguments);
 	return string;
 }
-
+/*
+	 * Returns a string that contains the escaped sequence of the control
+ * characters in the given string. The returned string must be freed by the
+ * caller.
+ */
 char * escape(const char * string) {
 	unsigned int length = 1;
 	for (unsigned int k = 0; 0 < string[k]; ++k) {

@@ -10,6 +10,6 @@ class QuestOfTheRing using IRingBearerTrial
 	 @override
 	 invokeRingBearer: Function<void> = () 
 	 {
-		 print("Even the smallest function can change the fate of the code")
+		print("Even the smallest function can change the fate of the code")
 	 }
 }

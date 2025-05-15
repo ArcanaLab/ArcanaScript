@@ -16,46 +16,7 @@ void shutdownFlexActionsModule() {
 	}
 }
 
-/* PRIVATE FUNCTIONS */
-
-static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyzerContext * lexicalAnalyzerContext);
-
-/**
- * Logs a lexical-analyzer context in DEBUGGING level.
- */
-static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	char * escapedLexeme = escape(lexicalAnalyzerContext->lexeme);
-	logDebugging(_logger, "%s: %s (context = %d, length = %d, line = %d)",
-		functionName,
-		escapedLexeme,
-		lexicalAnalyzerContext->currentContext,
-		lexicalAnalyzerContext->length,
-		lexicalAnalyzerContext->line);
-	free(escapedLexeme);
-}
-
-/* PUBLIC FUNCTIONS */
-
-void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	if (_logIgnoredLexemes) {
-		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	}
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-}
-
-void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	if (_logIgnoredLexemes) {
-		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	}
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-}
-
-void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	if (_logIgnoredLexemes) {
-		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	}
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-}
+#pragma region Base TP Lexeme Actions
 
 Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
@@ -77,6 +38,61 @@ Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, T
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
 }
+
+#pragma endregion
+/* PRIVATE FUNCTIONS */
+
+static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+/**
+ * Logs a lexical-analyzer context in DEBUGGING level.
+ */
+static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	char * escapedLexeme = escape(lexicalAnalyzerContext->lexeme);
+	logDebugging(_logger, "%s: %s (context = %d, length = %d, line = %d)",
+		functionName,
+		escapedLexeme,
+		lexicalAnalyzerContext->currentContext,
+		lexicalAnalyzerContext->length,
+		lexicalAnalyzerContext->line);
+	free(escapedLexeme);
+}
+
+/* PUBLIC FUNCTIONS */
+
+#pragma region Comment Lexeme Actions
+void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	if (_logIgnoredLexemes) {
+		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	}
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+}
+
+void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	if (_logIgnoredLexemes) {
+		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	}
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+}
+
+void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	if (_logIgnoredLexemes) {
+		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	}
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+}
+#pragma endregion
+
+
+
+Token ComparisonOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return token;
+}
+
+
 
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
