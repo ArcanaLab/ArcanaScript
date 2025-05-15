@@ -17,10 +17,9 @@
 
 	/** Non-terminals. */
 	VariableDeclarationNode *variable_declaration;
-	Expression *expression;
-	ComparisonExpression *comparison_expression;
-	ArithmeticExpression *arithmetic_expression;
-	Constant *constant;
+	ExpresionNode *comparison_expression;
+	ExpresionNode *arithmetic_expression;
+	ConstantNode *constant;
 	Program *program;
 }
 
@@ -76,7 +75,6 @@
 
 /** Non-terminals. */
 %type <variable_declaration> variable_declaration
-%type <expression> expression
 %type <comparison_expression> comparison_expression
 %type <arithmetic_expression> arithmetic_expression
 %type <constant> constant
@@ -122,7 +120,9 @@ program:
 // var varname: type = 3;
 variable_declaration: 
 	VARIABLE_NAME[varname] COLON TYPE[vartype] SEMICOLON			                    { $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype); }
-    |VARIABLE_NAME[varname] COLON TYPE[vartype] ASIGNATION expression[expr] SEMICOLON 	{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype, $expr); }
+    |VARIABLE_NAME[varname] COLON TYPE[vartype] ASIGNATION comparison_expression[expr] SEMICOLON 	{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype, $expr); }
+	|VARIABLE_NAME[varname] COLON TYPE[vartype] ASIGNATION arithmetic_expression[expr] SEMICOLON 	{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype, $expr); }
+	|VARIABLE_NAME[varname] COLON TYPE[vartype] ASIGNATION constant[expr] SEMICOLON 				{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype, $expr); }
 	;
 	
 
