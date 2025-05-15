@@ -71,6 +71,78 @@ ExpressionNode * ArithmeticExpressionSemanticAction(ExpressionNode * leftExpress
 	expression->type = arithmeticOperator;
 	return expression;
 }
+
+ /*============================== PROGRAM SEMANTIC ACTIONS ====================================*/
+
+
+Program * ProgramSemanticAction(CompilerState * compilerState, ExpressionNode * expression){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program * program = calloc(1, sizeof(Program));
+	program->variableDeclaration = expression; 
+	return program;
+
+}
+
+ /*============================== CONSTANT SEMANTIC ACTIONS ====================================*/
+
+ConstantNode * CharConstantSemanticAction(const char value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
+	constant->charValue = value;
+	constant->type = CHAR_TYPE;
+	return constant;
+}
+ConstantNode * IntConstantSemanticAction(const int value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
+	constant->intValue = value;
+	constant->type = INT_TYPE;
+	return constant;
+}
+ConstantNode * FloatConstantSemanticAction(const float value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
+	constant->floatValue = value;
+	constant->type = FLOAT_TYPE;
+	return constant;
+}
+ConstantNode * DoubleConstantSemanticAction(const double value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
+	constant->doubleValue = value;
+	constant->type = DOUBLE_TYPE;
+	return constant;
+}
+ConstantNode * StringConstantSemanticAction(const char * value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
+	constant->stringValue = value;
+	constant->type = STRING_TYPE;
+	return constant;
+}
+ConstantNode * BooleanConstantSemanticAction(const boolean value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
+	constant->booleanValue = value;
+	constant->type = BOOLEAN_TYPE;
+	return constant;
+}
+ConstantNode * LongConstantSemanticAction(const long value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
+	constant->longValue = value;
+	constant->type = LONG_TYPE;
+	return constant;
+}
+ConstantNode * ShortConstantSemanticAction(const short value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ConstantNode * constant = calloc(1, sizeof(ConstantNode));
+	constant->shortValue = value;
+	constant->type = SHORT_TYPE;
+	return constant;
+}
+
+#pragma region "Unused Code"
 // /* PUBLIC FUNCTIONS */
 
 // Constant * IntegerConstantSemanticAction(const int value) {
@@ -121,4 +193,4 @@ ExpressionNode * ArithmeticExpressionSemanticAction(ExpressionNode * leftExpress
 // 	factor->type = EXPRESSION;
 // 	return factor;
 // }
-
+#pragma endregion

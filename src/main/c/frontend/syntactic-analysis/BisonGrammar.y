@@ -28,8 +28,10 @@
 
 	/** Non-terminals. */
 	VariableDeclarationNode *variable_declaration;
+	VariableTypeNode *variable_type;
 	ExpresionNode *comparison_expression;
 	ExpresionNode *arithmetic_expression;
+	ExpresionNode *expression;
 	ConstantNode *constant;
 	Program *program;
 }
@@ -48,7 +50,8 @@
  */
 
 /** Terminals. */
-%token <varname> VARIABLE_NAME
+%token <varname> IDENTIFIER
+%token INT_TYPE CHAR_TYPE DOUBLE_TYPE FLOAT_TYPE STRING_TYPE BOOLEAN_TYPE LONG_TYPE SHORT_TYPE
 /** ===== Variable Types ===== */
 %token <charType> CHAR
 %token <intType> INTEGER
@@ -86,9 +89,11 @@
 
 /** Non-terminals. */
 %type <variable_declaration> variable_declaration
+%type <expression> expression
 %type <comparison_expression> comparison_expression
 %type <arithmetic_expression> arithmetic_expression
 %type <constant> constant
+%type <variable_type> variable_type
 %type <program> program
 /**
  * Precedence and associativity.
@@ -126,16 +131,32 @@ program:
 	;
 
 // var 
-// var varname: type;
-// var varname: type = expression;
-// var varname: type = 3;
+// varname: type;
+// varname: type = expression;
+// varname: type = 3;
+// varname: type = varnameB;
+
 variable_declaration: 
-	VARIABLE_NAME[varname] COLON TYPE[vartype] SEMICOLON			                    			{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype); }
-    |VARIABLE_NAME[varname] COLON TYPE[vartype] ASIGNATION comparison_expression[expr] SEMICOLON 	{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype, $expr); }
-	|VARIABLE_NAME[varname] COLON TYPE[vartype] ASIGNATION arithmetic_expression[expr] SEMICOLON 	{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype, $expr); }
-	|VARIABLE_NAME[varname] COLON TYPE[vartype] ASIGNATION constant[expr] SEMICOLON 				{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype, $expr); }
+	IDENTIFIER COLON variable_type SEMICOLON 									{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
+	| IDENTIFIER COLON variable_type ASIGNATION expression SEMICOLON 			{ $$ = VariableDeclarationSemanticAction($1, $3, $5); }
 	;
-	
+
+variable_type:
+	INT_TYPE 																	{ $$ = INT_TYPE; }
+	| CHAR_TYPE 																{ $$ = CHAR_TYPE }
+	| FLOAT_TYPE 																{ $$ = DOUBLE_TYPE; }
+	| DOUBLE_TYPE 																{ $$ = FLOAT_TYPE; }
+	| STRING_TYPE 																{ $$ = STRING_TYPE; }
+	| BOOLEAN_TYPE 																{ $$ = BOOLEAN_TYPE; }
+	| LONG_TYPE 																{ $$ = LONG_TYPE; }
+	| SHORT_TYPE 																{ $$ = LONG_TYPE; }
+
+expression:
+	arithmetic_expression { $$ = $1; }
+    | comparison_expression { $$ = $1; }
+    | constant              { $$ = ConstantExpressionSemanticAction($1); }
+    | IDENTIFIER            { /* Handle variable references */ }
+    ;
 
 comparison_expression:
 //True or False  
@@ -157,26 +178,24 @@ arithmetic_expression:
 	|constant																			{ $$ = ConstantExpresionSemanticAction($1); }	
 	;
 
-
-
 constant:
 	//char: 'x'
-	CHAR[char] 																			{ $$ = CharConstantSemanticAction($char); }
+	CHAR 																			{ $$ = CharConstantSemanticAction($1); }
 	//Integer: 3
-	|INTEGER[integer] 																	{ $$ = IntegerConstantSemanticAction($integer); }
+	|INTEGER 																	    { $$ = IntegerConstantSemanticAction($1); }
 	//Double: 3.0
-	|DOUBLE[double] 																	{ $$ = FloatConstantSemanticAction($float); }
+	|DOUBLE																	        { $$ = FloatConstantSemanticAction($1); }
 	//Float: 3.0f
-	|FLOAT[float] 																		{ $$ = FloatConstantSemanticAction($float); }
+	|FLOAT 																			{ $$ = DoubleConstantSemanticAction($1); }
 	//String: "Tres"
-	|STRING[string] 										 							{ $$ = StringConstantSemanticAction($string); }
+	|STRING										 									{ $$ = StringConstantSemanticAction($1); }
 	//Boolean: true or false
-	|BOOLEAN[bool] 																		{ $$ = BooleanConstantSemanticAction($bool); }
+	|BOOLEAN																		{ $$ = BooleanConstantSemanticAction($1); }
 	//Long: 3L
-	|LONG[long] 																		{ $$ = LongConstantSemanticAction($long); }
+	|LONG																			{ $$ = LongConstantSemanticAction($1); }
 	//Short: 3S
-	|SHORT[short] 																		{ $$ = ShortConstantSemanticAction($short); }
+	|SHORT 																			{ $$ = ShortConstantSemanticAction($1); }
 	//Null: "NULL"
-	|NULL[null] 																		{ $$ = NullConstantSemanticAction($null); }
+	|NULL_LITERAL																	{ $$ = NullConstantSemanticAction($1); }
 	;
 %%

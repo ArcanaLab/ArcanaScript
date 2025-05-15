@@ -38,22 +38,32 @@ typedef enum TypeExpression {
 	NOT_EQUAL
 } TypeExpression;
 
-typedef enum TypeEnum{
-	CHAR_TYPE,
-	INT_TYPE,
-	DOUBLE_TYPE,
-	FLOAT_TYPE,
-	STRING_TYPE,
-	BOOLEAN_TYPE,
-	LONG_TYPE,
-	SHORT_TYPE
+typedef enum TypeEnum {
+    CHAR_TYPE,
+    INT_TYPE,
+    DOUBLE_TYPE,
+    FLOAT_TYPE,
+    STRING_TYPE,
+    BOOLEAN_TYPE,
+    LONG_TYPE,
+    SHORT_TYPE
 } TypeEnum;
 
 #pragma endregion
 
 
 struct ConstantNode {
-	TypeEnum value;
+	union {
+		char charValue;
+		int intValue;
+		double doubleValue;
+		float floatValue;
+		char * stringValue;
+		boolean booleanValue;
+		long longValue;
+		short shortValue;
+	};
+	TypeEnum type;
 };
 
 
@@ -76,6 +86,8 @@ struct ExpressionNode {
 	};
 	TypeExpression type;
 };
+
+
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
