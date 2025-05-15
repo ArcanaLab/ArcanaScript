@@ -14,6 +14,14 @@ void shutdownAbstractSyntaxTreeModule() {
 	}
 }
 
+void releaseProgram(Program * program) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (program != NULL) {
+		releaseExpression(program->variableDeclaration);
+		free(program);
+	}
+}
+#pragma region "Unused Code"
 /** PUBLIC FUNCTIONS */
 /**
 void releaseConstant(Constant * constant) {
@@ -57,11 +65,4 @@ void releaseFactor(Factor * factor) {
 	}
 }
 */
-
-void releaseProgram(Program * program) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (program != NULL) {
-		releaseExpression(program->expression);
-		free(program);
-	}
-}
+#pragma endregion
