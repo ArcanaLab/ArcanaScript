@@ -10,9 +10,20 @@
 
 %union {
 	/** Terminals. */
-
-	TypeEnum varType;
+	// Variables
 	char * varname;
+
+	// Variable types
+	int intType;
+	char charType;
+	float floatType;
+	double doubleType;
+	char * stringType;
+	bool boolType;
+	long longType;
+	short shortType;
+	void * ptr;
+	
 	Token token;
 
 	/** Non-terminals. */
@@ -37,18 +48,18 @@
  */
 
 /** Terminals. */
-%token <varType> TYPE
 %token <varname> VARIABLE_NAME
 /** ===== Variable Types ===== */
-%token <token> CHAR
-%token <token> INTEGER
-%token <token> DOUBLE
-%token <token> FLOAT
-%token <token> STRING
-%token <token> BOOLEAN
-%token <token> LONG
-%token <token> SHORT
-%token <token> NULL
+%token <charType> CHAR
+%token <intType> INTEGER
+%token <doubleType> DOUBLE
+%token <floatType> FLOAT
+%token <stringType> STRING
+%token <boolType> BOOLEAN
+%token <longType> LONG
+%token <shortType> SHORT
+%token <ptr> NULL_LITERAL
+
 /** ===== Atomics ===== */
 %token <token> SEMICOLON
 %token <token> COLON
@@ -119,7 +130,7 @@ program:
 // var varname: type = expression;
 // var varname: type = 3;
 variable_declaration: 
-	VARIABLE_NAME[varname] COLON TYPE[vartype] SEMICOLON			                    { $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype); }
+	VARIABLE_NAME[varname] COLON TYPE[vartype] SEMICOLON			                    			{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype); }
     |VARIABLE_NAME[varname] COLON TYPE[vartype] ASIGNATION comparison_expression[expr] SEMICOLON 	{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype, $expr); }
 	|VARIABLE_NAME[varname] COLON TYPE[vartype] ASIGNATION arithmetic_expression[expr] SEMICOLON 	{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype, $expr); }
 	|VARIABLE_NAME[varname] COLON TYPE[vartype] ASIGNATION constant[expr] SEMICOLON 				{ $$ = VariableDeclarationSemanticAction(currentCompilerState(), $varname, $vartype, $expr); }

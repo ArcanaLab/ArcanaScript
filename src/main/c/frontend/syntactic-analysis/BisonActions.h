@@ -28,6 +28,19 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 */
 Program * ProgramSemanticAction(CompilerState * compilerState, ExpressionNode * expression);
 VariableDeclarationNode * VariableSemanticAction(char * name, TypeEnum * type);
+ExpressionNode * ComparisonExpressionSemanticAction(ExpressionNode * leftExpression, ExpressionNode * rightExpression, TypeExpression comparisonOperator);
+ExpressionNode * ArithmeticExpressionSemanticAction(ExpressionNode * leftExpression, ExpressionNode * rightExpression, TypeExpression arithmeticOperator);
+
+/** ===== Constants ===== */
+ConstantNode * CharConstantSemanticAction(const char value);
+ConstantNode * IntConstantSemanticAction(const int value);
+ConstantNode * FloatConstantSemanticAction(const float value);
+ConstantNode * DoubleConstantSemanticAction(const double value);
+ConstantNode * StringConstantSemanticAction(const char * value);
+ConstantNode * BooleanConstantSemanticAction(const boolean value);
+ConstantNode * LongConstantSemanticAction(const long value);
+ConstantNode * ShortConstantSemanticAction(const short value);
+
 
 
 #endif

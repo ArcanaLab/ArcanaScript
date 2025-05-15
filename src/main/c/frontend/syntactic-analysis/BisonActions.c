@@ -55,6 +55,22 @@ VariableDeclarationNode * VariableSemanticAction(char * name, TypeEnum * type, E
 	return variableDeclaration;
 }
 
+ExpressionNode * ComparisonExpressionSemanticAction(ExpressionNode * leftExpression, ExpressionNode * rightExpression, TypeExpression comparisonOperator){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ExpressionNode * expression = calloc(1, sizeof(ExpressionNode));
+	expression->leftExpression = leftExpression;
+	expression->rightExpression = rightExpression;
+	expression->type = comparisonOperator;
+	return expression;
+}
+ExpressionNode * ArithmeticExpressionSemanticAction(ExpressionNode * leftExpression, ExpressionNode * rightExpression, TypeExpression arithmeticOperator){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ExpressionNode * expression = calloc(1, sizeof(ExpressionNode));
+	expression->leftExpression = leftExpression;
+	expression->rightExpression = rightExpression;
+	expression->type = arithmeticOperator;
+	return expression;
+}
 // /* PUBLIC FUNCTIONS */
 
 // Constant * IntegerConstantSemanticAction(const int value) {
