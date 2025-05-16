@@ -18,6 +18,7 @@ void shutdownAbstractSyntaxTreeModule() {
 void releaseConstant(Constant * constant) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (constant != NULL) {
+		free(constant->value);
 		free(constant);
 	}
 }
