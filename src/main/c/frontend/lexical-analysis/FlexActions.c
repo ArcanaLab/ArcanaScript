@@ -83,3 +83,33 @@ Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return UNKNOWN;
 }
+
+
+Token NameLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->name = strdup(lexicalAnalyzerContext->lexeme);
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return NAME;	
+}
+
+Token SemicolonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = SEMICOLON;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);	
+	return SEMICOLON;
+}
+
+Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = COLON;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return COLON;
+}
+
+Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, VariableType varType) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->varType = varType;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return TYPE;
+}
+

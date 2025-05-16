@@ -1,6 +1,7 @@
 %{
 
 #include "FlexActions.h"
+#include <stdlib.h>
 
 %}
 
@@ -23,15 +24,12 @@
  * @see https://westes.github.io/flex/manual/Patterns.html
  */
 
+digit			      [0-9]
+char                  [a-zA-Z_]
+name            {char}({char}|{digit})*
+
 %%
-
-"/*"								{ BEGIN(MULTILINE_COMMENT); BeginMultilineCommentLexemeAction(createLexicalAnalyzerContext()); }
-<MULTILINE_COMMENT>"*/"				{ EndMultilineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
-<MULTILINE_COMMENT>[[:space:]]+		{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
-<MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
-<MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
-
-"-"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), SUB); }
+"-"						            { return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), MUL); }
 "/"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), DIV); }
 "+"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), ADD); }
@@ -39,11 +37,15 @@
 "("									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), OPEN_PARENTHESIS); }
 ")"									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), CLOSE_PARENTHESIS); }
 
+":"                                 { return ColonLexemeAction(createLexicalAnalyzerContext()); }
+";"                                 { return SemicolonLexemeAction(createLexicalAnalyzerContext()); }
+"int"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), INT); }
+
+[[:alpha:]]+                        { return NameLexemeAction(createLexicalAnalyzerContext()); }
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
-
 %%
 
 #include "FlexExport.h"

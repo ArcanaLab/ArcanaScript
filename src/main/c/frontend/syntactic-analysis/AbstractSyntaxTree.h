@@ -13,19 +13,22 @@ void shutdownAbstractSyntaxTreeModule();
 /**
  * This typedefs allows self-referencing types.
  */
-
 typedef enum ExpressionType ExpressionType;
 typedef enum FactorType FactorType;
+typedef enum VariableType VariableType;
 
 typedef struct Constant Constant;
 typedef struct Expression Expression;
 typedef struct Factor Factor;
 typedef struct Program Program;
 
+typedef struct VariableDeclaration VariableDeclaration;
+
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
 
+/** ============== ENUMS ============== */
 enum ExpressionType {
 	ADDITION,
 	DIVISION,
@@ -38,6 +41,12 @@ enum FactorType {
 	CONSTANT,
 	EXPRESSION
 };
+
+enum VariableType {
+    INT,
+};
+
+/** ============== STRUCTS ============== */
 
 struct Constant {
 	int value;
@@ -62,8 +71,15 @@ struct Expression {
 	ExpressionType type;
 };
 
+struct VariableDeclaration {
+	char * name;
+	VariableType type;
+	Expression * expression;
+};
+
 struct Program {
 	Expression * expression;
+	VariableDeclaration * variableDeclaration;
 };
 
 /**
@@ -72,6 +88,7 @@ struct Program {
 void releaseConstant(Constant * constant);
 void releaseExpression(Expression * expression);
 void releaseFactor(Factor * factor);
+void releaseVariableDeclaration(VariableDeclaration * variable);
 void releaseProgram(Program * program);
 
 #endif

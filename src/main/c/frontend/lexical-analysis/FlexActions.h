@@ -20,15 +20,21 @@ void shutdownFlexActionsModule();
 /**
  * Flex lexeme processing actions.
  */
-
+void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+//Nuestro
+Token SemicolonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token NameLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, VariableType token); 
 
 #endif

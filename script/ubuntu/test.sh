@@ -14,7 +14,7 @@ echo "Compiler should accept..."
 echo ""
 
 for test in $(ls src/test/c/accept/); do
-	cat "src/test/c/accept/$test" | build/Compiler > "$PWD/logs/accept/${test}.log" 2>&1
+	cat "src/test/c/accept/$test" | build/Compiler > "$PWD/logs/accept/${test}.log" 2> "$PWD/logs/accept/${test}-error.log"
 	RESULT="$?"
 	if [ "$RESULT" == "0" ]; then
 		echo -e "    $test, ${GREEN}and it does${OFF} (status $RESULT)"
@@ -29,7 +29,7 @@ echo "Compiler should reject..."
 echo ""
 
 for test in $(ls src/test/c/reject/); do
-	cat "src/test/c/accept/$test" | build/Compiler > "$PWD/logs/reject/${test}.log" 2>&1
+	cat "src/test/c/accept/$test" | build/Compiler > "$PWD/logs/reject/${test}.log" 2> "$PWD/logs/reject/${test}-error.log"
 	RESULT="$?"
 	if [ "$RESULT" != "0" ]; then
 		echo -e "    $test, ${GREEN}and it does${OFF} (status $RESULT)"

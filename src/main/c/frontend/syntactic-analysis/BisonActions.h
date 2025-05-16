@@ -23,6 +23,9 @@ Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Exp
 Expression * FactorExpressionSemanticAction(Factor * factor);
 Factor * ConstantFactorSemanticAction(Constant * constant);
 Factor * ExpressionFactorSemanticAction(Expression * expression);
-Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
 
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression);
+
+Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
+Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableDeclaration * varDeclaration);
 #endif

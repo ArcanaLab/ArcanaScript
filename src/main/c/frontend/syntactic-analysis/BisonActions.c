@@ -27,6 +27,7 @@ static void _logSyntacticAnalyzerAction(const char * functionName);
  */
 static void _logSyntacticAnalyzerAction(const char * functionName) {
 	logDebugging(_logger, "%s", functionName);
+	logError(_logger, "%s", functionName);
 }
 
 /* PUBLIC FUNCTIONS */
@@ -71,6 +72,17 @@ Factor * ExpressionFactorSemanticAction(Expression * expression) {
 	return factor;
 }
 
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	
+	VariableDeclaration * variableDeclaration = calloc(1, sizeof(VariableDeclaration));
+	variableDeclaration->name = name;
+	variableDeclaration->type = type;
+	variableDeclaration->expression = expression;
+
+	return variableDeclaration;
+}
+
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
@@ -84,4 +96,22 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 		compilerState->succeed = true;
 	}
 	return program;
+
+}
+
+Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableDeclaration * varDeclaration) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program * program = calloc(1, sizeof(Program));
+	program->variableDeclaration = varDeclaration;
+
+	compilerState->abstractSyntaxtTree = program;
+	if (0 < flexCurrentContext()) {
+		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
+		compilerState->succeed = false;
+	}
+	else {
+		compilerState->succeed = true;
+	}
+	return program;
+
 }

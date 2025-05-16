@@ -15,7 +15,6 @@ void shutdownAbstractSyntaxTreeModule() {
 }
 
 /** PUBLIC FUNCTIONS */
-
 void releaseConstant(Constant * constant) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (constant != NULL) {
@@ -57,9 +56,19 @@ void releaseFactor(Factor * factor) {
 	}
 }
 
+void releaseVariableDeclaration(VariableDeclaration * variable) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(variable == NULL) return;
+
+	if(variable->expression != NULL) releaseExpression(variable->expression);
+	free(variable->name); // It must be done since it's name is allocated when strdup is done.
+	free(variable);
+}
+
 void releaseProgram(Program * program) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (program != NULL) {
+		releaseVariableDeclaration(program->variableDeclaration);
 		releaseExpression(program->expression);
 		free(program);
 	}
