@@ -32,10 +32,14 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 
 /* PUBLIC FUNCTIONS */
 
-Constant * IntegerConstantSemanticAction(const int value) {
+Constant * ConstantSemanticAction(const void * value, int size, ConstantType constantType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Constant * constant = calloc(1, sizeof(Constant));
-	constant->value = value;
+	void * valueCPY = calloc(1, size);
+	memcpy(valueCPY, value, size);
+
+	constant->value = valueCPY;
+	constant->type = constantType;
 	return constant;
 }
 

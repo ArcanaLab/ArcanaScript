@@ -16,6 +16,7 @@ void shutdownAbstractSyntaxTreeModule();
 typedef enum ExpressionType ExpressionType;
 typedef enum FactorType FactorType;
 typedef enum VariableType VariableType;
+typedef enum ConstantType ConstantType;
 
 typedef struct Constant Constant;
 typedef struct Expression Expression;
@@ -39,17 +40,34 @@ enum ExpressionType {
 
 enum FactorType {
 	CONSTANT,
-	EXPRESSION
+	EXPRESSION,
 };
 
 enum VariableType {
-    INT,
+    V_INT,
+	V_CHAR,
+	V_BOOLEAN,
+	V_STRING,
+	V_DOUBLE,
+	V_FLOAT,
+	V_LONG,
+	V_SHORT,
+};
+
+enum ConstantType {
+	C_INT_TYPE,
+	C_CHAR_TYPE,
+	C_BOOLEAN_TYPE,
+	C_STRING_TYPE,
+	C_DOUBLE_TYPE,
+	C_FLOAT_TYPE,	
 };
 
 /** ============== STRUCTS ============== */
 
 struct Constant {
-	int value;
+	void * value;
+	ConstantType type;
 };
 
 struct Factor {

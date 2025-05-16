@@ -9,9 +9,12 @@
 
 %union {
 	/** Terminals. */
-
-	int integer;
-	char * string;
+	int c_integer;
+	char c_character;
+	double c_double;
+	float c_float;
+	boolean c_boolean;
+	char * c_string;
 	
 	Token token;
 	
@@ -44,7 +47,12 @@
 %token <varType> TYPE
 
 /** ===== Factor Types ===== */
-%token <integer> INTEGER // 1 no es int (type)
+%token <c_integer> C_INTEGER
+%token <c_character> C_CHARACTER
+%token <c_double> C_DOUBLE
+%token <c_float> C_FLOAT
+%token <c_boolean> C_BOOLEAN
+%token <c_string> C_STRING
 
 /** ===== Arithmetic Types ===== */
 %token <token> ADD
@@ -109,7 +117,12 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactor
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
 	;
 
-constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
+constant: C_INTEGER													{ $$ = ConstantSemanticAction(&$1, sizeof(int),C_INT_TYPE); }
+		| C_CHARACTER												{ $$ = ConstantSemanticAction(&$1, sizeof(char),C_CHAR_TYPE); }
+		| C_DOUBLE													{ $$ = ConstantSemanticAction(&$1, sizeof(double),C_DOUBLE_TYPE); }	
+		| C_FLOAT													{ $$ = ConstantSemanticAction(&$1, sizeof(float),C_FLOAT_TYPE); }
+		| C_STRING													{ $$ = ConstantSemanticAction(&$1, sizeof(char)*strlen($1) + 1,C_STRING_TYPE); }
+		| C_BOOLEAN													{ $$ = ConstantSemanticAction(&$1, sizeof(boolean),C_BOOLEAN_TYPE); }	
 	;
 
 %%

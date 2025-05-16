@@ -39,7 +39,14 @@ name            {char}({char}|{digit})*
 
 ":"                                 { return ColonLexemeAction(createLexicalAnalyzerContext()); }
 ";"                                 { return SemicolonLexemeAction(createLexicalAnalyzerContext()); }
-"int"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), INT); }
+
+"int"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), V_INT); }
+"char"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), V_CHAR); } 
+"float"                             { return TypeLexemeAction(createLexicalAnalyzerContext(), V_FLOAT); } 
+"double"                            { return TypeLexemeAction(createLexicalAnalyzerContext(), V_DOUBLE); } 
+"string"                            { return TypeLexemeAction(createLexicalAnalyzerContext(), V_STRING); } 
+"long"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), V_LONG); } 
+"short"                             { return TypeLexemeAction(createLexicalAnalyzerContext(), V_SHORT); } 
 
 [[:alpha:]]+                        { return NameLexemeAction(createLexicalAnalyzerContext()); }
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
