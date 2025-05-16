@@ -70,7 +70,7 @@ struct Program {
 
 struct VariableDeclarationNode {
 	char * identifier;
-	TypeEnum * type;
+	TypeEnum type;
 	ExpressionNode * expression;
 };
 

@@ -18,7 +18,7 @@ void shutdownBisonActionsModule();
  * Bison semantic actions.
  */ 
 Program * ProgramSemanticAction(CompilerState * compilerState, ExpressionNode * expression);
-VariableDeclarationNode * VariableDeclarationSemanticAction(char * name, TypeEnum * type, ExpressionNode * expression);
+VariableDeclarationNode * VariableDeclarationSemanticAction(char * name, TypeEnum type, ExpressionNode * expression);
 ExpressionNode * ComparisonExpressionSemanticAction(ExpressionNode * leftExpression, ExpressionNode * rightExpression, TypeExpression comparisonOperator);
 ExpressionNode * ArithmeticExpressionSemanticAction(ExpressionNode * leftExpression, ExpressionNode * rightExpression, TypeExpression arithmeticOperator);
 

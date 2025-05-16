@@ -46,7 +46,7 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 	return program;
 }
 
-VariableDeclarationNode * VariableDeclarationSemanticAction(char * identifier, TypeEnum * type, ExpressionNode * expression) {	
+VariableDeclarationNode * VariableDeclarationSemanticAction(char * identifier, TypeEnum type, ExpressionNode * expression) {	
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	VariableDeclarationNode * variableDeclaration = calloc(1, sizeof(VariableDeclarationNode));
 	variableDeclaration->identifier = identifier;

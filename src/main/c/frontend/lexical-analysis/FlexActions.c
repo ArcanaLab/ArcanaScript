@@ -89,50 +89,6 @@ Token ComparisonOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerCon
 	return token;
 }
 
-Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->intType = atoi(lexicalAnalyzerContext->lexeme);
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return INT_TYPE;
-}
-
-Token CharLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->charType = lexicalAnalyzerContext->lexeme[0];
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return CHAR_TYPE;
-}
-Token StringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->stringType = strdup(lexicalAnalyzerContext->lexeme);
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return STRING_TYPE;
-}
-Token FloatLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->floatType = (float) atof(lexicalAnalyzerContext->lexeme);
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return FLOAT_TYPE;
-}
-Token DoubleLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->doubleType = atof(lexicalAnalyzerContext->lexeme);
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return DOUBLE_TYPE;
-}
-Token ShortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->shortType = (short) atoi(lexicalAnalyzerContext->lexeme);
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return SHORT_TYPE;
-}
-Token LongLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->longType = (long) atoi(lexicalAnalyzerContext->lexeme);
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return LONG_TYPE;
-}
-
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
@@ -152,22 +108,27 @@ Token BooleanLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	return BOOLEAN_TYPE;
 }
 
-Token SemicolonLexemeAction() {
-	yylval.token = SEMICOLON;
-	return SEMICOLON;
+Token SemicolonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = SEMICOLON;
+	// yylval.token = SEMICOLON;
+	// return SEMICOLON;
 }
 
-Token ColonLexemeAction() {
-	yylval.token = COLON;
-	return COLON;
+Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = COLON;
+	// yylval.token = COLON;
+	// return COLON;
 }
+
 //Colon and Semicolon
 Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->variable_declaration->identifier = strdup(lexicalAnalyzerContext->lexeme);
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-
+	lexicalAnalyzerContext->semanticValue->stringType = strdup(lexicalAnalyzerContext->lexeme);
+	return IDENTIFIER;
 }
+
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	if (_logIgnoredLexemes) {
 		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);

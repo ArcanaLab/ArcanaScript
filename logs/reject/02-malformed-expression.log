@@ -1,0 +1,18 @@
+[[1;31mERROR[0m][SyntacticAnalyzer] Syntax error (on line 1).
+[[1;31mERROR[0m][SyntacticAnalyzer] Syntactic analysis status: 1
+[[1;31mERROR[0m][SyntacticAnalyzer] Compilation status: 0
+[[1;31mERROR[0m][EntryPoint] Syntactic analysis status: 2
+[[1;31mERROR[0m][EntryPoint] The syntactic-analysis phase rejects the input program.
+
+=================================================================
+==14689==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 64 byte(s) in 2 object(s) allocated from:
+    #0 0x7fc3ecee7a57 in __interceptor_calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:154
+    #1 0x557e6cb9c23e in createLexicalAnalyzerContext (/mnt/g/GitHub/ArcanaLabs/ArcanaScript/build/Compiler+0xb23e)
+
+Indirect leak of 6 byte(s) in 2 object(s) allocated from:
+    #0 0x7fc3ecee7a57 in __interceptor_calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:154
+    #1 0x557e6cb9c2ac in createLexicalAnalyzerContext (/mnt/g/GitHub/ArcanaLabs/ArcanaScript/build/Compiler+0xb2ac)
+
+SUMMARY: AddressSanitizer: 70 byte(s) leaked in 4 allocation(s).

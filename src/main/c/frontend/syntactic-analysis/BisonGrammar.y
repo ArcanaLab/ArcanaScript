@@ -115,6 +115,8 @@
 %left MUL DIV
 %left OPEN_PARENTHESIS CLOSE_PARENTHESIS */
 
+%start program
+
 %%
 
 program: 
@@ -159,7 +161,7 @@ arithmetic_expression:
 	;
 
 constant:
-	CHAR 										{ $$ = CharConstantSemanticAction($1); }
+	CHAR 										{ $$ = CharConstantSemanticAction($1); } 
 	| INTEGER 									{ $$ = IntConstantSemanticAction($1); }
 	| DOUBLE									{ $$ = DoubleConstantSemanticAction($1); }
 	| FLOAT 									{ $$ = FloatConstantSemanticAction($1); }
@@ -168,4 +170,21 @@ constant:
 	| LONG										{ $$ = LongConstantSemanticAction($1); }
 	| SHORT 									{ $$ = ShortConstantSemanticAction($1); }
 	;
+	
 %%
+
+/* 1
+'a'
+12.0
+12.0f
+"String"
+... */
+
+
+/**
+	expresion izq operador expresion der.
+
+
+	varName semicolon type ;
+	varName semicolon type = expresion ;
+**/

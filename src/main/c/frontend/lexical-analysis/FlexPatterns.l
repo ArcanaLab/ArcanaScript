@@ -1,5 +1,8 @@
 %{
     #include "FlexActions.h"
+    #include "../../shared/Logger.h"
+
+    
 %}
 
 %option stack
@@ -11,19 +14,25 @@
  */
 
 %%
+":"         {  return COLON; }
+";"         {  return SEMICOLON; }
 
-"char"      { return CharLexemeAction(createLexicalAnalyzerContext()); }
-"int"       { return IntegerLexemeAction(createLexicalAnalyzerContext()); }
-"float"     { return FloatLexemeAction(createLexicalAnalyzerContext()); }
-"boolean"   { return BooleanLexemeAction(createLexicalAnalyzerContext()); }
-"long"      { return LongLexemeAction(createLexicalAnalyzerContext()); }
-"short"     { return ShortLexemeAction(createLexicalAnalyzerContext()); }
-"double"    { return DoubleLexemeAction(createLexicalAnalyzerContext()); }
+"char"      { yylval.varType = CHAR_TYPE; return TYPE; }
+"int"       { yylval.varType = INT_TYPE; return TYPE; }
+    /**
+    "float"     { return FloatLexemeAction(createLexicalAnalyzerContext()); }
+    "boolean"   { return BooleanLexemeAction(createLexicalAnalyzerContext()); }
+    "long"      { return LongLexemeAction(createLexicalAnalyzerContext()); }
+    "short"     { return ShortLexemeAction(createLexicalAnalyzerContext()); }
+    "double"    { return DoubleLexemeAction(createLexicalAnalyzerContext()); }
+    */
 
 [[:alnum:]]+    { return IdentifierLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:space:]]+    { IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .               { return UnknownLexemeAction(createLexicalAnalyzerContext()); }
+
+
 
 %%
 

@@ -32,20 +32,11 @@ void shutdownFlexActionsModule();
 Token IdentifierLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-Token CharLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Token StringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Token FloatLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Token DoubleLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Token ShortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Token LongLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Token BooleanLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-
 
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-Token SemicolonLexemeAction();
+Token SemicolonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-Token ColonLexemeAction();
+Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 #endif
