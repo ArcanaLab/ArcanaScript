@@ -24,7 +24,7 @@ void releaseConstant(Constant * constant) {
 }
 
 void releaseExpression(Expression * expression) {
-	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (expression != NULL) {
 		switch (expression->type) {
 			case ADDITION:
@@ -52,7 +52,7 @@ void releaseExpression(Expression * expression) {
 }
 
 void releaseFactor(Factor * factor) {
-	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (factor != NULL) {
 		switch (factor->type) {
 			case CONSTANT:
