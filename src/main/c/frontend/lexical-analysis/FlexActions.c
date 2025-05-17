@@ -158,3 +158,42 @@ Token AssignmentOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerCon
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
 }
+
+Token ConditionalStructureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token)
+{
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return token;
+}
+
+Token ComparatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	Token token;
+	switch(lexicalAnalyzerContext->lexeme[0]) {
+		case '>':
+			if(lexicalAnalyzerContext->lexeme[1] == '=') {
+				token = GREATER_EQUAL;
+			}else{
+				token = GREATER;
+			}
+			break;
+		case '<':
+			if(lexicalAnalyzerContext->lexeme[1] == '=') {
+				token = LESS_EQUAL;
+			}else{
+				token = LESS;
+			}
+			break;
+		case '=':
+			if(lexicalAnalyzerContext->lexeme[1] == '='){
+				token = EQUAL_EQUAL;
+			};
+		case '!':
+			if(lexicalAnalyzerContext->lexeme[1] == '='){
+				token = NOT_EQUAL;
+			} break;
+	}
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return token;
+}
