@@ -113,3 +113,16 @@ Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Variable
 	return TYPE;
 }
 
+Token ControlStructureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	Token token;
+	if (strcmp(lexicalAnalyzerContext->lexeme, "if") == 0) {
+		token = IF;
+	} else if (strcmp(lexicalAnalyzerContext->lexeme, "else") == 0) {
+		token = ELSE;
+	} else if (strcmp(lexicalAnalyzerContext->lexeme, "elif") == 0) {
+		token = ELIF;
+	}
+	return token;
+}
+

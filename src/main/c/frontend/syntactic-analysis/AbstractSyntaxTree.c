@@ -18,7 +18,7 @@ void shutdownAbstractSyntaxTreeModule() {
 void releaseConstant(Constant * constant) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (constant != NULL) {
-		free(constant->value);
+		if (constant->value) free(constant->value);
 		free(constant);
 	}
 }
@@ -66,11 +66,22 @@ void releaseVariableDeclaration(VariableDeclaration * variable) {
 	free(variable);
 }
 
+void releaseConditional(Conditional * conditional){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (!conditional) return;
+
+	releaseExpression(conditional->expression);
+	free(conditional);
+}
+
+
 void releaseProgram(Program * program) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (program != NULL) {
-		releaseVariableDeclaration(program->variableDeclaration);
-		releaseExpression(program->expression);
-		free(program);
-	}
+	if (!program) return;
+
+	releaseExpression(program->expression);
+	releaseVariableDeclaration(program->variableDeclaration);
+	releaseConditional(program->conditional);
+	free(program);
 }
+

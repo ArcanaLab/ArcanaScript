@@ -86,6 +86,7 @@ VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableTyp
 
 	return variableDeclaration;
 }
+#pragma region "Program Semantic Actions"
 
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -119,3 +120,32 @@ Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableD
 	return program;
 
 }
+
+Program * ConditionalProgramSemanticAction(CompilerState * compilerState, Conditional * conditional) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program * program = calloc(1, sizeof(Program));
+	program->conditional = conditional;
+
+	compilerState->abstractSyntaxtTree = program;
+	if (0 < flexCurrentContext()) {
+		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
+		compilerState->succeed = false;
+	}
+	else {
+		compilerState->succeed = true;
+	}
+	return program;
+
+}
+#pragma endregion
+
+Conditional * IfConditionalSemanticAction(Expression * expression)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Conditional * conditional = calloc(1, sizeof(Conditional));
+	conditional->expression = expression;
+	conditional->type = IF_TYPE;
+	return conditional;
+}
+
+

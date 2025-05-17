@@ -24,6 +24,9 @@
 	Factor * factor;
 	Program * program;
 
+	Conditional * conditional;
+
+
 	VariableDeclaration * variableDeclaration;
 	VariableType varType;
 	char * name;
@@ -41,6 +44,8 @@
 %destructor { releaseExpression($$); } <expression>
 %destructor { releaseFactor($$); } <factor>
 %destructor { releaseVariableDeclaration($$); } <variableDeclaration>
+%destructor { releaseConditional($$); } <conditional>
+
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -65,6 +70,13 @@
 %token <token> SEMICOLON
 %token <token> CLOSE_PARENTHESIS
 %token <token> OPEN_PARENTHESIS
+%token <token> OPEN_BRACE
+%token <token> CLOSE_BRACE
+
+/** ===== Control Structures ===== */
+%token <token> IF
+%token <token> ELSE
+%token <token> ELIF
 
 
 
@@ -77,7 +89,7 @@
 %type <expression> expression
 %type <factor> factor
 %type <program> program
-
+%type <conditional> conditional
 %type <variableDeclaration> variable_declaration
 %type <varType> variable_type
 /**
@@ -88,23 +100,30 @@
 %left ADD SUB
 %left MUL DIV
 
+%precedence ELSE
+%precedence ELIF
+%precedence IF
+
 %start program
 %%
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
-
-program:  variable_declaration											{ $$ = VariableProgramSemanticAction(currentCompilerState(), $1); }
-		| expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
-	;
+program: variable_declaration										{ $$ = VariableProgramSemanticAction(currentCompilerState(), $1); }
+	|expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
+	|conditional												{ $$ = ConditionalProgramSemanticAction(currentCompilerState(), $1); }
+	; 
 
 variable_declaration:
-	NAME COLON variable_type SEMICOLON									{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
+	NAME COLON variable_type SEMICOLON							{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
 	;
 
 variable_type:
-	TYPE 																{ $$ = $1; }
+	TYPE 														{ $$ = $1; }
 	;
 
+conditional: IF OPEN_PARENTHESIS expression[exp] CLOSE_PARENTHESIS	{$$ = IfConditionalSemanticAction($exp);}
+
+	
 
 expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }

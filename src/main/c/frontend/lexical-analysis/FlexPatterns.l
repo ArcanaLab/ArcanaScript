@@ -36,7 +36,7 @@ single_line_comment     "#"[^!].*
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>"!#"				{ EndMultilineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
 
-<INITIAL>{single_line_comment}               { IgnoredLexemeAction(createLexicalAnalyzerContext()); }  
+<INITIAL>{single_line_comment}      { IgnoredLexemeAction(createLexicalAnalyzerContext()); }  
 
 "-"						            { return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), MUL); }
@@ -45,6 +45,10 @@ single_line_comment     "#"[^!].*
 
 "("									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), OPEN_PARENTHESIS); }
 ")"									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), CLOSE_PARENTHESIS); }
+
+"if"                                { return ControlStructureLexemeAction(createLexicalAnalyzerContext()); }   
+"elif"                              { return ControlStructureLexemeAction(createLexicalAnalyzerContext()); }   
+"else"                              { return ControlStructureLexemeAction(createLexicalAnalyzerContext()); }
 
 ":"                                 { return ColonLexemeAction(createLexicalAnalyzerContext()); }
 ";"                                 { return SemicolonLexemeAction(createLexicalAnalyzerContext()); }

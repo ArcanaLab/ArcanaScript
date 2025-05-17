@@ -28,4 +28,9 @@ VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableTyp
 
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
 Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableDeclaration * varDeclaration);
+Program * ConditionalProgramSemanticAction(CompilerState * compilerState, Conditional * conditional);
+
+Conditional * IfConditionalSemanticAction(Expression * expression);
+
+
 #endif

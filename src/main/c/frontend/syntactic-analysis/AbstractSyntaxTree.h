@@ -17,11 +17,14 @@ typedef enum ExpressionType ExpressionType;
 typedef enum FactorType FactorType;
 typedef enum VariableType VariableType;
 typedef enum ConstantType ConstantType;
+typedef enum ConditionalType ConditionalType;
 
+typedef struct Conditional Conditional;
 typedef struct Constant Constant;
 typedef struct Expression Expression;
 typedef struct Factor Factor;
 typedef struct Program Program;
+
 
 typedef struct VariableDeclaration VariableDeclaration;
 
@@ -36,6 +39,12 @@ enum ExpressionType {
 	FACTOR,
 	MULTIPLICATION,
 	SUBTRACTION
+};
+
+enum ConditionalType {
+	IF_TYPE,
+	ELSE_TYPE,
+	ELIF_TYPE,
 };
 
 enum FactorType {
@@ -98,6 +107,24 @@ struct VariableDeclaration {
 struct Program {
 	Expression * expression;
 	VariableDeclaration * variableDeclaration;
+	Conditional * conditional;
+};
+
+/*
+	if (exp)
+	{
+	}
+	else if (exp)
+	{
+	}
+	else
+	{
+	}
+*/
+
+struct Conditional {
+	Expression * expression;
+	ConditionalType ConditionalType;
 };
 
 /**
@@ -108,5 +135,6 @@ void releaseExpression(Expression * expression);
 void releaseFactor(Factor * factor);
 void releaseVariableDeclaration(VariableDeclaration * variable);
 void releaseProgram(Program * program);
+void releaseConditional(Conditional * conditional);
 
 #endif

@@ -36,4 +36,7 @@ Token NameLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, VariableType token); 
 
+// ================== CONTROL STRUCTURES ==================
+Token ControlStructureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 #endif

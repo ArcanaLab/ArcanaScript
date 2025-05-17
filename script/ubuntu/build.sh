@@ -10,9 +10,22 @@ rm --force "$BASE_PATH/src/main/c/frontend/lexical-analysis/FlexScanner.c"
 rm --force "$BASE_PATH/src/main/c/frontend/syntactic-analysis/BisonParser.c"
 rm --force "$BASE_PATH/src/main/c/frontend/syntactic-analysis/BisonParser.h"
 
+# Delete logs
+rm -f "$BASE_PATH/logs/accept/"*
+rm -f "$BASE_PATH/logs/reject/"*
+
 cmake -S . -B build
 cd build
 make
 cd ..
+
+# Run Valgrind (adjust executable name as needed)
+VALGRIND_TARGET="./build/Compiler" # or your actual binary name
+if [ -x "$VALGRIND_TARGET" ]; then
+  valgrind --leak-check=full --show-leak-kinds=all -s "$VALGRIND_TARGET"
+else
+  echo "Executable not found: $VALGRIND_TARGET"
+  exit 1
+fi
 
 echo "All done."
