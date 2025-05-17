@@ -158,7 +158,7 @@ variable_type:
 	TYPE 															{ $$ = $1; }
 	;
 
-if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS    { $$ = ConditionalSemanticAction($exp,IF_TYPE); }
+if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS    			{ $$ = ConditionalSemanticAction($exp,IF_TYPE); }
     | IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS else[con]	{ $$ = ConditionalSemanticAction($exp,IF_TYPE); $$->nextConditional = $con; }	
 	;
 else:
