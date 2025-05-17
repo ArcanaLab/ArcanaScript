@@ -98,10 +98,38 @@ void releaseInstruction(Instruction * instruction) {
 	free(instruction);
 }
 
+void releaseInstructionNode(InstructionNode * instructionNode) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(instructionNode == NULL) return;
+
+	releaseInstruction(instructionNode->instruction);
+	free(instructionNode);
+}
+
+void releaseInstructionList(InstructionNode * instructionNode) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(instructionNode == NULL) return;
+	
+	InstructionNode * currentInstructionNode = instructionNode;
+	while(currentInstructionNode != NULL) {
+		InstructionNode * nextInstructionNode = currentInstructionNode->nextInstructionNode;
+		releaseInstructionNode(currentInstructionNode);
+		currentInstructionNode = nextInstructionNode;
+	}
+}
+
+void releaseBlock(Block * block) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(block == NULL) return;
+
+	releaseInstructionList(block->firstInstructionNode);
+	free(block);
+}
+
 void releaseProgram(Program * program) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(program == NULL) return;
 
-	releaseInstruction(program->instruction);
+	releaseBlock(program->block);
 	free(program);
 }

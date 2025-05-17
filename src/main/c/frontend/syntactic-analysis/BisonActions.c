@@ -155,10 +155,27 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 	return instruction;
 }
 
-Program * InstructionProgramSemanticAction(CompilerState * compilerState, Instruction * instruction) {
+Block * CreateBlockSemanticAction(Instruction * instruction) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Block * block = calloc(1, sizeof(Block));
+	block->firstInstructionNode = calloc(1, sizeof(InstructionNode));
+	block->firstInstructionNode->instruction = instruction;
+	block->lastInstructionNode = block->firstInstructionNode;
+	return block;
+}
+
+Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	InstructionNode * newInstructionNode = calloc(1, sizeof(InstructionNode));
+	newInstructionNode->instruction = instruction;
+	block->lastInstructionNode->nextInstructionNode = newInstructionNode;
+	block->lastInstructionNode = newInstructionNode;
+	return block;
+}
+Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
-	program->instruction = instruction;
+	program->block = block;
 	compilerState->abstractSyntaxtTree = program;
 	if (0 < flexCurrentContext()) {
 		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
@@ -169,3 +186,4 @@ Program * InstructionProgramSemanticAction(CompilerState * compilerState, Instru
 	}
 	return program;
 }
+
