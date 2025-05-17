@@ -25,9 +25,11 @@ void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerC
 void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ConstantLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+Token ApostropheLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token QuoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 

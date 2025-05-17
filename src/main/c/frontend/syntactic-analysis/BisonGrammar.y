@@ -65,6 +65,9 @@
 %token <token> SEMICOLON
 %token <token> CLOSE_PARENTHESIS
 %token <token> OPEN_PARENTHESIS
+%token <token> APOSTROPHE
+%token <token> QUOTE
+
 
 
 
@@ -119,9 +122,9 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactor
 
 constant: C_INTEGER													{ $$ = ConstantSemanticAction(&$1, sizeof(int),		C_INT_TYPE); }
 		| C_CHARACTER												{ $$ = ConstantSemanticAction(&$1, sizeof(char),	C_CHAR_TYPE); }
+		| C_STRING													{ $$ = ConstantSemanticAction(&$1, sizeof(char)*strlen($1) + 1,C_STRING_TYPE); }
 		| C_DOUBLE													{ $$ = ConstantSemanticAction(&$1, sizeof(double),	C_DOUBLE_TYPE); }	
 		| C_FLOAT													{ $$ = ConstantSemanticAction(&$1, sizeof(float),	C_FLOAT_TYPE); }
-		| C_STRING													{ $$ = ConstantSemanticAction(&$1, sizeof(char)*strlen($1) + 1,C_STRING_TYPE); }
 		| C_BOOLEAN													{ $$ = ConstantSemanticAction(&$1, sizeof(boolean),C_BOOLEAN_TYPE); }	
 	;
 
