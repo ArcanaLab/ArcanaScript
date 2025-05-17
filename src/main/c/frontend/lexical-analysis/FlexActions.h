@@ -24,9 +24,11 @@ void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ConstantLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+Token ApostropheLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token QuoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
@@ -35,5 +37,7 @@ Token SemicolonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token NameLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, VariableType token); 
+
+Token AssignmentOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
 #endif

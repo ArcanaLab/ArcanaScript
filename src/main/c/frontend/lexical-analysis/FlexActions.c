@@ -25,7 +25,7 @@ static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyze
  */
 static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	char * escapedLexeme = escape(lexicalAnalyzerContext->lexeme);
-	logDebugging(_logger, "%s: %s (context = %d, length = %d, line = %d)",
+	logError(_logger, "%s: %s (context = %d, length = %d, line = %d)",
 		functionName,
 		escapedLexeme,
 		lexicalAnalyzerContext->currentContext,
@@ -35,7 +35,6 @@ static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyze
 }
 
 /* PUBLIC FUNCTIONS */
-
 void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	if (_logIgnoredLexemes) {
 		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
@@ -64,11 +63,33 @@ Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerCon
 	return token;
 }
 
-Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token ConstantLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->c_integer = atoi(lexicalAnalyzerContext->lexeme);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	
+	switch (token) {
+		case C_INTEGER:
+			lexicalAnalyzerContext->semanticValue->c_integer = atoi(lexicalAnalyzerContext->lexeme);
+			break;
+		case C_CHARACTER:
+			lexicalAnalyzerContext->semanticValue->c_character = lexicalAnalyzerContext->lexeme[0];
+			break;
+		case C_DOUBLE:
+			lexicalAnalyzerContext->semanticValue->c_double = atof(lexicalAnalyzerContext->lexeme);
+			break;
+		case C_FLOAT:
+			lexicalAnalyzerContext->semanticValue->c_float = atof(lexicalAnalyzerContext->lexeme);
+			break;
+		case C_BOOLEAN:
+			lexicalAnalyzerContext->semanticValue->c_boolean = lexicalAnalyzerContext->lexeme[0] == 't' ? true : false;
+			break;
+		case C_STRING:
+			lexicalAnalyzerContext->semanticValue->c_string = strdup(lexicalAnalyzerContext->lexeme);
+			break;
+	}
+
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return C_INTEGER;
+	return token;
 }
 
 Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
@@ -76,6 +97,20 @@ Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, T
 	lexicalAnalyzerContext->semanticValue->token = token;
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
+}
+
+Token ApostropheLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = APOSTROPHE;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return APOSTROPHE;
+}
+
+Token QuoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = QUOTE;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return QUOTE;
 }
 
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
@@ -109,7 +144,17 @@ Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, VariableType varType) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->varType = varType;
+	lexicalAnalyzerContext->semanticValue->token = TYPE;
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return TYPE;
 }
 
+/**
+ * Assignment operator lexeme action.
+ */
+Token AssignmentOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return token;
+}

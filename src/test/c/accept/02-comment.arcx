@@ -1,2 +1,2 @@
-#	A multiline comment.
+# A single line comment.
 var:int;
