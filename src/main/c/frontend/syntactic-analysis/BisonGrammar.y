@@ -71,8 +71,6 @@
 %token <token> SEMICOLON
 %token <token> CLOSE_PARENTHESIS
 %token <token> OPEN_PARENTHESIS
-%token <token> APOSTROPHE
-%token <token> QUOTE
 
 %token <token> ASSIGN
 %token <token> ADD_ASSIGN
@@ -87,12 +85,14 @@
 %type <constant> constant
 %type <expression> expression
 %type <factor> factor
-%type <program> program
-
-%type <assignmentOperation> assignment_operation
 
 %type <variableDeclaration> variable_declaration
 %type <varType> variable_type
+
+%type <assignmentOperation> assignment_operation
+
+%type <instruction> instruction
+%type <program> program
 /**
  * Precedence and associativity.
  *
@@ -106,24 +106,29 @@
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 program: 
-	assignment_operation											{ $$ = AssignmentProgramSemanticAction(currentCompilerState(), $1); }
-	| variable_declaration											{ $$ = VariableProgramSemanticAction(currentCompilerState(), $1); }
-	| expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
+	instruction													{ $$ = InstructionProgramSemanticAction(currentCompilerState(), $1); }
+	;
+
+instruction:
+	assignment_operation SEMICOLON									{ $$ = InstructionSemanticAction($1); }
+	| variable_declaration SEMICOLON								{ $$ = InstructionSemanticAction($1); }
+	| expression SEMICOLON											{ $$ = InstructionSemanticAction($1); }
+	| SEMICOLON														{ $$ = InstructionSemanticAction(NULL); }
 	;
 
 assignment_operation: 
-	NAME ASSIGN expression SEMICOLON								{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
-	| NAME ADD_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
-	| NAME SUB_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
-	| NAME MUL_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
+	NAME ASSIGN expression											{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
+	| NAME ADD_ASSIGN expression									{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
+	| NAME SUB_ASSIGN expression									{ $$ = AssignmentOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
+	| NAME MUL_ASSIGN expression									{ $$ = AssignmentOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
 	// TODO: Debatir mejor opción:
 	// - Si es en assignment_operation o variable_declaration que hay que poner esto:
 	/* | variable_declaration ASSIGN expression SEMICOLON				{ $$ = AssignmentDeclarationSemanticAction($1, $3); } */
 	;
 
 variable_declaration:
-	NAME COLON variable_type SEMICOLON								{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
-	| NAME COLON variable_type ASSIGN expression SEMICOLON			{ $$ = VariableDeclarationSemanticAction($1, $3, $5); }
+	NAME COLON variable_type										{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
+	| NAME COLON variable_type ASSIGN expression					{ $$ = VariableDeclarationSemanticAction($1, $3, $5); }
 	;
 
 variable_type:
