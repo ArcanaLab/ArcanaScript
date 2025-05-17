@@ -31,6 +31,8 @@
 	AssignmentOperation * assignmentOperation;
 	AssignmentOperatorType assignmentOperatorType;
 	char * name;
+
+	Instruction * instruction;
 }
 
 /**
@@ -47,6 +49,7 @@
 %destructor { releaseName($$); } <name>
 %destructor { releaseVariableDeclaration($$); } <variableDeclaration>
 %destructor { releaseAssignmentOperation($$); } <assignmentOperation>
+%destructor { releaseInstruction($$); } <instruction>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -106,14 +109,13 @@
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 program: 
-	instruction													{ $$ = InstructionProgramSemanticAction(currentCompilerState(), $1); }
+	instruction														{ $$ = InstructionProgramSemanticAction(currentCompilerState(), $1); }
 	;
 
 instruction:
-	assignment_operation SEMICOLON									{ $$ = InstructionSemanticAction($1); }
-	| variable_declaration SEMICOLON								{ $$ = InstructionSemanticAction($1); }
-	| expression SEMICOLON											{ $$ = InstructionSemanticAction($1); }
-	| SEMICOLON														{ $$ = InstructionSemanticAction(NULL); }
+	assignment_operation SEMICOLON									{ $$ = InstructionSemanticAction($1, INSTRUCTION_ASSIGNMENT); }
+	| variable_declaration SEMICOLON								{ $$ = InstructionSemanticAction($1, INSTRUCTION_VARIABLE_DECLARATION); }
+	| expression SEMICOLON											{ $$ = InstructionSemanticAction($1, INSTRUCTION_EXPRESSION); }
 	;
 
 assignment_operation: 
