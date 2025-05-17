@@ -29,6 +29,8 @@ typedef struct VariableDeclaration VariableDeclaration;
 typedef struct AssignmentOperation AssignmentOperation;
 typedef struct Instruction Instruction;
 
+typedef struct InstructionNode InstructionNode;
+typedef struct Block Block;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -138,8 +140,18 @@ struct Instruction {
 	InstructionType type;
 };
 
-struct Program {
+struct InstructionNode {
 	Instruction * instruction;
+	InstructionNode * nextInstructionNode;
+};
+
+struct Block {
+	InstructionNode * firstInstructionNode;// Prepend en O(1)
+	InstructionNode * lastInstructionNode; // Append en O(1)
+};
+
+struct Program {
+	Block * block;
 };
 
 /**

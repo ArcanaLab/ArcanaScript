@@ -42,8 +42,14 @@ AssignmentOperation * AssignmentOperatorSemanticAction(char * name, Expression *
 Instruction * InstructionSemanticAction(void * value, InstructionType instructionType);
 
 /**
+ * Blocks.
+ */
+Block * CreateBlockSemanticAction(Instruction * instruction);
+Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction);
+
+/**
  * Programs.
  */
-Program * InstructionProgramSemanticAction(CompilerState * compilerState, Instruction * instruction);
+Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block);
 
 #endif

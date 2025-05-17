@@ -33,6 +33,7 @@
 	char * name;
 
 	Instruction * instruction;
+	Block * block;
 }
 
 /**
@@ -50,6 +51,7 @@
 %destructor { releaseVariableDeclaration($$); } <variableDeclaration>
 %destructor { releaseAssignmentOperation($$); } <assignmentOperation>
 %destructor { releaseInstruction($$); } <instruction>
+%destructor { releaseBlock($$); } <block>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -95,6 +97,7 @@
 %type <assignmentOperation> assignment_operation
 
 %type <instruction> instruction
+%type <block> block
 %type <program> program
 /**
  * Precedence and associativity.
@@ -108,8 +111,19 @@
 %%
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
+/**
+ * Multiple instructions. (Blocks)
+ *
+ * Parser will read all lines of the input file and try to parse them to an program.
+ * So program MUST have at least a block.
+ */
 program: 
-	instruction														{ $$ = InstructionProgramSemanticAction(currentCompilerState(), $1); }
+	block															{ $$ = BlockProgramSemanticAction(currentCompilerState(), $1); }
+	;
+
+block:
+	instruction														{ $$ = CreateBlockSemanticAction($1); }
+	| block instruction												{ $$ = AppendInstructionSemanticAction($1, $2); }
 	;
 
 instruction:
