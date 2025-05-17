@@ -48,11 +48,15 @@ name            {char}({char}|{digit})*
 "long"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), V_LONG); } 
 "short"                             { return TypeLexemeAction(createLexicalAnalyzerContext(), V_SHORT); } 
 
+
+
 [[:alpha:]]+                        { return NameLexemeAction(createLexicalAnalyzerContext()); }
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
 %%
+/* "true"                              { return BooleanLexemeAction(createLexicalAnalyzerContext(), TRUE); }
+"false"                             { return BooleanLexemeAction(createLexicalAnalyzerContext(), FALSE); } */
 
 #include "FlexExport.h"
