@@ -23,7 +23,6 @@ void shutdownFlexActionsModule();
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);

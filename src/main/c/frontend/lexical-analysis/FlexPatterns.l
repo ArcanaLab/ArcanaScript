@@ -26,9 +26,18 @@
 
 digit			      [0-9]
 char                  [a-zA-Z_]
-name            {char}({char}|{digit})*
+name                  {char}({char}|{digit})*
+single_line_comment     "#"[^!].*
 
 %%
+"#!"								{ BEGIN(MULTILINE_COMMENT); BeginMultilineCommentLexemeAction(createLexicalAnalyzerContext()); }
+<MULTILINE_COMMENT>[[:space:]]+		{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+<MULTILINE_COMMENT>[^!]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+<MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+<MULTILINE_COMMENT>"!#"				{ EndMultilineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
+
+<INITIAL>{single_line_comment}               { IgnoredLexemeAction(createLexicalAnalyzerContext()); }  
+
 "-"						            { return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), MUL); }
 "/"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), DIV); }
