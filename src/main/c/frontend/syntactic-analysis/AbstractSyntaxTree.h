@@ -139,6 +139,7 @@ struct AssignmentOperation {
 };
 struct Conditional {
 	Expression * expression;
+	Conditional * nextConditional;
 	ConditionalType ConditionalType;
 };
 

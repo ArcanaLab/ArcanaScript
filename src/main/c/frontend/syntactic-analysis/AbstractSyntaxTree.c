@@ -85,6 +85,9 @@ void releaseConditional(Conditional * conditional){
 	if (!conditional) return;
 
 	releaseExpression(conditional->expression);
+
+	if (conditional->nextConditional)
+		releaseConditional(conditional->nextConditional);
 	free(conditional);
 }
 

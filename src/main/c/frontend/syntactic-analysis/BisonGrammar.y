@@ -159,10 +159,10 @@ variable_type:
 	;
 
 if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS    { $$ = ConditionalSemanticAction($exp,IF_TYPE); }
-    | IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS else	{ $$ = ConditionalSemanticAction($exp,IF_TYPE); }	
+    | IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS else[con]	{ $$ = ConditionalSemanticAction($exp,IF_TYPE); $$->nextConditional = $con; }	
 	;
 else:
-	ELSE if															{ $$ = ConditionalSemanticAction(NULL,IF_TYPE); }
+	ELSE if															{ $$ = $2; }
 	| ELSE															{ $$ = ConditionalSemanticAction(NULL,ELSE_TYPE); }
 
 comparator_expression: 	factor[left] GREATER factor[right]			{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_TYPE); }

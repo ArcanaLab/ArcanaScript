@@ -218,6 +218,7 @@ Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType
 	
 	Conditional * conditional = calloc(1, sizeof(Conditional));
 	conditional->expression = expression;
+	conditional->nextConditional = NULL;
 	conditional->ConditionalType = conditionalType;
 
 	return conditional;
