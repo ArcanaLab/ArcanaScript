@@ -126,60 +126,6 @@ void releaseBlock(Block * block) {
 	free(block);
 }
 
-void releaseProgram(Program * program) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(program == NULL) return;
-
-	releaseBlock(program->block);
-	free(program);
-}
-
-void releaseInstruction(Instruction * instruction) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(instruction == NULL) return;
-
-	switch (instruction->type) {
-		case INSTRUCTION_ASSIGNMENT:
-			releaseAssignmentOperation(instruction->assignment);
-			break;
-		case INSTRUCTION_VARIABLE_DECLARATION:
-			releaseVariableDeclaration(instruction->variableDeclaration);
-			break;
-		case INSTRUCTION_EXPRESSION:
-			releaseExpression(instruction->expression);
-			break;
-	}
-	free(instruction);
-}
-
-void releaseInstructionNode(InstructionNode * instructionNode) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(instructionNode == NULL) return;
-
-	releaseInstruction(instructionNode->instruction);
-	free(instructionNode);
-}
-
-void releaseInstructionList(InstructionNode * instructionNode) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(instructionNode == NULL) return;
-	
-	InstructionNode * currentInstructionNode = instructionNode;
-	while(currentInstructionNode != NULL) {
-		InstructionNode * nextInstructionNode = currentInstructionNode->nextInstructionNode;
-		releaseInstructionNode(currentInstructionNode);
-		currentInstructionNode = nextInstructionNode;
-	}
-}
-
-void releaseBlock(Block * block) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(block == NULL) return;
-
-	releaseInstructionList(block->firstInstructionNode);
-	free(block);
-}
-
 void releaseLoop(Loop * loop) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (loop == NULL) return;
