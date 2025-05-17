@@ -53,6 +53,7 @@
 %destructor { releaseAssignmentOperation($$); } <assignmentOperation>
 %destructor { releaseInstruction($$); } <instruction>
 %destructor { releaseBlock($$); } <block>
+%destructor { releaseLoop($$); } <loop>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -129,7 +130,6 @@
  */
 program: 
 	block															{ $$ = BlockProgramSemanticAction(currentCompilerState(), $1); }
-	| loop															{ $$ = LoopProgramSemanticAction(currentCompilerState(), $1); }
 	;
 
 block:
@@ -142,14 +142,15 @@ instruction:
 	| variable_declaration SEMICOLON								{ $$ = InstructionSemanticAction($1, INSTRUCTION_VARIABLE_DECLARATION); }
 	| expression SEMICOLON											{ $$ = InstructionSemanticAction($1, INSTRUCTION_EXPRESSION); }
 	| scope															{ $$ = InstructionSemanticAction($1, INSTRUCTION_BLOCK); }
+	| loop 															{ $$ = InstructionSemanticAction($1, INSTRUCTION_LOOP); }
 	;
 
 scope:
 	OPEN_BRACE block CLOSE_BRACE									{ $$ = $2; }
 
 loop:
-	WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = LoopSemanticAction($3, WHILE_LOOP); }	
-	| FOR OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = LoopSemanticAction($3, FOR_LOOP); }
+	WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS scope 				{ $$ = LoopSemanticAction($3, WHILE_LOOP, $5); }	
+	| FOR OPEN_PARENTHESIS expression CLOSE_PARENTHESIS scope				{ $$ = LoopSemanticAction($3, FOR_LOOP, $5); }
 	;
 assignment_operation: 
 	NAME ASSIGN expression											{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }

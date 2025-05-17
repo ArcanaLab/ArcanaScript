@@ -83,6 +83,7 @@ enum InstructionType {
 	INSTRUCTION_VARIABLE_DECLARATION,
 	INSTRUCTION_EXPRESSION,
 	INSTRUCTION_BLOCK,
+	INSTRUCTION_LOOP,
 };
 
 enum LoopType {
@@ -141,7 +142,7 @@ struct AssignmentOperation {
 struct Loop {
 	Expression * expression;
 	LoopType type;
-
+	Block * block;
 };
 
 struct Instruction {
@@ -150,6 +151,7 @@ struct Instruction {
 		VariableDeclaration * variableDeclaration;
 		Expression * expression;
 		Block * block;
+		Loop * loop;
 	};
 
 	InstructionType type;
@@ -181,5 +183,6 @@ void releaseVariableDeclaration(VariableDeclaration * variable);
 void releaseAssignmentOperation(AssignmentOperation * assignmentOperation);
 void releaseProgram(Program * program);
 void releaseLoop(Loop * loop);
+void releaseBlock(Block * block);
 
 #endif

@@ -104,13 +104,13 @@ VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableTyp
 	return variableDeclaration;
 }
 
-Loop * LoopSemanticAction(Expression * expression, LoopType type){
+Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
 	Loop * loop = calloc(1, sizeof(Loop));
 	loop->type = type;
 	loop->expression = expression;
-
+	loop->block = block;
 	return loop;
 }
 Program * LoopProgramSemanticAction(CompilerState * compilerState, Loop * loop) {
@@ -178,6 +178,9 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 			break;
 		case INSTRUCTION_BLOCK:
 			instruction->block = value;
+			break;
+		case INSTRUCTION_LOOP:
+			instruction->loop = value;
 			break;
 	}
 

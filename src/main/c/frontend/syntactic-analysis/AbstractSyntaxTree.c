@@ -81,7 +81,7 @@ void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
 }
 
 void releaseInstruction(Instruction * instruction) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(instruction == NULL) return;
 
 	switch (instruction->type) {
@@ -96,6 +96,9 @@ void releaseInstruction(Instruction * instruction) {
 			break;
 		case INSTRUCTION_BLOCK:
 			releaseBlock(instruction->block);
+			break;
+		case INSTRUCTION_LOOP:	
+			releaseLoop(instruction->loop);
 			break;
 	}
 	free(instruction);
@@ -130,9 +133,10 @@ void releaseBlock(Block * block) {
 }
 
 void releaseLoop(Loop * loop) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (loop == NULL) return;
 	releaseExpression(loop->expression);
+	releaseBlock(loop->block);
 	free(loop);
 }
 
