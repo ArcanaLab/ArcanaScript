@@ -28,4 +28,11 @@ VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableTyp
 
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
 Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableDeclaration * varDeclaration);
+
+/**
+ * Assignment operations.
+ */
+Program * AssignmentProgramSemanticAction(CompilerState * compilerState, AssignmentOperation * assignmentOperation);
+AssignmentOperation * AssignmentDeclarationSemanticAction(char * name, VariableDeclaration * variableDeclaration, Expression * expression, AssignmentOperatorType assignmentOperatorType);
+
 #endif

@@ -17,6 +17,7 @@ typedef enum ExpressionType ExpressionType;
 typedef enum FactorType FactorType;
 typedef enum VariableType VariableType;
 typedef enum ConstantType ConstantType;
+typedef enum AssignmentOperatorType AssignmentOperatorType;
 
 typedef struct Constant Constant;
 typedef struct Expression Expression;
@@ -24,6 +25,7 @@ typedef struct Factor Factor;
 typedef struct Program Program;
 
 typedef struct VariableDeclaration VariableDeclaration;
+typedef struct AssignmentOperation AssignmentOperation;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -63,6 +65,13 @@ enum ConstantType {
 	C_FLOAT_TYPE,	
 };
 
+enum AssignmentOperatorType {
+	ASSIGN_TYPE,
+	ADD_ASSIGN_TYPE,
+	SUB_ASSIGN_TYPE,
+	MUL_ASSIGN_TYPE,
+};
+
 /** ============== STRUCTS ============== */
 
 struct Constant {
@@ -95,9 +104,19 @@ struct VariableDeclaration {
 	Expression * expression;
 };
 
+struct AssignmentOperation {
+	union {
+		VariableDeclaration * variableDeclaration;
+		char * name;
+	};
+	Expression * expression;
+	AssignmentOperatorType assignmentOperator;
+};
+
 struct Program {
 	Expression * expression;
 	VariableDeclaration * variableDeclaration;
+	AssignmentOperation * assignmentOperation;
 };
 
 /**
@@ -107,6 +126,7 @@ void releaseConstant(Constant * constant);
 void releaseExpression(Expression * expression);
 void releaseFactor(Factor * factor);
 void releaseVariableDeclaration(VariableDeclaration * variable);
+void releaseAssignmentOperation(AssignmentOperation * assignmentOperation);
 void releaseProgram(Program * program);
 
 #endif

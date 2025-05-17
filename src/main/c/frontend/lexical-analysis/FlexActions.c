@@ -25,7 +25,7 @@ static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyze
  */
 static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	char * escapedLexeme = escape(lexicalAnalyzerContext->lexeme);
-	logDebugging(_logger, "%s: %s (context = %d, length = %d, line = %d)",
+	logError(_logger, "%s: %s (context = %d, length = %d, line = %d)",
 		functionName,
 		escapedLexeme,
 		lexicalAnalyzerContext->currentContext,
@@ -144,7 +144,17 @@ Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, VariableType varType) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->varType = varType;
+	lexicalAnalyzerContext->semanticValue->token = TYPE;
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return TYPE;
 }
 
+/**
+ * Assignment operator lexeme action.
+ */
+Token AssignmentOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return token;
+}

@@ -119,3 +119,39 @@ Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableD
 	return program;
 
 }
+
+/**
+ * Assignment operations.
+ */
+Program * AssignmentProgramSemanticAction(CompilerState * compilerState, AssignmentOperation * assignmentOperation) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program * program = calloc(1, sizeof(Program));
+	program->assignmentOperation = assignmentOperation;
+
+	compilerState->abstractSyntaxtTree = program;
+	if (0 < flexCurrentContext()) {
+		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
+		compilerState->succeed = false;
+	}
+	else {
+		compilerState->succeed = true;
+	}
+	return program;
+}
+
+AssignmentOperation * AssignmentDeclarationSemanticAction(
+	char * name,
+	VariableDeclaration * variableDeclaration,
+	Expression * expression,
+	AssignmentOperatorType assignmentOperatorType
+) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	
+	AssignmentOperation * assignmentOperation = calloc(1, sizeof(AssignmentOperation));
+	assignmentOperation->name = name;
+	assignmentOperation->variableDeclaration = variableDeclaration;
+	assignmentOperation->assignmentOperator = assignmentOperatorType;
+	assignmentOperation->expression = expression;
+
+	return assignmentOperation;
+}

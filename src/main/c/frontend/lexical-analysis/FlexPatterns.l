@@ -59,7 +59,7 @@ char            [a-zA-Z_]
 "short"                             { return TypeLexemeAction(createLexicalAnalyzerContext(), V_SHORT); } 
 "boolean"                           { return TypeLexemeAction(createLexicalAnalyzerContext(), V_BOOLEAN); } 
 
-
+"="                                 { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), ASSIGN); }
 
 "true"|"false"                      { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_BOOLEAN); }
 [0-9]+\.[0-9]+f						{ return ConstantLexemeAction(createLexicalAnalyzerContext(), C_FLOAT); }
@@ -72,4 +72,7 @@ char            [a-zA-Z_]
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
 %%
 
+/* "+="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), ADD_ASSIGN); }
+"-="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), SUB_ASSIGN); }
+"*="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), MUL_ASSIGN); } */
 #include "FlexExport.h"

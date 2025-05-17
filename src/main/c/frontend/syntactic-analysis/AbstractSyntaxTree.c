@@ -74,3 +74,12 @@ void releaseProgram(Program * program) {
 		free(program);
 	}
 }
+
+void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (assignmentOperation != NULL) {
+		if(assignmentOperation->variableDeclaration != NULL) releaseVariableDeclaration(assignmentOperation->variableDeclaration);
+		free(assignmentOperation->expression);
+		free(assignmentOperation);
+	}
+}

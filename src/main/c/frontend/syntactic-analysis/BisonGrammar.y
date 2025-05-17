@@ -24,8 +24,12 @@
 	Factor * factor;
 	Program * program;
 
+
 	VariableDeclaration * variableDeclaration;
 	VariableType varType;
+
+	AssignmentOperation * assignmentOperation;
+	AssignmentOperatorType assignmentOperatorType;
 	char * name;
 }
 
@@ -41,6 +45,7 @@
 %destructor { releaseExpression($$); } <expression>
 %destructor { releaseFactor($$); } <factor>
 %destructor { releaseVariableDeclaration($$); } <variableDeclaration>
+%destructor { releaseAssignmentOperation($$); } <assignmentOperation>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -68,8 +73,10 @@
 %token <token> APOSTROPHE
 %token <token> QUOTE
 
-
-
+%token <token> ASSIGN
+%token <token> ADD_ASSIGN
+%token <token> SUB_ASSIGN
+%token <token> MUL_ASSIGN
 
 %token <token> UNKNOWN
 
@@ -80,6 +87,8 @@
 %type <expression> expression
 %type <factor> factor
 %type <program> program
+
+%type <assignmentOperation> assignment_operation
 
 %type <variableDeclaration> variable_declaration
 %type <varType> variable_type
@@ -96,16 +105,26 @@
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 
-program:  variable_declaration											{ $$ = VariableProgramSemanticAction(currentCompilerState(), $1); }
-		| expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
+program: 
+	assignment_operation											{ $$ = AssignmentProgramSemanticAction(currentCompilerState(), $1); }
+	| variable_declaration											{ $$ = VariableProgramSemanticAction(currentCompilerState(), $1); }
+	| expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
+	;
+
+assignment_operation: 
+	variable_declaration ASSIGN expression SEMICOLON				{ $$ = AssignmentDeclarationSemanticAction(NULL, $1, $3, ASSIGN_TYPE); }
+	| NAME ASSIGN expression SEMICOLON								{ $$ = AssignmentDeclarationSemanticAction($1, NULL, $3, ASSIGN_TYPE); }
+	| NAME ADD_ASSIGN expression SEMICOLON							{ $$ = AssignmentDeclarationSemanticAction($1, NULL, $3, ADD_ASSIGN_TYPE); }
+	| NAME SUB_ASSIGN expression SEMICOLON							{ $$ = AssignmentDeclarationSemanticAction($1, NULL, $3, SUB_ASSIGN_TYPE); }
+	| NAME MUL_ASSIGN expression SEMICOLON							{ $$ = AssignmentDeclarationSemanticAction($1, NULL, $3, MUL_ASSIGN_TYPE); }
 	;
 
 variable_declaration:
-	NAME COLON variable_type SEMICOLON									{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
+	NAME COLON variable_type										{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
 	;
 
 variable_type:
-	TYPE 																{ $$ = $1; }
+	TYPE 															{ $$ = $1; }
 	;
 
 
