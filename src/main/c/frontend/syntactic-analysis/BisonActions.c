@@ -32,30 +32,13 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 
 /* PUBLIC FUNCTIONS */
 
-Constant * ConstantSemanticAction(const void * value, ConstantType constantType) {
+Constant * ConstantSemanticAction(const void * value, int size, ConstantType constantType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Constant * constant = calloc(1, sizeof(Constant));
-	switch (constantType) {
-		case C_INT_TYPE:
-			constant->intValue = *(int *)value;
-			break;
-		case C_CHAR_TYPE:
-			constant->charValue = *(char *)value;
-			break;
-		case C_BOOLEAN_TYPE:
-			constant->booleanValue = *(boolean *)value;
-			break;
-		case C_DOUBLE_TYPE:
-			constant->doubleValue = *(double *)value;
-			break;
-		case C_FLOAT_TYPE:
-			constant->floatValue = *(float *)value;
-			break;
-		case C_STRING_TYPE:
-			constant->stringValue = *(char **)value;
-			break;
-	}
+	void * valueCPY = calloc(1, size);
+	memcpy(valueCPY, value, size);
 
+	constant->value = valueCPY;
 	constant->type = constantType;
 	return constant;
 }
@@ -175,51 +158,3 @@ Conditional * IfConditionalSemanticAction(Expression * expression)
 }
 
 
-
-/**
- * Assignment operations.
- */
-Program * AssignmentProgramSemanticAction(CompilerState * compilerState, AssignmentOperation * assignmentOperation) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Program * program = calloc(1, sizeof(Program));
-	program->assignmentOperation = assignmentOperation;
-
-	compilerState->abstractSyntaxtTree = program;
-	if (0 < flexCurrentContext()) {
-		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
-		compilerState->succeed = false;
-	}
-	else {
-		compilerState->succeed = true;
-	}
-	return program;
-}
-
-AssignmentOperation * AssignmentDeclarationSemanticAction(
-	VariableDeclaration * variableDeclaration,
-	Expression * expression
-) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	
-	AssignmentOperation * assignmentOperation = calloc(1, sizeof(AssignmentOperation));
-	assignmentOperation->variableDeclaration = variableDeclaration;
-	assignmentOperation->assignmentOperator = ASSIGN_TYPE;
-	assignmentOperation->expression = expression;
-
-	return assignmentOperation;
-}
-
-AssignmentOperation * AssignmentOperatorSemanticAction(
-	char * name,
-	Expression * expression,
-	AssignmentOperatorType assignmentOperatorType
-) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	
-	AssignmentOperation * assignmentOperation = calloc(1, sizeof(AssignmentOperation));
-	assignmentOperation->name = name;
-	assignmentOperation->assignmentOperator = assignmentOperatorType;
-	assignmentOperation->expression = expression;
-
-	return assignmentOperation;
-}

@@ -49,7 +49,7 @@ static const char _expressionTypeToCharacter(const ExpressionType type) {
  */
 static void _generateConstant(const unsigned int indentationLevel, Constant * constant) {
 	_output(indentationLevel, "%s", "[ $C$, circle, draw, black!20\n");
-	// _output(1 + indentationLevel, "%s%d%s", "[ $", constant->value, "$, circle, draw ]\n");
+	_output(1 + indentationLevel, "%s%d%s", "[ $", constant->value, "$, circle, draw ]\n");
 	_output(indentationLevel, "%s", "]\n");
 }
 

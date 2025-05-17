@@ -17,7 +17,6 @@ typedef enum ExpressionType ExpressionType;
 typedef enum FactorType FactorType;
 typedef enum VariableType VariableType;
 typedef enum ConstantType ConstantType;
-typedef enum AssignmentOperatorType AssignmentOperatorType;
 typedef enum ConditionalType ConditionalType;
 
 typedef struct Conditional Conditional;
@@ -28,7 +27,6 @@ typedef struct Program Program;
 
 
 typedef struct VariableDeclaration VariableDeclaration;
-typedef struct AssignmentOperation AssignmentOperation;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -80,24 +78,10 @@ enum ConstantType {
 	C_FLOAT_TYPE,	
 };
 
-enum AssignmentOperatorType {
-	ASSIGN_TYPE,
-	ADD_ASSIGN_TYPE,
-	SUB_ASSIGN_TYPE,
-	MUL_ASSIGN_TYPE,
-};
-
 /** ============== STRUCTS ============== */
 
 struct Constant {
-	union {
-		int intValue;
-		char charValue;
-		boolean booleanValue;
-		double doubleValue;
-		float floatValue;
-		char * stringValue;
-	};
+	void * value;
 	ConstantType type;
 };
 
@@ -131,19 +115,9 @@ struct VariableDeclaration {
 	Expression * expression;
 };
 
-struct AssignmentOperation {
-	union {
-		char * name;
-		VariableDeclaration * variableDeclaration;
-	};
-	Expression * expression;
-	AssignmentOperatorType assignmentOperator;
-};
-
 struct Program {
 	Expression * expression;
 	VariableDeclaration * variableDeclaration;
-	AssignmentOperation * assignmentOperation;
 	Conditional * conditional;
 };
 
@@ -170,9 +144,7 @@ struct Conditional {
 void releaseConstant(Constant * constant);
 void releaseExpression(Expression * expression);
 void releaseFactor(Factor * factor);
-void releaseName(char * name);
 void releaseVariableDeclaration(VariableDeclaration * variable);
-void releaseAssignmentOperation(AssignmentOperation * assignmentOperation);
 void releaseProgram(Program * program);
 void releaseConditional(Conditional * conditional);
 

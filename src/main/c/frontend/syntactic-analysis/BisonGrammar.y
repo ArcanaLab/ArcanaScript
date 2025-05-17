@@ -27,12 +27,8 @@
 	Conditional * conditional;
 
 
-
 	VariableDeclaration * variableDeclaration;
 	VariableType varType;
-
-	AssignmentOperation * assignmentOperation;
-	AssignmentOperatorType assignmentOperatorType;
 	char * name;
 }
 
@@ -47,12 +43,10 @@
 %destructor { releaseConstant($$); } <constant>
 %destructor { releaseFactor($$); } <factor>
 %destructor { releaseExpression($$); } <expression>
-%destructor { releaseName($$); } <name>
 %destructor { releaseVariableDeclaration($$); } <variableDeclaration>
 %destructor { releaseConditional($$); } <conditional>
 
 
-%destructor { releaseAssignmentOperation($$); } <assignmentOperation>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -77,8 +71,6 @@
 %token <token> SEMICOLON
 %token <token> CLOSE_PARENTHESIS
 %token <token> OPEN_PARENTHESIS
-%token <token> APOSTROPHE
-%token <token> QUOTE
 %token <token> OPEN_BRACE
 %token <token> CLOSE_BRACE
 
@@ -94,10 +86,7 @@
 %token <token> LESS_EQUAL
 %token <token> EQUAL_EQUAL
 %token <token> NOT_EQUAL
-%token <token> ASSIGN
-%token <token> ADD_ASSIGN
-%token <token> SUB_ASSIGN
-%token <token> MUL_ASSIGN
+
 
 %token <token> UNKNOWN
 
@@ -110,8 +99,6 @@
 %type <expression> expression
 %type <expression> comparator_expression
 %type <factor> factor
-
-%type <assignmentOperation> assignment_operation
 
 %type <conditional> conditional
 %type <variableDeclaration> variable_declaration
@@ -132,29 +119,17 @@
 %%
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
-program: 
-	assignment_operation											{ $$ = AssignmentProgramSemanticAction(currentCompilerState(), $1); }
-	| variable_declaration											{ $$ = VariableProgramSemanticAction(currentCompilerState(), $1); }
-	| expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
-	;
-
-assignment_operation: 
-	NAME ASSIGN expression SEMICOLON								{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
-	| NAME ADD_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
-	| NAME SUB_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
-	| NAME MUL_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
-	// TODO: Debatir mejor opción:
-	// - Si es en assignment_operation o variable_declaration que hay que poner esto:
-	/* | variable_declaration ASSIGN expression SEMICOLON				{ $$ = AssignmentDeclarationSemanticAction($1, $3); } */
-	;
+program: variable_declaration										{ $$ = VariableProgramSemanticAction(currentCompilerState(), $1); }
+	|expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
+	|conditional												{ $$ = ConditionalProgramSemanticAction(currentCompilerState(), $1); }
+	; 
 
 variable_declaration:
-	NAME COLON variable_type SEMICOLON								{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
-	| NAME COLON variable_type ASSIGN expression SEMICOLON			{ $$ = VariableDeclarationSemanticAction($1, $3, $5); }
+	NAME COLON variable_type SEMICOLON							{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
 	;
 
 variable_type:
-	TYPE 															{ $$ = $1; }
+	TYPE 														{ $$ = $1; }
 	;
 
 conditional: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS	{$$ = IfConditionalSemanticAction($exp);}
@@ -181,12 +156,12 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactor
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
 	;
 
-constant: C_INTEGER													{ $$ = ConstantSemanticAction(&$1, C_INT_TYPE); }
-		| C_CHARACTER												{ $$ = ConstantSemanticAction(&$1, C_CHAR_TYPE); }
-		| C_STRING													{ $$ = ConstantSemanticAction(&$1, C_STRING_TYPE); }
-		| C_DOUBLE													{ $$ = ConstantSemanticAction(&$1, C_DOUBLE_TYPE); }	
-		| C_FLOAT													{ $$ = ConstantSemanticAction(&$1, C_FLOAT_TYPE); }
-		| C_BOOLEAN													{ $$ = ConstantSemanticAction(&$1, C_BOOLEAN_TYPE); }	
+constant: C_INTEGER													{ $$ = ConstantSemanticAction(&$1, sizeof(int),		C_INT_TYPE); }
+		| C_CHARACTER												{ $$ = ConstantSemanticAction(&$1, sizeof(char),	C_CHAR_TYPE); }
+		| C_DOUBLE													{ $$ = ConstantSemanticAction(&$1, sizeof(double),	C_DOUBLE_TYPE); }	
+		| C_FLOAT													{ $$ = ConstantSemanticAction(&$1, sizeof(float),	C_FLOAT_TYPE); }
+		| C_STRING													{ $$ = ConstantSemanticAction(&$1, sizeof(char)*strlen($1) + 1,C_STRING_TYPE); }
+		| C_BOOLEAN													{ $$ = ConstantSemanticAction(&$1, sizeof(boolean),C_BOOLEAN_TYPE); }	
 	;
 
 %%
