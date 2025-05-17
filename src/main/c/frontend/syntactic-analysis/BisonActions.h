@@ -21,6 +21,10 @@ void shutdownBisonActionsModule();
 Constant * ConstantSemanticAction(const void * value, ConstantType constantType);
 Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
 Expression * FactorExpressionSemanticAction(Factor * factor);
+Expression * ComparatorExpressionSemanticAction(Factor * leftFactor, Factor * rightFactor, ExpressionType type);
+Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType);
+
+
 Factor * ConstantFactorSemanticAction(Constant * constant);
 Factor * ExpressionFactorSemanticAction(Expression * expression);
 
@@ -33,6 +37,8 @@ Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableD
  * Assignment operations.
  */
 Program * AssignmentProgramSemanticAction(CompilerState * compilerState, AssignmentOperation * assignmentOperation);
+Program * ConditionalProgramSemanticAction(CompilerState * compilerState, Conditional * conditional);
+
 AssignmentOperation * AssignmentDeclarationSemanticAction(VariableDeclaration * variableDeclaration, Expression * expression);
 AssignmentOperation * AssignmentOperatorSemanticAction(char * name, Expression * expression, AssignmentOperatorType assignmentOperatorType);
 

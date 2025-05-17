@@ -77,6 +77,17 @@ Expression * FactorExpressionSemanticAction(Factor * factor) {
 	return expression;
 }
 
+Expression * ComparatorExpressionSemanticAction(Factor * leftFactor, Factor * rightFactor, ExpressionType type) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->leftFactor = leftFactor;
+	expression->rightFactor = rightFactor;
+	expression->type = type;
+	return expression;
+}
+
+
+
 Factor * ConstantFactorSemanticAction(Constant * constant) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Factor * factor = calloc(1, sizeof(Factor));
@@ -120,6 +131,7 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 
 }
 
+
 Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableDeclaration * varDeclaration) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
@@ -155,6 +167,22 @@ Program * AssignmentProgramSemanticAction(CompilerState * compilerState, Assignm
 	}
 	return program;
 }
+Program * ConditionalProgramSemanticAction(CompilerState * compilerState, Conditional * conditional) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program * program = calloc(1, sizeof(Program));
+	program->conditional = conditional;
+
+	compilerState->abstractSyntaxtTree = program;
+	if (0 < flexCurrentContext()) {
+		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
+		compilerState->succeed = false;
+	}
+	else {
+		compilerState->succeed = true;
+	}
+	return program;
+}
+
 
 AssignmentOperation * AssignmentDeclarationSemanticAction(
 	VariableDeclaration * variableDeclaration,
@@ -183,4 +211,15 @@ AssignmentOperation * AssignmentOperatorSemanticAction(
 	assignmentOperation->expression = expression;
 
 	return assignmentOperation;
+}
+
+Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	
+	Conditional * conditional = calloc(1, sizeof(Conditional));
+	conditional->expression = expression;
+	conditional->nextConditional = NULL;
+	conditional->ConditionalType = conditionalType;
+
+	return conditional;
 }
