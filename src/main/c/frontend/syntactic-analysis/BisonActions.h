@@ -33,6 +33,7 @@ Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableD
  * Assignment operations.
  */
 Program * AssignmentProgramSemanticAction(CompilerState * compilerState, AssignmentOperation * assignmentOperation);
-AssignmentOperation * AssignmentDeclarationSemanticAction(char * name, VariableDeclaration * variableDeclaration, Expression * expression, AssignmentOperatorType assignmentOperatorType);
+AssignmentOperation * AssignmentDeclarationSemanticAction(VariableDeclaration * variableDeclaration, Expression * expression, AssignmentOperatorType assignmentOperatorType);
+AssignmentOperation * AssignmentOperatorSemanticAction(char * name, Expression * expression, AssignmentOperatorType assignmentOperatorType);
 
 #endif

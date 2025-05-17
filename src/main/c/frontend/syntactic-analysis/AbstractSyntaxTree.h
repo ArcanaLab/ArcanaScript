@@ -75,7 +75,14 @@ enum AssignmentOperatorType {
 /** ============== STRUCTS ============== */
 
 struct Constant {
-	void * value;
+	union {
+		int intValue;
+		char charValue;
+		boolean booleanValue;
+		double doubleValue;
+		float floatValue;
+		char * stringValue;
+	};
 	ConstantType type;
 };
 

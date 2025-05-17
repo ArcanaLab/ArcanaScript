@@ -112,11 +112,11 @@ program:
 	;
 
 assignment_operation: 
-	variable_declaration ASSIGN expression SEMICOLON				{ $$ = AssignmentDeclarationSemanticAction(NULL, $1, $3, ASSIGN_TYPE); }
-	| NAME ASSIGN expression SEMICOLON								{ $$ = AssignmentDeclarationSemanticAction($1, NULL, $3, ASSIGN_TYPE); }
-	| NAME ADD_ASSIGN expression SEMICOLON							{ $$ = AssignmentDeclarationSemanticAction($1, NULL, $3, ADD_ASSIGN_TYPE); }
-	| NAME SUB_ASSIGN expression SEMICOLON							{ $$ = AssignmentDeclarationSemanticAction($1, NULL, $3, SUB_ASSIGN_TYPE); }
-	| NAME MUL_ASSIGN expression SEMICOLON							{ $$ = AssignmentDeclarationSemanticAction($1, NULL, $3, MUL_ASSIGN_TYPE); }
+	variable_declaration ASSIGN expression SEMICOLON				{ $$ = AssignmentDeclarationSemanticAction($1, $3, ASSIGN_TYPE); }
+	| NAME ASSIGN expression SEMICOLON								{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
+	| NAME ADD_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
+	| NAME SUB_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
+	| NAME MUL_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
 	;
 
 variable_declaration:

@@ -35,10 +35,27 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 Constant * ConstantSemanticAction(const void * value, int size, ConstantType constantType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Constant * constant = calloc(1, sizeof(Constant));
-	void * valueCPY = calloc(1, size);
-	memcpy(valueCPY, value, size);
+	switch (constantType) {
+		case C_INT_TYPE:
+			constant->intValue = *(int *)value;
+			break;
+		case C_CHAR_TYPE:
+			constant->charValue = *(char *)value;
+			break;
+		case C_BOOLEAN_TYPE:
+			constant->booleanValue = *(boolean *)value;
+			break;
+		case C_DOUBLE_TYPE:
+			constant->doubleValue = *(double *)value;
+			break;
+		case C_FLOAT_TYPE:
+			constant->floatValue = *(float *)value;
+			break;
+		case C_STRING_TYPE:
+			constant->stringValue = *(char **)value;
+			break;
+	}
 
-	constant->value = valueCPY;
 	constant->type = constantType;
 	return constant;
 }
@@ -140,7 +157,6 @@ Program * AssignmentProgramSemanticAction(CompilerState * compilerState, Assignm
 }
 
 AssignmentOperation * AssignmentDeclarationSemanticAction(
-	char * name,
 	VariableDeclaration * variableDeclaration,
 	Expression * expression,
 	AssignmentOperatorType assignmentOperatorType
@@ -148,8 +164,22 @@ AssignmentOperation * AssignmentDeclarationSemanticAction(
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
 	AssignmentOperation * assignmentOperation = calloc(1, sizeof(AssignmentOperation));
-	assignmentOperation->name = name;
 	assignmentOperation->variableDeclaration = variableDeclaration;
+	assignmentOperation->assignmentOperator = assignmentOperatorType;
+	assignmentOperation->expression = expression;
+
+	return assignmentOperation;
+}
+
+AssignmentOperation * AssignmentOperatorSemanticAction(
+	char * name,
+	Expression * expression,
+	AssignmentOperatorType assignmentOperatorType
+) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	
+	AssignmentOperation * assignmentOperation = calloc(1, sizeof(AssignmentOperation));
+	assignmentOperation->name = name;
 	assignmentOperation->assignmentOperator = assignmentOperatorType;
 	assignmentOperation->expression = expression;
 

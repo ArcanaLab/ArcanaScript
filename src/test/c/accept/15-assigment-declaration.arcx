@@ -1,1 +1,1 @@
-var1: int = 10;
+var1: int = "a";
