@@ -16,15 +16,15 @@ void shutdownAbstractSyntaxTreeModule() {
 
 /** PUBLIC FUNCTIONS */
 void releaseConstant(Constant * constant) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Freeing Constant at %p with value at %p", constant, constant->value);
 	if (constant != NULL) {
-		if (constant->value) free(constant->value);
+		free(constant->value);
 		free(constant);
 	}
 }
 
 void releaseExpression(Expression * expression) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (expression != NULL) {
 		switch (expression->type) {
 			case ADDITION:
@@ -37,13 +37,22 @@ void releaseExpression(Expression * expression) {
 			case FACTOR:
 				releaseFactor(expression->factor);
 				break;
+			case GREATER_TYPE:
+			case GREATER_EQUAL_TYPE:
+			case LESS_TYPE:
+			case LESS_EQUAL_TYPE:
+			case EQUAL_EQUAL_TYPE:
+			case NOT_EQUAL_TYPE:
+				releaseFactor(expression->leftFactor);
+				releaseFactor(expression->rightFactor);
+				break;
 		}
 		free(expression);
 	}
 }
 
 void releaseFactor(Factor * factor) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (factor != NULL) {
 		switch (factor->type) {
 			case CONSTANT:

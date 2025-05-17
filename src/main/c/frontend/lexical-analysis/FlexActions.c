@@ -127,3 +127,30 @@ Token ControlStructureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerConte
 	return token;
 }
 
+Token ComparisonOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+    Token token;
+    if (strcmp(lexicalAnalyzerContext->lexeme, "<") == 0) 
+    {
+        token = LESS;
+    } 
+    else if (strcmp(lexicalAnalyzerContext->lexeme, "<=") == 0) 
+    {
+        token = LESS_EQUAL;
+    } 
+    else if (strcmp(lexicalAnalyzerContext->lexeme, ">") == 0) {
+        token = GREATER;
+    } 
+    else if (strcmp(lexicalAnalyzerContext->lexeme, ">=") == 0) {
+        token = GREATER_EQUAL;
+    } 
+    else if (strcmp(lexicalAnalyzerContext->lexeme, "==") == 0) {
+        token = EQUAL_EQUAL;
+    }
+    else if (strcmp(lexicalAnalyzerContext->lexeme, "!=") == 0) {
+        token = NOT_EQUAL;
+    }
+    destroyLexicalAnalyzerContext(lexicalAnalyzerContext);  
+    return token;
+}
+

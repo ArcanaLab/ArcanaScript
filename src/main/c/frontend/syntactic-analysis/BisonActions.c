@@ -52,6 +52,15 @@ Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Exp
 	return expression;
 }
 
+Expression * ComparatorExpressionSemanticAction(Factor * leftExpression, Factor * rightExpression, ExpressionType type) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->leftFactor = leftExpression;
+	expression->rightFactor = rightExpression;
+	expression->type = type;
+	return expression;
+}
+
 Expression * FactorExpressionSemanticAction(Factor * factor) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Expression * expression = calloc(1, sizeof(Expression));
@@ -144,6 +153,7 @@ Conditional * IfConditionalSemanticAction(Expression * expression)
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Conditional * conditional = calloc(1, sizeof(Conditional));
 	conditional->expression = expression;
+	conditional->ConditionalType = IF_TYPE;
 	return conditional;
 }
 

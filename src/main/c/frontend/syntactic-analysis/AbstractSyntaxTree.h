@@ -38,7 +38,13 @@ enum ExpressionType {
 	DIVISION,
 	FACTOR,
 	MULTIPLICATION,
-	SUBTRACTION
+	SUBTRACTION,
+	GREATER_TYPE,
+	LESS_TYPE,
+	GREATER_EQUAL_TYPE,
+	LESS_EQUAL_TYPE,
+	EQUAL_EQUAL_TYPE,
+	NOT_EQUAL_TYPE,
 };
 
 enum ConditionalType {
@@ -93,6 +99,11 @@ struct Expression {
 		struct {
 			Expression * leftExpression;
 			Expression * rightExpression;
+		};
+		struct
+		{
+			Factor * leftFactor;
+			Factor * rightFactor;
 		};
 	};
 	ExpressionType type;

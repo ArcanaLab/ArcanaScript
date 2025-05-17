@@ -38,5 +38,6 @@ Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Variable
 
 // ================== CONTROL STRUCTURES ==================
 Token ControlStructureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-
+// ================== CONTROL STRUCTURES ==================
+Token ComparisonOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 #endif

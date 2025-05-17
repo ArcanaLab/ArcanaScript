@@ -41,10 +41,11 @@
  * @see https://www.gnu.org/software/bison/manual/html_node/Destructor-Decl.html
  */
 %destructor { releaseConstant($$); } <constant>
-%destructor { releaseExpression($$); } <expression>
 %destructor { releaseFactor($$); } <factor>
+%destructor { releaseExpression($$); } <expression>
 %destructor { releaseVariableDeclaration($$); } <variableDeclaration>
 %destructor { releaseConditional($$); } <conditional>
+
 
 
 /** ============== TERMINALS. ============== */
@@ -78,6 +79,13 @@
 %token <token> ELSE
 %token <token> ELIF
 
+/** ===== Comparators ===== */
+%token <token> GREATER
+%token <token> GREATER_EQUAL
+%token <token> LESS
+%token <token> LESS_EQUAL
+%token <token> EQUAL_EQUAL
+%token <token> NOT_EQUAL
 
 
 %token <token> UNKNOWN
@@ -85,10 +93,13 @@
 /** ============== TERMINALS ENDS. ============== */
 
 /** ============== NON-TERMINALS. ============== */
-%type <constant> constant
-%type <expression> expression
-%type <factor> factor
 %type <program> program
+%type <constant> constant
+/** ===== Expresions ===== */
+%type <expression> expression
+%type <expression> comparator_expression
+%type <factor> factor
+
 %type <conditional> conditional
 %type <variableDeclaration> variable_declaration
 %type <varType> variable_type
@@ -121,9 +132,9 @@ variable_type:
 	TYPE 														{ $$ = $1; }
 	;
 
-conditional: IF OPEN_PARENTHESIS expression[exp] CLOSE_PARENTHESIS	{$$ = IfConditionalSemanticAction($exp);}
+conditional: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS	{$$ = IfConditionalSemanticAction($exp);}
 
-	
+
 
 expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
@@ -132,6 +143,15 @@ expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressi
 	| factor														{ $$ = FactorExpressionSemanticAction($1); }
 	;
 
+comparator_expression:
+	factor[left] GREATER factor[right]						{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_TYPE); }
+	| factor[left] GREATER_EQUAL factor[right]				{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_EQUAL_TYPE); }
+	| factor[left] LESS factor[right]						{ $$ = ComparatorExpressionSemanticAction($left, $right, LESS_TYPE); }
+	| factor[left] LESS_EQUAL factor[right]					{ $$ = ComparatorExpressionSemanticAction($left, $right, LESS_EQUAL_TYPE); }
+	| factor[left] EQUAL_EQUAL factor[right]				{ $$ = ComparatorExpressionSemanticAction($left, $right, EQUAL_EQUAL_TYPE); }
+	| factor[left] NOT_EQUAL factor[right]					{ $$ = ComparatorExpressionSemanticAction($left, $right, NOT_EQUAL_TYPE); }
+	;
+	
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
 	;

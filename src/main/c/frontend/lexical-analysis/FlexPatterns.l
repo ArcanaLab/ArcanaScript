@@ -50,6 +50,13 @@ single_line_comment     "#"[^!].*
 "elif"                              { return ControlStructureLexemeAction(createLexicalAnalyzerContext()); }   
 "else"                              { return ControlStructureLexemeAction(createLexicalAnalyzerContext()); }
 
+"<"                                 { return ComparisonOperatorLexemeAction(createLexicalAnalyzerContext()); }
+">"                                 { return ComparisonOperatorLexemeAction(createLexicalAnalyzerContext()); }
+"<="                                { return ComparisonOperatorLexemeAction(createLexicalAnalyzerContext()); }
+">="                                { return ComparisonOperatorLexemeAction(createLexicalAnalyzerContext()); }
+"=="                                { return ComparisonOperatorLexemeAction(createLexicalAnalyzerContext()); }
+"!="                                { return ComparisonOperatorLexemeAction(createLexicalAnalyzerContext()); }
+
 ":"                                 { return ColonLexemeAction(createLexicalAnalyzerContext()); }
 ";"                                 { return SemicolonLexemeAction(createLexicalAnalyzerContext()); }
 
