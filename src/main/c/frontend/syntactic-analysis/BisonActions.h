@@ -24,16 +24,26 @@ Expression * FactorExpressionSemanticAction(Factor * factor);
 Factor * ConstantFactorSemanticAction(Constant * constant);
 Factor * ExpressionFactorSemanticAction(Expression * expression);
 
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression);
 
-Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
-Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableDeclaration * varDeclaration);
+/**
+ * Variable declarations.
+ */
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression);
 
 /**
  * Assignment operations.
  */
-Program * AssignmentProgramSemanticAction(CompilerState * compilerState, AssignmentOperation * assignmentOperation);
 AssignmentOperation * AssignmentDeclarationSemanticAction(VariableDeclaration * variableDeclaration, Expression * expression);
 AssignmentOperation * AssignmentOperatorSemanticAction(char * name, Expression * expression, AssignmentOperatorType assignmentOperatorType);
+
+/**
+ * Instructions.
+ */
+Instruction * InstructionSemanticAction(void * value, InstructionType instructionType);
+
+/**
+ * Programs.
+ */
+Program * InstructionProgramSemanticAction(CompilerState * compilerState, Instruction * instruction);
 
 #endif

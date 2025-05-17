@@ -99,18 +99,18 @@ Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, T
 	return token;
 }
 
-Token ApostropheLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = APOSTROPHE;
+void ApostropheLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	if (_logIgnoredLexemes) {
+		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	}
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return APOSTROPHE;
 }
 
-Token QuoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = QUOTE;
+void QuoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	if (_logIgnoredLexemes) {
+		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	}
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return QUOTE;
 }
 
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {

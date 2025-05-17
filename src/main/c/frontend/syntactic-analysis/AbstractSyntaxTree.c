@@ -71,22 +71,37 @@ void releaseVariableDeclaration(VariableDeclaration * variable) {
 	free(variable);
 }
 
-void releaseProgram(Program * program) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(program == NULL) return;
-
-	releaseVariableDeclaration(program->variableDeclaration);
-	releaseAssignmentOperation(program->assignmentOperation);
-	releaseExpression(program->expression);
-	free(program);
-}
-
 void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (assignmentOperation == NULL) return;
 
-	// releaseVariableDeclaration(assignmentOperation->variableDeclaration);
 	releaseName(assignmentOperation->name);
 	releaseExpression(assignmentOperation->expression);
 	free(assignmentOperation);
+}
+
+void releaseInstruction(Instruction * instruction) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(instruction == NULL) return;
+
+	switch (instruction->type) {
+		case INSTRUCTION_ASSIGNMENT:
+			releaseAssignmentOperation(instruction->assignment);
+			break;
+		case INSTRUCTION_VARIABLE_DECLARATION:
+			releaseVariableDeclaration(instruction->variableDeclaration);
+			break;
+		case INSTRUCTION_EXPRESSION:
+			releaseExpression(instruction->expression);
+			break;
+	}
+	free(instruction);
+}
+
+void releaseProgram(Program * program) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(program == NULL) return;
+
+	releaseInstruction(program->instruction);
+	free(program);
 }

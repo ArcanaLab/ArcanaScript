@@ -18,6 +18,7 @@ typedef enum FactorType FactorType;
 typedef enum VariableType VariableType;
 typedef enum ConstantType ConstantType;
 typedef enum AssignmentOperatorType AssignmentOperatorType;
+typedef enum InstructionType InstructionType;
 
 typedef struct Constant Constant;
 typedef struct Expression Expression;
@@ -26,6 +27,7 @@ typedef struct Program Program;
 
 typedef struct VariableDeclaration VariableDeclaration;
 typedef struct AssignmentOperation AssignmentOperation;
+typedef struct Instruction Instruction;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -70,6 +72,12 @@ enum AssignmentOperatorType {
 	ADD_ASSIGN_TYPE,
 	SUB_ASSIGN_TYPE,
 	MUL_ASSIGN_TYPE,
+};
+
+enum InstructionType {
+	INSTRUCTION_ASSIGNMENT,
+	INSTRUCTION_VARIABLE_DECLARATION,
+	INSTRUCTION_EXPRESSION,
 };
 
 /** ============== STRUCTS ============== */
@@ -120,10 +128,18 @@ struct AssignmentOperation {
 	AssignmentOperatorType assignmentOperator;
 };
 
+struct Instruction {
+	union {
+		AssignmentOperation * assignment;
+		VariableDeclaration * variableDeclaration;
+		Expression * expression;
+	};
+
+	InstructionType type;
+};
+
 struct Program {
-	Expression * expression;
-	VariableDeclaration * variableDeclaration;
-	AssignmentOperation * assignmentOperation;
+	Instruction * instruction;
 };
 
 /**
