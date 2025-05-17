@@ -16,6 +16,8 @@
  * @see https://westes.github.io/flex/manual/Start-Conditions.html
  */
 %x MULTILINE_COMMENT
+%x CHAR_CONSTANT
+%x STRING_CONSTANT
 
 /**
  * Reusable patterns.
@@ -57,7 +59,15 @@ single_line_comment     "#"[^!].*
 "=="                                { return ComparisonOperatorLexemeAction(createLexicalAnalyzerContext()); }
 "!="                                { return ComparisonOperatorLexemeAction(createLexicalAnalyzerContext()); }
 
-":"                                 { return ColonLexemeAction(createLexicalAnalyzerContext()); }
+"'"                                 { BEGIN(CHAR_CONSTANT); IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+<CHAR_CONSTANT>[^(\n|')]             { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_CHARACTER); }
+<CHAR_CONSTANT>"'"                  { IgnoredLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
+
+"\""                                { BEGIN(STRING_CONSTANT); IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+<STRING_CONSTANT>[^(\n|\")]+        { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_STRING); }
+<STRING_CONSTANT>\"                  { IgnoredLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
+
+<INITIAL>":"                        { return ColonLexemeAction(createLexicalAnalyzerContext()); }
 ";"                                 { return SemicolonLexemeAction(createLexicalAnalyzerContext()); }
 
 "int"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), V_INT); }
@@ -67,16 +77,23 @@ single_line_comment     "#"[^!].*
 "string"                            { return TypeLexemeAction(createLexicalAnalyzerContext(), V_STRING); } 
 "long"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), V_LONG); } 
 "short"                             { return TypeLexemeAction(createLexicalAnalyzerContext(), V_SHORT); } 
+"boolean"                           { return TypeLexemeAction(createLexicalAnalyzerContext(), V_BOOLEAN); } 
+
+"="                                 { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), ASSIGN); }
+"+="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), ADD_ASSIGN); }
+"-="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), SUB_ASSIGN); }
+"*="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), MUL_ASSIGN); }
+
+"true"|"false"                      { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_BOOLEAN); }
+[0-9]+\.[0-9]+f						{ return ConstantLexemeAction(createLexicalAnalyzerContext(), C_FLOAT); }
+[0-9]+\.[0-9]+						{ return ConstantLexemeAction(createLexicalAnalyzerContext(), C_DOUBLE); }
+[0-9]+						        { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_INTEGER); }
 
 
-
-[[:alpha:]]+                        { return NameLexemeAction(createLexicalAnalyzerContext()); }
-[[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
-
+{name}                              { return NameLexemeAction(createLexicalAnalyzerContext()); }
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
 %%
-/* "true"                              { return BooleanLexemeAction(createLexicalAnalyzerContext(), TRUE); }
-"false"                             { return BooleanLexemeAction(createLexicalAnalyzerContext(), FALSE); } */
 
 #include "FlexExport.h"

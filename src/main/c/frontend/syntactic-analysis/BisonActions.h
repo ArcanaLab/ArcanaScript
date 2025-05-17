@@ -18,7 +18,7 @@ void shutdownBisonActionsModule();
  * Bison semantic actions.
  */
 
-Constant * ConstantSemanticAction(const void * value, int size, ConstantType constantType);
+Constant * ConstantSemanticAction(const void * value, ConstantType constantType);
 Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
 Expression * ComparatorExpressionSemanticAction(Factor * leftExpression, Factor * rightExpression, ExpressionType type);
 Expression * FactorExpressionSemanticAction(Factor * factor);
@@ -29,6 +29,14 @@ VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableTyp
 
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
 Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableDeclaration * varDeclaration);
+
+/**
+ * Assignment operations.
+ */
+Program * AssignmentProgramSemanticAction(CompilerState * compilerState, AssignmentOperation * assignmentOperation);
+AssignmentOperation * AssignmentDeclarationSemanticAction(VariableDeclaration * variableDeclaration, Expression * expression);
+AssignmentOperation * AssignmentOperatorSemanticAction(char * name, Expression * expression, AssignmentOperatorType assignmentOperatorType);
+
 Program * ConditionalProgramSemanticAction(CompilerState * compilerState, Conditional * conditional);
 
 Conditional * IfConditionalSemanticAction(Expression * expression);

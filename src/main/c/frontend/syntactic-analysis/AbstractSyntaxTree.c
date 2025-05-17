@@ -16,11 +16,11 @@ void shutdownAbstractSyntaxTreeModule() {
 
 /** PUBLIC FUNCTIONS */
 void releaseConstant(Constant * constant) {
-	logDebugging(_logger, "Freeing Constant at %p with value at %p", constant, constant->value);
-	if (constant != NULL) {
-		free(constant->value);
-		free(constant);
-	}
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (constant == NULL) return;
+
+	if(constant->type == C_STRING_TYPE) free(constant->stringValue);
+	free(constant);
 }
 
 void releaseExpression(Expression * expression) {
@@ -66,12 +66,18 @@ void releaseFactor(Factor * factor) {
 	}
 }
 
+void releaseName(char * name) {
+	if(name == NULL) return;
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	free(name);
+}
+
 void releaseVariableDeclaration(VariableDeclaration * variable) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(variable == NULL) return;
 
-	if(variable->expression != NULL) releaseExpression(variable->expression);
-	free(variable->name); // It must be done since it's name is allocated when strdup is done.
+	releaseExpression(variable->expression);
+	releaseName(variable->name);
 	free(variable);
 }
 
@@ -86,11 +92,20 @@ void releaseConditional(Conditional * conditional){
 
 void releaseProgram(Program * program) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (!program) return;
-
-	releaseExpression(program->expression);
-	releaseVariableDeclaration(program->variableDeclaration);
-	releaseConditional(program->conditional);
-	free(program);
+	if (program != NULL) {
+		releaseVariableDeclaration(program->variableDeclaration);
+		releaseExpression(program->expression);
+		releaseConditional(program->conditional);
+		free(program);
+	}
 }
 
+void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (assignmentOperation == NULL) return;
+
+	// releaseVariableDeclaration(assignmentOperation->variableDeclaration);
+	releaseName(assignmentOperation->name);
+	releaseExpression(assignmentOperation->expression);
+	free(assignmentOperation);
+}
