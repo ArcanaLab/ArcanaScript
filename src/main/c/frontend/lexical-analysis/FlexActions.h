@@ -39,4 +39,6 @@ Token NameLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, VariableType token); 
 
+Token AssignmentOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+
 #endif

@@ -17,29 +17,28 @@ void shutdownAbstractSyntaxTreeModule() {
 /** PUBLIC FUNCTIONS */
 void releaseConstant(Constant * constant) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (constant != NULL) {
-		free(constant->value);
-		free(constant);
-	}
+	if (constant == NULL) return;
+
+	if(constant->type == C_STRING_TYPE) free(constant->stringValue);
+	free(constant);
 }
 
 void releaseExpression(Expression * expression) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (expression != NULL) {
-		switch (expression->type) {
-			case ADDITION:
-			case DIVISION:
-			case MULTIPLICATION:
-			case SUBTRACTION:
-				releaseExpression(expression->leftExpression);
-				releaseExpression(expression->rightExpression);
-				break;
-			case FACTOR:
-				releaseFactor(expression->factor);
-				break;
-		}
-		free(expression);
+	if(expression == NULL) return;
+	switch (expression->type) {
+		case ADDITION:
+		case DIVISION:
+		case MULTIPLICATION:
+		case SUBTRACTION:
+			releaseExpression(expression->leftExpression);
+			releaseExpression(expression->rightExpression);
+			break;
+		case FACTOR:
+			releaseFactor(expression->factor);
+			break;
 	}
+	free(expression);
 }
 
 void releaseFactor(Factor * factor) {
@@ -57,20 +56,37 @@ void releaseFactor(Factor * factor) {
 	}
 }
 
+void releaseName(char * name) {
+	if(name == NULL) return;
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	free(name);
+}
+
 void releaseVariableDeclaration(VariableDeclaration * variable) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(variable == NULL) return;
 
-	if(variable->expression != NULL) releaseExpression(variable->expression);
-	free(variable->name); // It must be done since it's name is allocated when strdup is done.
+	releaseExpression(variable->expression);
+	releaseName(variable->name);
 	free(variable);
 }
 
 void releaseProgram(Program * program) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (program != NULL) {
-		releaseVariableDeclaration(program->variableDeclaration);
-		releaseExpression(program->expression);
-		free(program);
-	}
+	if(program == NULL) return;
+
+	releaseVariableDeclaration(program->variableDeclaration);
+	releaseAssignmentOperation(program->assignmentOperation);
+	releaseExpression(program->expression);
+	free(program);
+}
+
+void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (assignmentOperation == NULL) return;
+
+	// releaseVariableDeclaration(assignmentOperation->variableDeclaration);
+	releaseName(assignmentOperation->name);
+	releaseExpression(assignmentOperation->expression);
+	free(assignmentOperation);
 }
