@@ -80,6 +80,7 @@ enum InstructionType {
 	INSTRUCTION_ASSIGNMENT,
 	INSTRUCTION_VARIABLE_DECLARATION,
 	INSTRUCTION_EXPRESSION,
+	INSTRUCTION_BLOCK,
 };
 
 /** ============== STRUCTS ============== */
@@ -135,6 +136,7 @@ struct Instruction {
 		AssignmentOperation * assignment;
 		VariableDeclaration * variableDeclaration;
 		Expression * expression;
+		Block * block;
 	};
 
 	InstructionType type;

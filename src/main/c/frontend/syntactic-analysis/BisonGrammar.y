@@ -77,6 +77,9 @@
 %token <token> CLOSE_PARENTHESIS
 %token <token> OPEN_PARENTHESIS
 
+%token <token> OPEN_BRACE
+%token <token> CLOSE_BRACE
+
 %token <token> ASSIGN
 %token <token> ADD_ASSIGN
 %token <token> SUB_ASSIGN
@@ -98,6 +101,7 @@
 
 %type <instruction> instruction
 %type <block> block
+%type <block> scope
 %type <program> program
 /**
  * Precedence and associativity.
@@ -130,7 +134,11 @@ instruction:
 	assignment_operation SEMICOLON									{ $$ = InstructionSemanticAction($1, INSTRUCTION_ASSIGNMENT); }
 	| variable_declaration SEMICOLON								{ $$ = InstructionSemanticAction($1, INSTRUCTION_VARIABLE_DECLARATION); }
 	| expression SEMICOLON											{ $$ = InstructionSemanticAction($1, INSTRUCTION_EXPRESSION); }
+	| scope															{ $$ = InstructionSemanticAction($1, INSTRUCTION_BLOCK); }
 	;
+
+scope:
+	OPEN_BRACE block CLOSE_BRACE									{ $$ = $2; }
 
 assignment_operation: 
 	NAME ASSIGN expression											{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }

@@ -99,6 +99,13 @@ Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, T
 	return token;
 }
 
+Token BraceLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return token;
+}
+
 void ApostropheLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	if (_logIgnoredLexemes) {
 		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
