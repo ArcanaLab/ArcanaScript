@@ -18,6 +18,7 @@ typedef enum FactorType FactorType;
 typedef enum VariableType VariableType;
 typedef enum ConstantType ConstantType;
 typedef enum AssignmentOperatorType AssignmentOperatorType;
+typedef enum InstructionType InstructionType;
 typedef enum LoopType LoopType;
 
 typedef struct Constant Constant;
@@ -28,7 +29,10 @@ typedef struct Loop Loop;
 
 typedef struct VariableDeclaration VariableDeclaration;
 typedef struct AssignmentOperation AssignmentOperation;
+typedef struct Instruction Instruction;
 
+typedef struct InstructionNode InstructionNode;
+typedef struct Block Block;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -74,10 +78,23 @@ enum AssignmentOperatorType {
 	MUL_ASSIGN_TYPE,
 };
 
+enum InstructionType {
+	INSTRUCTION_ASSIGNMENT,
+	INSTRUCTION_VARIABLE_DECLARATION,
+	INSTRUCTION_EXPRESSION,
+};
+
+enum InstructionType {
+	INSTRUCTION_ASSIGNMENT,
+	INSTRUCTION_VARIABLE_DECLARATION,
+	INSTRUCTION_EXPRESSION,
+};
+
 enum LoopType {
 	WHILE_LOOP,
 	FOR_LOOP,
 };
+
 /** ============== STRUCTS ============== */
 
 struct Constant {
@@ -132,10 +149,28 @@ struct Loop {
 
 };
 
+struct Instruction {
+	union {
+		AssignmentOperation * assignment;
+		VariableDeclaration * variableDeclaration;
+		Expression * expression;
+	};
+
+	InstructionType type;
+};
+
+struct InstructionNode {
+	Instruction * instruction;
+	InstructionNode * nextInstructionNode;
+};
+
+struct Block {
+	InstructionNode * firstInstructionNode;// Prepend en O(1)
+	InstructionNode * lastInstructionNode; // Append en O(1)
+};
+
 struct Program {
-	Expression * expression;
-	VariableDeclaration * variableDeclaration;
-	AssignmentOperation * assignmentOperation;
+	Block * block;
 	Loop * loop;
 };
 

@@ -48,13 +48,13 @@ single_line_comment     "#"[^!].*
 "("									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), OPEN_PARENTHESIS); }
 ")"									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), CLOSE_PARENTHESIS); }
 
-"'"                                 { BEGIN(CHAR_CONSTANT); IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+"'"                                 { BEGIN(CHAR_CONSTANT); ApostropheLexemeAction(createLexicalAnalyzerContext()); }
 <CHAR_CONSTANT>[^(\n|')]             { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_CHARACTER); }
-<CHAR_CONSTANT>"'"                  { IgnoredLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
+<CHAR_CONSTANT>"'"                  { ApostropheLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
 
-"\""                                { BEGIN(STRING_CONSTANT); IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+"\""                                { BEGIN(STRING_CONSTANT); QuoteLexemeAction(createLexicalAnalyzerContext()); }
 <STRING_CONSTANT>[^(\n|\")]+        { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_STRING); }
-<STRING_CONSTANT>\"                  { IgnoredLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
+<STRING_CONSTANT>\"                  { QuoteLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
 
 <INITIAL>":"                        { return ColonLexemeAction(createLexicalAnalyzerContext()); }
 ";"                                 { return SemicolonLexemeAction(createLexicalAnalyzerContext()); }

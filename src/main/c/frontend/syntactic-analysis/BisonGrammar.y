@@ -32,6 +32,9 @@
 	AssignmentOperation * assignmentOperation;
 	AssignmentOperatorType assignmentOperatorType;
 	char * name;
+
+	Instruction * instruction;
+	Block * block;
 }
 
 /**
@@ -48,6 +51,8 @@
 %destructor { releaseName($$); } <name>
 %destructor { releaseVariableDeclaration($$); } <variableDeclaration>
 %destructor { releaseAssignmentOperation($$); } <assignmentOperation>
+%destructor { releaseInstruction($$); } <instruction>
+%destructor { releaseBlock($$); } <block>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -76,8 +81,6 @@
 %token <token> SEMICOLON
 %token <token> CLOSE_PARENTHESIS
 %token <token> OPEN_PARENTHESIS
-%token <token> APOSTROPHE
-%token <token> QUOTE
 
 %token <token> ASSIGN
 %token <token> ADD_ASSIGN
@@ -92,13 +95,16 @@
 %type <constant> constant
 %type <expression> expression
 %type <factor> factor
-%type <program> program
 %type <loop> loop
-
-%type <assignmentOperation> assignment_operation
 
 %type <variableDeclaration> variable_declaration
 %type <varType> variable_type
+
+%type <assignmentOperation> assignment_operation
+
+%type <instruction> instruction
+%type <block> block
+%type <program> program
 /**
  * Precedence and associativity.
  *
@@ -111,11 +117,26 @@
 %%
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
+/**
+ * Multiple instructions. (Blocks)
+ *
+ * Parser will read all lines of the input file and try to parse them to an program.
+ * So program MUST have at least a block.
+ */
 program: 
-	assignment_operation											{ $$ = AssignmentProgramSemanticAction(currentCompilerState(), $1); }
-	| variable_declaration											{ $$ = VariableProgramSemanticAction(currentCompilerState(), $1); }
-	| expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
+	block															{ $$ = BlockProgramSemanticAction(currentCompilerState(), $1); }
 	| loop															{ $$ = LoopProgramSemanticAction(currentCompilerState(), $1); }
+	;
+
+block:
+	instruction														{ $$ = CreateBlockSemanticAction($1); }
+	| block instruction												{ $$ = AppendInstructionSemanticAction($1, $2); }
+	;
+
+instruction:
+	assignment_operation SEMICOLON									{ $$ = InstructionSemanticAction($1, INSTRUCTION_ASSIGNMENT); }
+	| variable_declaration SEMICOLON								{ $$ = InstructionSemanticAction($1, INSTRUCTION_VARIABLE_DECLARATION); }
+	| expression SEMICOLON											{ $$ = InstructionSemanticAction($1, INSTRUCTION_EXPRESSION); }
 	;
 
 loop:
@@ -123,18 +144,18 @@ loop:
 	| FOR OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = LoopSemanticAction($3, FOR_LOOP); }
 	;
 assignment_operation: 
-	NAME ASSIGN expression SEMICOLON								{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
-	| NAME ADD_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
-	| NAME SUB_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
-	| NAME MUL_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
+	NAME ASSIGN expression											{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
+	| NAME ADD_ASSIGN expression									{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
+	| NAME SUB_ASSIGN expression									{ $$ = AssignmentOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
+	| NAME MUL_ASSIGN expression									{ $$ = AssignmentOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
 	// TODO: Debatir mejor opción:
 	// - Si es en assignment_operation o variable_declaration que hay que poner esto:
 	/* | variable_declaration ASSIGN expression SEMICOLON				{ $$ = AssignmentDeclarationSemanticAction($1, $3); } */
 	;
 
 variable_declaration:
-	NAME COLON variable_type SEMICOLON								{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
-	| NAME COLON variable_type ASSIGN expression SEMICOLON			{ $$ = VariableDeclarationSemanticAction($1, $3, $5); }
+	NAME COLON variable_type										{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
+	| NAME COLON variable_type ASSIGN expression					{ $$ = VariableDeclarationSemanticAction($1, $3, $5); }
 	;
 
 variable_type:
