@@ -56,12 +56,18 @@ void releaseFactor(Factor * factor) {
 	}
 }
 
+void releaseName(char * name) {
+	if(name == NULL) return;
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	free(name);
+}
+
 void releaseVariableDeclaration(VariableDeclaration * variable) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(variable == NULL) return;
 
 	releaseExpression(variable->expression);
-	free(variable->name); // It must be done since it's name is allocated when strdup is done.
+	releaseName(variable->name);
 	free(variable);
 }
 
@@ -79,9 +85,8 @@ void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (assignmentOperation == NULL) return;
 
-	releaseVariableDeclaration(assignmentOperation->variableDeclaration);
+	// releaseVariableDeclaration(assignmentOperation->variableDeclaration);
+	releaseName(assignmentOperation->name);
 	releaseExpression(assignmentOperation->expression);
-
-	// if(assignmentOperation->name != NULL) free(assignmentOperation->name);
 	free(assignmentOperation);
 }

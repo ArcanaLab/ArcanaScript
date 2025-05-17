@@ -113,8 +113,8 @@ struct VariableDeclaration {
 
 struct AssignmentOperation {
 	union {
-		VariableDeclaration * variableDeclaration;
 		char * name;
+		VariableDeclaration * variableDeclaration;
 	};
 	Expression * expression;
 	AssignmentOperatorType assignmentOperator;
@@ -132,6 +132,7 @@ struct Program {
 void releaseConstant(Constant * constant);
 void releaseExpression(Expression * expression);
 void releaseFactor(Factor * factor);
+void releaseName(char * name);
 void releaseVariableDeclaration(VariableDeclaration * variable);
 void releaseAssignmentOperation(AssignmentOperation * assignmentOperation);
 void releaseProgram(Program * program);

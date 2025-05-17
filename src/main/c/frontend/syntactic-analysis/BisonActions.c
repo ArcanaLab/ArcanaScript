@@ -32,7 +32,7 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 
 /* PUBLIC FUNCTIONS */
 
-Constant * ConstantSemanticAction(const void * value, int size, ConstantType constantType) {
+Constant * ConstantSemanticAction(const void * value, ConstantType constantType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Constant * constant = calloc(1, sizeof(Constant));
 	switch (constantType) {
@@ -158,14 +158,13 @@ Program * AssignmentProgramSemanticAction(CompilerState * compilerState, Assignm
 
 AssignmentOperation * AssignmentDeclarationSemanticAction(
 	VariableDeclaration * variableDeclaration,
-	Expression * expression,
-	AssignmentOperatorType assignmentOperatorType
+	Expression * expression
 ) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
 	AssignmentOperation * assignmentOperation = calloc(1, sizeof(AssignmentOperation));
 	assignmentOperation->variableDeclaration = variableDeclaration;
-	assignmentOperation->assignmentOperator = assignmentOperatorType;
+	assignmentOperation->assignmentOperator = ASSIGN_TYPE;
 	assignmentOperation->expression = expression;
 
 	return assignmentOperation;
