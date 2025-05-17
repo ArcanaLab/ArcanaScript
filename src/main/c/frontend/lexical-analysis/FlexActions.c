@@ -123,6 +123,7 @@ Token ControlStructureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerConte
 	} else if (strcmp(lexicalAnalyzerContext->lexeme, "elif") == 0) {
 		token = ELIF;
 	}
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
 }
 

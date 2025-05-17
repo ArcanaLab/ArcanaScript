@@ -144,7 +144,6 @@ Conditional * IfConditionalSemanticAction(Expression * expression)
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Conditional * conditional = calloc(1, sizeof(Conditional));
 	conditional->expression = expression;
-	conditional->type = IF_TYPE;
 	return conditional;
 }
 
