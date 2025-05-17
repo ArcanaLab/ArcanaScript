@@ -94,6 +94,9 @@ void releaseInstruction(Instruction * instruction) {
 		case INSTRUCTION_EXPRESSION:
 			releaseExpression(instruction->expression);
 			break;
+		case INSTRUCTION_BLOCK:
+			releaseBlock(instruction->block);
+			break;
 	}
 	free(instruction);
 }

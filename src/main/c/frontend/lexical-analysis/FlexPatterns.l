@@ -48,6 +48,9 @@ single_line_comment     "#"[^!].*
 "("									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), OPEN_PARENTHESIS); }
 ")"									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), CLOSE_PARENTHESIS); }
 
+"{"									{ return BraceLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACE); }
+"}"									{ return BraceLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
+
 "'"                                 { BEGIN(CHAR_CONSTANT); ApostropheLexemeAction(createLexicalAnalyzerContext()); }
 <CHAR_CONSTANT>[^(\n|')]             { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_CHARACTER); }
 <CHAR_CONSTANT>"'"                  { ApostropheLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }

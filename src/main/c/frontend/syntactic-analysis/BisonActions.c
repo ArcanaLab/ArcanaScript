@@ -176,6 +176,9 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 		case INSTRUCTION_EXPRESSION:
 			instruction->expression = value;
 			break;
+		case INSTRUCTION_BLOCK:
+			instruction->block = value;
+			break;
 	}
 
 	return instruction;
