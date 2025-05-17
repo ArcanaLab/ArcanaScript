@@ -158,3 +158,10 @@ Token AssignmentOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerCon
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
 }
+
+Token LoopLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return token;
+}

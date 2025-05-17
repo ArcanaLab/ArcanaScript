@@ -78,6 +78,7 @@ void releaseProgram(Program * program) {
 	releaseVariableDeclaration(program->variableDeclaration);
 	releaseAssignmentOperation(program->assignmentOperation);
 	releaseExpression(program->expression);
+	releaseLoop(program->loop);
 	free(program);
 }
 
@@ -89,4 +90,11 @@ void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
 	releaseName(assignmentOperation->name);
 	releaseExpression(assignmentOperation->expression);
 	free(assignmentOperation);
+}
+
+void releaseLoop(Loop * loop) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (loop == NULL) return;
+	releaseExpression(loop->expression);
+	free(loop);
 }

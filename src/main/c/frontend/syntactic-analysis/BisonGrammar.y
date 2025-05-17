@@ -23,6 +23,7 @@
 	Expression * expression;
 	Factor * factor;
 	Program * program;
+	Loop * loop;
 
 
 	VariableDeclaration * variableDeclaration;
@@ -66,6 +67,10 @@
 %token <token> MUL
 %token <token> SUB
 
+/** ===== Loops ===== */
+%token <token> WHILE
+%token <token> FOR
+
 /** ===== Atomics ===== */
 %token <token> COLON
 %token <token> SEMICOLON
@@ -88,6 +93,7 @@
 %type <expression> expression
 %type <factor> factor
 %type <program> program
+%type <loop> loop
 
 %type <assignmentOperation> assignment_operation
 
@@ -109,8 +115,13 @@ program:
 	assignment_operation											{ $$ = AssignmentProgramSemanticAction(currentCompilerState(), $1); }
 	| variable_declaration											{ $$ = VariableProgramSemanticAction(currentCompilerState(), $1); }
 	| expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
+	| loop															{ $$ = LoopProgramSemanticAction(currentCompilerState(), $1); }
 	;
 
+loop:
+	WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = LoopSemanticAction($3, WHILE_LOOP); }	
+	| FOR OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = LoopSemanticAction($3, FOR_LOOP); }
+	;
 assignment_operation: 
 	NAME ASSIGN expression SEMICOLON								{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
 	| NAME ADD_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }

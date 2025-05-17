@@ -40,4 +40,6 @@ Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Variable
 
 Token AssignmentOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
+Token LoopLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+
 #endif

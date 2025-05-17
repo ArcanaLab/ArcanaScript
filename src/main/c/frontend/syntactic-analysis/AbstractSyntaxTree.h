@@ -18,11 +18,13 @@ typedef enum FactorType FactorType;
 typedef enum VariableType VariableType;
 typedef enum ConstantType ConstantType;
 typedef enum AssignmentOperatorType AssignmentOperatorType;
+typedef enum LoopType LoopType;
 
 typedef struct Constant Constant;
 typedef struct Expression Expression;
 typedef struct Factor Factor;
 typedef struct Program Program;
+typedef struct Loop Loop;
 
 typedef struct VariableDeclaration VariableDeclaration;
 typedef struct AssignmentOperation AssignmentOperation;
@@ -72,6 +74,10 @@ enum AssignmentOperatorType {
 	MUL_ASSIGN_TYPE,
 };
 
+enum LoopType {
+	WHILE_LOOP,
+	FOR_LOOP,
+};
 /** ============== STRUCTS ============== */
 
 struct Constant {
@@ -120,10 +126,17 @@ struct AssignmentOperation {
 	AssignmentOperatorType assignmentOperator;
 };
 
+struct Loop {
+	Expression * expression;
+	LoopType type;
+
+};
+
 struct Program {
 	Expression * expression;
 	VariableDeclaration * variableDeclaration;
 	AssignmentOperation * assignmentOperation;
+	Loop * loop;
 };
 
 /**
@@ -136,5 +149,6 @@ void releaseName(char * name);
 void releaseVariableDeclaration(VariableDeclaration * variable);
 void releaseAssignmentOperation(AssignmentOperation * assignmentOperation);
 void releaseProgram(Program * program);
+void releaseLoop(Loop * loop);
 
 #endif

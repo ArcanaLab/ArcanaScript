@@ -104,6 +104,16 @@ VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableTyp
 	return variableDeclaration;
 }
 
+Loop * LoopSemanticAction(Expression * expression, LoopType type){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	
+	Loop * loop = calloc(1, sizeof(Loop));
+	loop->type = type;
+	loop->expression = expression;
+
+	return loop;
+}
+
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
@@ -137,6 +147,22 @@ Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableD
 
 }
 
+Program * LoopProgramSemanticAction(CompilerState * compilerState, Loop * loop) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program * program = calloc(1, sizeof(Program));
+	program->loop = loop;
+
+	compilerState->abstractSyntaxtTree = program;
+	if (0 < flexCurrentContext()) {
+		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
+		compilerState->succeed = false;
+	}
+	else {
+		compilerState->succeed = true;
+	}
+	return program;
+
+}
 /**
  * Assignment operations.
  */

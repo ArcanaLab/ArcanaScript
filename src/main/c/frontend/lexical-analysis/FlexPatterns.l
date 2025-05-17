@@ -68,6 +68,9 @@ single_line_comment     "#"[^!].*
 "short"                             { return TypeLexemeAction(createLexicalAnalyzerContext(), V_SHORT); } 
 "boolean"                           { return TypeLexemeAction(createLexicalAnalyzerContext(), V_BOOLEAN); } 
 
+"while"                             { return LoopLexemeAction(createLexicalAnalyzerContext(), WHILE); }
+"for"                               { return LoopLexemeAction(createLexicalAnalyzerContext(), FOR); }
+
 "="                                 { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), ASSIGN); }
 "+="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), ADD_ASSIGN); }
 "-="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), SUB_ASSIGN); }
