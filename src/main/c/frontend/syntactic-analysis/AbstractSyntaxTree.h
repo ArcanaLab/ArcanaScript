@@ -19,7 +19,9 @@ typedef enum VariableType VariableType;
 typedef enum ConstantType ConstantType;
 typedef enum AssignmentOperatorType AssignmentOperatorType;
 typedef enum InstructionType InstructionType;
+typedef enum ConditionalType ConditionalType;
 
+typedef struct Conditional Conditional;
 typedef struct Constant Constant;
 typedef struct Expression Expression;
 typedef struct Factor Factor;
@@ -41,9 +43,19 @@ enum ExpressionType {
 	DIVISION,
 	FACTOR,
 	MULTIPLICATION,
-	SUBTRACTION
+	SUBTRACTION,
+	LESS_TYPE,
+	GREATER_TYPE,
+	LESS_EQUAL_TYPE,
+	GREATER_EQUAL_TYPE,
+	EQUAL_EQUAL_TYPE,
+	NOT_EQUAL_TYPE,
 };
-
+enum ConditionalType {
+	IF_TYPE,
+	ELSE_IF_TYPE,
+	ELSE_TYPE,
+};
 enum FactorType {
 	CONSTANT,
 	EXPRESSION,
@@ -81,6 +93,7 @@ enum InstructionType {
 	INSTRUCTION_VARIABLE_DECLARATION,
 	INSTRUCTION_EXPRESSION,
 	INSTRUCTION_BLOCK,
+	INSTRUCTION_CONDITIONAL,
 };
 
 /** ============== STRUCTS ============== */
@@ -112,6 +125,12 @@ struct Expression {
 			Expression * leftExpression;
 			Expression * rightExpression;
 		};
+		struct 
+		{
+			Factor * leftFactor;
+			Factor * rightFactor;
+		};
+		
 	};
 	ExpressionType type;
 };
@@ -130,6 +149,11 @@ struct AssignmentOperation {
 	Expression * expression;
 	AssignmentOperatorType assignmentOperator;
 };
+struct Conditional {
+	Expression * expression;
+	Conditional * nextConditional;
+	ConditionalType ConditionalType;
+};
 
 struct Instruction {
 	union {
@@ -137,6 +161,7 @@ struct Instruction {
 		VariableDeclaration * variableDeclaration;
 		Expression * expression;
 		Block * block;
+		Conditional * conditional;
 	};
 
 	InstructionType type;
@@ -165,6 +190,7 @@ void releaseFactor(Factor * factor);
 void releaseName(char * name);
 void releaseVariableDeclaration(VariableDeclaration * variable);
 void releaseAssignmentOperation(AssignmentOperation * assignmentOperation);
+void releaseConditional(Conditional * conditional); 
 void releaseProgram(Program * program);
 
 #endif

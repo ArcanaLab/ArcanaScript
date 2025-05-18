@@ -20,7 +20,11 @@
 	
 	/** Non-terminals. */
 	Constant * constant;
+	Conditional * conditional;
+
 	Expression * expression;
+	Expression * comparator_expression;
+
 	Factor * factor;
 	Program * program;
 
@@ -49,6 +53,7 @@
 %destructor { releaseFactor($$); } <factor>
 %destructor { releaseName($$); } <name>
 %destructor { releaseVariableDeclaration($$); } <variableDeclaration>
+%destructor { releaseConditional($$); } <conditional>
 %destructor { releaseAssignmentOperation($$); } <assignmentOperation>
 %destructor { releaseInstruction($$); } <instruction>
 %destructor { releaseBlock($$); } <block>
@@ -71,6 +76,15 @@
 %token <token> MUL
 %token <token> SUB
 
+/** ===== Comparator ===== */
+%token <token> GREATER
+%token <token> GREATER_EQUAL
+%token <token> LESS
+%token <token> LESS_EQUAL
+%token <token> EQUAL_EQUAL
+%token <token> NOT_EQUAL
+
+
 /** ===== Atomics ===== */
 %token <token> COLON
 %token <token> SEMICOLON
@@ -80,10 +94,15 @@
 %token <token> OPEN_BRACE
 %token <token> CLOSE_BRACE
 
+/** ===== Assignation ===== */
 %token <token> ASSIGN
 %token <token> ADD_ASSIGN
 %token <token> SUB_ASSIGN
 %token <token> MUL_ASSIGN
+
+/** ===== CONDITIONAL ===== */
+%token <token> IF
+%token <token> ELSE
 
 %token <token> UNKNOWN
 
@@ -91,7 +110,12 @@
 
 /** ============== NON-TERMINALS. ============== */
 %type <constant> constant
+
 %type <expression> expression
+%type <expression> comparator_expression
+%type <conditional> if
+%type <conditional> else
+
 %type <factor> factor
 
 %type <variableDeclaration> variable_declaration
@@ -111,16 +135,13 @@
 %left ADD SUB
 %left MUL DIV
 
+%precedence ELSE
+%precedence IF
+
 %start program
 %%
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
-/**
- * Multiple instructions. (Blocks)
- *
- * Parser will read all lines of the input file and try to parse them to an program.
- * So program MUST have at least a block.
- */
 program: 
 	block															{ $$ = BlockProgramSemanticAction(currentCompilerState(), $1); }
 	;
@@ -135,6 +156,7 @@ instruction:
 	| variable_declaration SEMICOLON								{ $$ = InstructionSemanticAction($1, INSTRUCTION_VARIABLE_DECLARATION); }
 	| expression SEMICOLON											{ $$ = InstructionSemanticAction($1, INSTRUCTION_EXPRESSION); }
 	| scope															{ $$ = InstructionSemanticAction($1, INSTRUCTION_BLOCK); }
+	| if															{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONDITIONAL); }
 	;
 
 scope:
@@ -159,6 +181,19 @@ variable_type:
 	TYPE 															{ $$ = $1; }
 	;
 
+if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS    			{ $$ = ConditionalSemanticAction($exp,IF_TYPE); }
+    | IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS else[con]	{ $$ = ConditionalSemanticAction($exp,IF_TYPE); $$->nextConditional = $con; }	
+	;
+else:
+	ELSE if															{ $$ = $2; }
+	| ELSE															{ $$ = ConditionalSemanticAction(NULL,ELSE_TYPE); }
+
+comparator_expression: 	factor[left] GREATER factor[right]			{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_TYPE); }
+	| factor[left] GREATER_EQUAL factor[right]						{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_EQUAL_TYPE); }
+	| factor[left] LESS factor[right]								{ $$ = ComparatorExpressionSemanticAction($left, $right, LESS_TYPE); }
+	| factor[left] LESS_EQUAL factor[right]							{ $$ = ComparatorExpressionSemanticAction($left, $right, LESS_EQUAL_TYPE); }
+	| factor[left] EQUAL_EQUAL factor[right]						{ $$ = ComparatorExpressionSemanticAction($left, $right, EQUAL_EQUAL_TYPE); }
+	| factor[left] NOT_EQUAL factor[right]							{ $$ = ComparatorExpressionSemanticAction($left, $right, NOT_EQUAL_TYPE); }
 
 expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
