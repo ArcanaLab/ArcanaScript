@@ -1,0 +1,8 @@
+class ClassName { 
+
+    int a;
+    int b;
+
+}
+
+class ClassName2 { }
