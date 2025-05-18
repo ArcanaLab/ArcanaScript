@@ -83,6 +83,14 @@ single_line_comment     "#"[^!].*
 [0-9]+\.[0-9]+						{ return ConstantLexemeAction(createLexicalAnalyzerContext(), C_DOUBLE); }
 [0-9]+						        { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_INTEGER); }
 
+"<"                                 { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
+">"                                 { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
+"=="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
+"<="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
+">="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
+
+"if"                                { return ConditionalStructureLexemeAction(createLexicalAnalyzerContext(), IF); }
+"else"                              { return ConditionalStructureLexemeAction(createLexicalAnalyzerContext(), ELSE); }
 
 {name}                              { return NameLexemeAction(createLexicalAnalyzerContext()); }
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }

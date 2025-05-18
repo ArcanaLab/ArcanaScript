@@ -37,6 +37,15 @@ void releaseExpression(Expression * expression) {
 		case FACTOR:
 			releaseFactor(expression->factor);
 			break;
+		case LESS_TYPE:
+		case GREATER_TYPE:
+		case LESS_EQUAL_TYPE:
+		case GREATER_EQUAL_TYPE:
+		case EQUAL_EQUAL_TYPE:
+		case NOT_EQUAL_TYPE:
+			releaseFactor(expression->leftFactor);
+			releaseFactor(expression->rightFactor);
+			break;
 		case LAMBDA:
 			releaseLambda(expression->lambda);
 			break;
@@ -74,6 +83,17 @@ void releaseVariableDeclaration(VariableDeclaration * variable) {
 	free(variable);
 }
 
+void releaseConditional(Conditional * conditional){
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (!conditional) return;
+
+	releaseExpression(conditional->expression);
+
+	if (conditional->nextConditional)
+		releaseConditional(conditional->nextConditional);
+	free(conditional);
+}
+
 void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (assignmentOperation == NULL) return;
@@ -99,6 +119,9 @@ void releaseInstruction(Instruction * instruction) {
 			break;
 		case INSTRUCTION_BLOCK:
 			releaseBlock(instruction->block);
+			break;
+		case INSTRUCTION_CONDITIONAL:
+			releaseConditional(instruction->conditional);
 			break;
 	}
 	free(instruction);

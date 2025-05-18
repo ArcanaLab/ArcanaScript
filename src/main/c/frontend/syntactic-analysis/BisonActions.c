@@ -77,6 +77,17 @@ Expression * FactorExpressionSemanticAction(Factor * factor) {
 	return expression;
 }
 
+Expression * ComparatorExpressionSemanticAction(Factor * leftFactor, Factor * rightFactor, ExpressionType type) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->leftFactor = leftFactor;
+	expression->rightFactor = rightFactor;
+	expression->type = type;
+	return expression;
+}
+
+
+
 Factor * ConstantFactorSemanticAction(Constant * constant) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Factor * factor = calloc(1, sizeof(Factor));
@@ -135,6 +146,17 @@ AssignmentOperation * AssignmentOperatorSemanticAction(
 	return assignmentOperation;
 }
 
+Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	
+	Conditional * conditional = calloc(1, sizeof(Conditional));
+	conditional->expression = expression;
+	conditional->nextConditional = NULL;
+	conditional->ConditionalType = conditionalType;
+
+	return conditional;
+}
+
 Instruction * InstructionSemanticAction(void * value, InstructionType instructionType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Instruction * instruction = calloc(1, sizeof(Instruction));
@@ -152,6 +174,9 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 			break;
 		case INSTRUCTION_BLOCK:
 			instruction->block = value;
+			break;
+		case INSTRUCTION_CONDITIONAL:
+			instruction->conditional = value;
 			break;
 	}
 
