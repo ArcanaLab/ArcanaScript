@@ -18,6 +18,7 @@ typedef enum FactorType FactorType;
 typedef enum VariableType VariableType;
 typedef enum ConstantType ConstantType;
 typedef enum AssignmentOperatorType AssignmentOperatorType;
+typedef enum InstructionType InstructionType;
 typedef enum ConditionalType ConditionalType;
 
 typedef struct Conditional Conditional;
@@ -28,7 +29,10 @@ typedef struct Program Program;
 
 typedef struct VariableDeclaration VariableDeclaration;
 typedef struct AssignmentOperation AssignmentOperation;
+typedef struct Instruction Instruction;
 
+typedef struct InstructionNode InstructionNode;
+typedef struct Block Block;
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -82,6 +86,14 @@ enum AssignmentOperatorType {
 	ADD_ASSIGN_TYPE,
 	SUB_ASSIGN_TYPE,
 	MUL_ASSIGN_TYPE,
+};
+
+enum InstructionType {
+	INSTRUCTION_ASSIGNMENT,
+	INSTRUCTION_VARIABLE_DECLARATION,
+	INSTRUCTION_EXPRESSION,
+	INSTRUCTION_BLOCK,
+	INSTRUCTION_CONDITIONAL,
 };
 
 /** ============== STRUCTS ============== */
@@ -143,11 +155,30 @@ struct Conditional {
 	ConditionalType ConditionalType;
 };
 
+struct Instruction {
+	union {
+		AssignmentOperation * assignment;
+		VariableDeclaration * variableDeclaration;
+		Expression * expression;
+		Block * block;
+		Conditional * conditional;
+	};
+
+	InstructionType type;
+};
+
+struct InstructionNode {
+	Instruction * instruction;
+	InstructionNode * nextInstructionNode;
+};
+
+struct Block {
+	InstructionNode * firstInstructionNode;// Prepend en O(1)
+	InstructionNode * lastInstructionNode; // Append en O(1)
+};
+
 struct Program {
-	Expression * expression;
-	VariableDeclaration * variableDeclaration;
-	AssignmentOperation * assignmentOperation;
-	Conditional * conditional;
+	Block * block;
 };
 
 /**

@@ -28,18 +28,32 @@ Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType
 Factor * ConstantFactorSemanticAction(Constant * constant);
 Factor * ExpressionFactorSemanticAction(Expression * expression);
 
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression);
 
-Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
-Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableDeclaration * varDeclaration);
+/**
+ * Variable declarations.
+ */
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression);
 
 /**
  * Assignment operations.
  */
-Program * AssignmentProgramSemanticAction(CompilerState * compilerState, AssignmentOperation * assignmentOperation);
-Program * ConditionalProgramSemanticAction(CompilerState * compilerState, Conditional * conditional);
-
 AssignmentOperation * AssignmentDeclarationSemanticAction(VariableDeclaration * variableDeclaration, Expression * expression);
 AssignmentOperation * AssignmentOperatorSemanticAction(char * name, Expression * expression, AssignmentOperatorType assignmentOperatorType);
+
+/**
+ * Instructions.
+ */
+Instruction * InstructionSemanticAction(void * value, InstructionType instructionType);
+
+/**
+ * Blocks.
+ */
+Block * CreateBlockSemanticAction(Instruction * instruction);
+Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction);
+
+/**
+ * Programs.
+ */
+Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block);
 
 #endif

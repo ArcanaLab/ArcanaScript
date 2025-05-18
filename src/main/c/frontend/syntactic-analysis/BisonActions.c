@@ -114,76 +114,9 @@ VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableTyp
 
 	return variableDeclaration;
 }
-
-Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Program * program = calloc(1, sizeof(Program));
-	program->expression = expression;
-	compilerState->abstractSyntaxtTree = program;
-	if (0 < flexCurrentContext()) {
-		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
-		compilerState->succeed = false;
-	}
-	else {
-		compilerState->succeed = true;
-	}
-	return program;
-
-}
-
-
-Program * VariableProgramSemanticAction(CompilerState * compilerState, VariableDeclaration * varDeclaration) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Program * program = calloc(1, sizeof(Program));
-	program->variableDeclaration = varDeclaration;
-
-	compilerState->abstractSyntaxtTree = program;
-	if (0 < flexCurrentContext()) {
-		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
-		compilerState->succeed = false;
-	}
-	else {
-		compilerState->succeed = true;
-	}
-	return program;
-
-}
-
 /**
  * Assignment operations.
  */
-Program * AssignmentProgramSemanticAction(CompilerState * compilerState, AssignmentOperation * assignmentOperation) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Program * program = calloc(1, sizeof(Program));
-	program->assignmentOperation = assignmentOperation;
-
-	compilerState->abstractSyntaxtTree = program;
-	if (0 < flexCurrentContext()) {
-		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
-		compilerState->succeed = false;
-	}
-	else {
-		compilerState->succeed = true;
-	}
-	return program;
-}
-Program * ConditionalProgramSemanticAction(CompilerState * compilerState, Conditional * conditional) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Program * program = calloc(1, sizeof(Program));
-	program->conditional = conditional;
-
-	compilerState->abstractSyntaxtTree = program;
-	if (0 < flexCurrentContext()) {
-		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
-		compilerState->succeed = false;
-	}
-	else {
-		compilerState->succeed = true;
-	}
-	return program;
-}
-
-
 AssignmentOperation * AssignmentDeclarationSemanticAction(
 	VariableDeclaration * variableDeclaration,
 	Expression * expression
@@ -223,3 +156,62 @@ Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType
 
 	return conditional;
 }
+
+Instruction * InstructionSemanticAction(void * value, InstructionType instructionType) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Instruction * instruction = calloc(1, sizeof(Instruction));
+	instruction->type = instructionType;
+	
+	switch (instructionType) {
+		case INSTRUCTION_ASSIGNMENT:
+			instruction->assignment = value;
+			break;
+		case INSTRUCTION_VARIABLE_DECLARATION:
+			instruction->variableDeclaration = value;
+			break;
+		case INSTRUCTION_EXPRESSION:
+			instruction->expression = value;
+			break;
+		case INSTRUCTION_BLOCK:
+			instruction->block = value;
+			break;
+		case INSTRUCTION_CONDITIONAL:
+			instruction->conditional = value;
+			break;
+	}
+
+	return instruction;
+}
+
+Block * CreateBlockSemanticAction(Instruction * instruction) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Block * block = calloc(1, sizeof(Block));
+	block->firstInstructionNode = calloc(1, sizeof(InstructionNode));
+	block->firstInstructionNode->instruction = instruction;
+	block->lastInstructionNode = block->firstInstructionNode;
+	return block;
+}
+
+Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	InstructionNode * newInstructionNode = calloc(1, sizeof(InstructionNode));
+	newInstructionNode->instruction = instruction;
+	block->lastInstructionNode->nextInstructionNode = newInstructionNode;
+	block->lastInstructionNode = newInstructionNode;
+	return block;
+}
+Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program * program = calloc(1, sizeof(Program));
+	program->block = block;
+	compilerState->abstractSyntaxtTree = program;
+	if (0 < flexCurrentContext()) {
+		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
+		compilerState->succeed = false;
+	}
+	else {
+		compilerState->succeed = true;
+	}
+	return program;
+}
+

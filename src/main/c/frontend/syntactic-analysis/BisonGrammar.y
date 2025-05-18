@@ -35,6 +35,9 @@
 	AssignmentOperation * assignmentOperation;
 	AssignmentOperatorType assignmentOperatorType;
 	char * name;
+
+	Instruction * instruction;
+	Block * block;
 }
 
 /**
@@ -52,6 +55,8 @@
 %destructor { releaseVariableDeclaration($$); } <variableDeclaration>
 %destructor { releaseConditional($$); } <conditional>
 %destructor { releaseAssignmentOperation($$); } <assignmentOperation>
+%destructor { releaseInstruction($$); } <instruction>
+%destructor { releaseBlock($$); } <block>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -85,8 +90,9 @@
 %token <token> SEMICOLON
 %token <token> CLOSE_PARENTHESIS
 %token <token> OPEN_PARENTHESIS
-%token <token> APOSTROPHE
-%token <token> QUOTE
+
+%token <token> OPEN_BRACE
+%token <token> CLOSE_BRACE
 
 /** ===== Assignation ===== */
 %token <token> ASSIGN
@@ -111,12 +117,16 @@
 %type <conditional> else
 
 %type <factor> factor
-%type <program> program
-
-%type <assignmentOperation> assignment_operation
 
 %type <variableDeclaration> variable_declaration
 %type <varType> variable_type
+
+%type <assignmentOperation> assignment_operation
+
+%type <instruction> instruction
+%type <block> block
+%type <block> scope
+%type <program> program
 /**
  * Precedence and associativity.
  *
@@ -133,25 +143,38 @@
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 program: 
-	assignment_operation											{ $$ = AssignmentProgramSemanticAction(currentCompilerState(), $1); }
-	| variable_declaration											{ $$ = VariableProgramSemanticAction(currentCompilerState(), $1); }
-	| expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
-	| if															{ $$ = ConditionalProgramSemanticAction(currentCompilerState(), $1); }		
+	block															{ $$ = BlockProgramSemanticAction(currentCompilerState(), $1); }
 	;
 
+block:
+	instruction														{ $$ = CreateBlockSemanticAction($1); }
+	| block instruction												{ $$ = AppendInstructionSemanticAction($1, $2); }
+	;
+
+instruction:
+	assignment_operation SEMICOLON									{ $$ = InstructionSemanticAction($1, INSTRUCTION_ASSIGNMENT); }
+	| variable_declaration SEMICOLON								{ $$ = InstructionSemanticAction($1, INSTRUCTION_VARIABLE_DECLARATION); }
+	| expression SEMICOLON											{ $$ = InstructionSemanticAction($1, INSTRUCTION_EXPRESSION); }
+	| scope															{ $$ = InstructionSemanticAction($1, INSTRUCTION_BLOCK); }
+	| if															{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONDITIONAL); }
+	;
+
+scope:
+	OPEN_BRACE block CLOSE_BRACE									{ $$ = $2; }
+
 assignment_operation: 
-	NAME ASSIGN expression SEMICOLON								{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
-	| NAME ADD_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
-	| NAME SUB_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
-	| NAME MUL_ASSIGN expression SEMICOLON							{ $$ = AssignmentOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
+	NAME ASSIGN expression											{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
+	| NAME ADD_ASSIGN expression									{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
+	| NAME SUB_ASSIGN expression									{ $$ = AssignmentOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
+	| NAME MUL_ASSIGN expression									{ $$ = AssignmentOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
 	// TODO: Debatir mejor opción:
 	// - Si es en assignment_operation o variable_declaration que hay que poner esto:
 	/* | variable_declaration ASSIGN expression SEMICOLON				{ $$ = AssignmentDeclarationSemanticAction($1, $3); } */
 	;
 
 variable_declaration:
-	NAME COLON variable_type SEMICOLON								{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
-	| NAME COLON variable_type ASSIGN expression SEMICOLON			{ $$ = VariableDeclarationSemanticAction($1, $3, $5); }
+	NAME COLON variable_type										{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
+	| NAME COLON variable_type ASSIGN expression					{ $$ = VariableDeclarationSemanticAction($1, $3, $5); }
 	;
 
 variable_type:
