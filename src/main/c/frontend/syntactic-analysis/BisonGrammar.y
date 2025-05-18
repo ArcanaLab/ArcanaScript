@@ -41,6 +41,8 @@
 
 	Lambda * lambda;
 	VariableDeclarationList * varList;
+
+	Class * class;
 }
 
 /**
@@ -110,6 +112,9 @@
 %token <token> IF
 %token <token> ELSE
 
+/** ===== CLASS ===== */
+%token <token> CLASS
+
 %token <token> UNKNOWN
 
 /** ============== TERMINALS ENDS. ============== */
@@ -135,6 +140,9 @@
 %type <instruction> instruction
 %type <block> block
 %type <block> scope
+
+%type <class> class
+
 %type <program> program
 /**
  * Precedence and associativity.
@@ -166,6 +174,11 @@ instruction:
 	| expression SEMICOLON											{ $$ = InstructionSemanticAction($1, INSTRUCTION_EXPRESSION); }
 	| scope															{ $$ = InstructionSemanticAction($1, INSTRUCTION_BLOCK); }
 	| if															{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONDITIONAL); }
+	| class															{ $$ = InstructionSemanticAction($1, INSTRUCTION_CLASS); }
+	;
+
+class: 
+	CLASS NAME scope												{ $$ = ClassSemanticAction($2, $3); }
 	;
 
 scope:

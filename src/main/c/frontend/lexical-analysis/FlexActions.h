@@ -47,4 +47,10 @@ Token AssignmentOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerCon
 
 Token ConditionalStructureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
+
+/**
+ * Class.
+ */
+Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 #endif

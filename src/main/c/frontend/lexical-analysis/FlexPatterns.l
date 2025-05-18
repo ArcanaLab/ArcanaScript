@@ -64,6 +64,8 @@ single_line_comment     "#"[^!].*
 <INITIAL>":"                        { return ColonLexemeAction(createLexicalAnalyzerContext()); }
 ";"                                 { return SemicolonLexemeAction(createLexicalAnalyzerContext()); }
 
+"class"                             { return ClassLexemeAction(createLexicalAnalyzerContext()); }
+
 "int"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), V_INT); }
 "char"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), V_CHAR); } 
 "float"                             { return TypeLexemeAction(createLexicalAnalyzerContext(), V_FLOAT); } 

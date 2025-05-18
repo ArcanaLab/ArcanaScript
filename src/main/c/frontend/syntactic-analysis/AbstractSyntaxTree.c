@@ -123,6 +123,9 @@ void releaseInstruction(Instruction * instruction) {
 		case INSTRUCTION_CONDITIONAL:
 			releaseConditional(instruction->conditional);
 			break;
+		case INSTRUCTION_CLASS:
+			releaseClass(instruction->class);
+			break;
 	}
 	free(instruction);
 }
@@ -176,6 +179,14 @@ void releaseLambda(Lambda * lambda) {
 	releaseVariableDeclarationList(lambda->variableDeclarationList);
 	releaseInstruction(lambda->instruction);
 	free(lambda);
+}
+
+void releaseClass(Class * class) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(class == NULL) return;
+
+	releaseBlock(class->block);
+	free(class);
 }
 
 void releaseProgram(Program * program) {

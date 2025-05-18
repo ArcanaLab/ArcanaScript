@@ -178,6 +178,9 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 		case INSTRUCTION_CONDITIONAL:
 			instruction->conditional = value;
 			break;
+		case INSTRUCTION_CLASS:
+			instruction->class = value;
+			break;
 	}
 
 	return instruction;
@@ -249,5 +252,10 @@ Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * bloc
 	return program;
 }
 
-
-
+Class * ClassSemanticAction(char * name, Block * block) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Class * class = calloc(1, sizeof(Class));
+	class->name = name;
+	class->block = block;
+	return class;
+}

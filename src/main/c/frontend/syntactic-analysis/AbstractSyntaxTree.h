@@ -37,6 +37,8 @@ typedef struct Block Block;
 typedef struct VariableDeclarationNode VariableDeclarationNode;
 typedef struct VariableDeclarationList VariableDeclarationList;
 typedef struct Lambda Lambda;
+typedef struct Class Class;
+
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -100,6 +102,7 @@ enum InstructionType {
 	INSTRUCTION_EXPRESSION,
 	INSTRUCTION_BLOCK,
 	INSTRUCTION_CONDITIONAL,
+	INSTRUCTION_CLASS,
 };
 
 /** ============== STRUCTS ============== */
@@ -169,6 +172,7 @@ struct Instruction {
 		Expression * expression;
 		Block * block;
 		Conditional * conditional;
+		Class * class;
 	};
 
 	InstructionType type;
@@ -199,6 +203,11 @@ struct Lambda {
 	Instruction * instruction;
 };
 
+struct Class {
+	char * name;
+	Block * block;
+};
+
 struct Program {
 	Block * block;
 };
@@ -214,6 +223,7 @@ void releaseVariableDeclaration(VariableDeclaration * variable);
 void releaseAssignmentOperation(AssignmentOperation * assignmentOperation);
 void releaseConditional(Conditional * conditional); 
 void releaseLambda(Lambda * lambda);
+void releaseClass(Class * class);
 
 void releaseInstruction(Instruction * instruction);
 void releaseBlock(Block * block);

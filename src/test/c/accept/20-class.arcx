@@ -1,8 +1,11 @@
 class ClassName { 
+    abc: int = 1;
+    fgh: int = 2;
 
-    int a;
-    int b;
-
+    fun = () {
+        abc = 1;
+        fgh = 2;
+    };
 }
 
 class ClassName2 { }

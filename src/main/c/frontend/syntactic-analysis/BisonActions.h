@@ -52,6 +52,11 @@ Block * CreateBlockSemanticAction(Instruction * instruction);
 Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction);
 
 /**
+ * Class.
+ */
+Class * ClassSemanticAction(char * name, Block * block);
+
+/**
  * Lambdas.
  */
 Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList, Instruction * instruction);
