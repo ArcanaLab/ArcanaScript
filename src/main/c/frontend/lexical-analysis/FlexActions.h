@@ -28,6 +28,7 @@ Token ConstantLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Toke
 Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 Token BraceLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 void ApostropheLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void QuoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);

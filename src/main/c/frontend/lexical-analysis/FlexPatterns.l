@@ -51,6 +51,8 @@ single_line_comment     "#"[^!].*
 "{"									{ return BraceLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACE); }
 "}"									{ return BraceLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
 
+","									{ return CommaLexemeAction(createLexicalAnalyzerContext()); }
+
 "'"                                 { BEGIN(CHAR_CONSTANT); ApostropheLexemeAction(createLexicalAnalyzerContext()); }
 <CHAR_CONSTANT>[^(\n|')]             { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_CHARACTER); }
 <CHAR_CONSTANT>"'"                  { ApostropheLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }

@@ -200,6 +200,40 @@ Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction
 	block->lastInstructionNode = newInstructionNode;
 	return block;
 }
+
+Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList,  Instruction * instruction) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Lambda * lambda = calloc(1, sizeof(Lambda));
+	lambda->variableDeclarationList = variableDeclarationList;
+	lambda->instruction = instruction;
+	return lambda;
+}
+
+Expression * LambdaExpressionSemanticAction(Lambda * lambda) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->lambda = lambda;
+	expression->type = LAMBDA;
+	return expression;
+}
+
+VariableDeclarationList * CreateVariableDeclarationListSemanticAction(VariableDeclaration * variableDeclaration) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	VariableDeclarationList * variableDeclarationList = calloc(1, sizeof(VariableDeclarationList));
+	variableDeclarationList->firstNode = calloc(1, sizeof(VariableDeclarationNode));
+	variableDeclarationList->firstNode->variableDeclaration = variableDeclaration;
+	variableDeclarationList->lastNode = variableDeclarationList->firstNode;
+	return variableDeclarationList;
+}
+
+VariableDeclarationList * AppendVariableDeclarationSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	VariableDeclarationNode * newVariableDeclarationNode = calloc(1, sizeof(VariableDeclarationNode));
+	newVariableDeclarationNode->variableDeclaration = variableDeclaration;
+	variableDeclarationList->lastNode->next = newVariableDeclarationNode;
+	variableDeclarationList->lastNode = newVariableDeclarationNode;
+	return variableDeclarationList;
+}
 Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
@@ -214,4 +248,6 @@ Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * bloc
 	}
 	return program;
 }
+
+
 

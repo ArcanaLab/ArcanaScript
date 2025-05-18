@@ -106,6 +106,13 @@ Token BraceLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token t
 	return token;
 }
 
+Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = COMMA;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return COMMA;
+}
+
 void ApostropheLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	if (_logIgnoredLexemes) {
 		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);

@@ -46,6 +46,9 @@ void releaseExpression(Expression * expression) {
 			releaseFactor(expression->leftFactor);
 			releaseFactor(expression->rightFactor);
 			break;
+		case LAMBDA:
+			releaseLambda(expression->lambda);
+			break;
 	}
 	free(expression);
 }
@@ -150,6 +153,29 @@ void releaseBlock(Block * block) {
 
 	releaseInstructionList(block->firstInstructionNode);
 	free(block);
+}
+
+void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(variableDeclarationList == NULL) return;
+
+	VariableDeclarationNode * currentVariableDeclarationNode = variableDeclarationList->firstNode;
+	while(currentVariableDeclarationNode != NULL) {
+		VariableDeclarationNode * nextVariableDeclarationNode = currentVariableDeclarationNode->next;
+		releaseVariableDeclaration(currentVariableDeclarationNode->variableDeclaration);
+		free(currentVariableDeclarationNode);
+		currentVariableDeclarationNode = nextVariableDeclarationNode;
+	}
+	free(variableDeclarationList);
+}
+
+void releaseLambda(Lambda * lambda) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(lambda == NULL) return;
+
+	releaseVariableDeclarationList(lambda->variableDeclarationList);
+	releaseInstruction(lambda->instruction);
+	free(lambda);
 }
 
 void releaseProgram(Program * program) {
