@@ -215,6 +215,9 @@ void releaseAssignmentOperation(AssignmentOperation * assignmentOperation);
 void releaseConditional(Conditional * conditional); 
 void releaseLambda(Lambda * lambda);
 
+void releaseInstruction(Instruction * instruction);
+void releaseBlock(Block * block);
+
 void releaseProgram(Program * program);
 
 #endif
