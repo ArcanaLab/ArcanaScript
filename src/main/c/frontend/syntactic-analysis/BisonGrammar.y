@@ -34,6 +34,9 @@
 
 	Instruction * instruction;
 	Block * block;
+
+	Lambda * lambda;
+	VariableDeclarationList * varList;
 }
 
 /**
@@ -52,6 +55,7 @@
 %destructor { releaseAssignmentOperation($$); } <assignmentOperation>
 %destructor { releaseInstruction($$); } <instruction>
 %destructor { releaseBlock($$); } <block>
+%destructor { releaseLambda($$); } <lambda>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -80,6 +84,8 @@
 %token <token> OPEN_BRACE
 %token <token> CLOSE_BRACE
 
+%token <token> COMMA
+
 %token <token> ASSIGN
 %token <token> ADD_ASSIGN
 %token <token> SUB_ASSIGN
@@ -98,6 +104,9 @@
 %type <varType> variable_type
 
 %type <assignmentOperation> assignment_operation
+
+%type <lambda> lambda
+%type <varList> var_list
 
 %type <instruction> instruction
 %type <block> block
@@ -139,6 +148,7 @@ instruction:
 
 scope:
 	OPEN_BRACE block CLOSE_BRACE									{ $$ = $2; }
+	| OPEN_BRACE CLOSE_BRACE										{ $$ = CreateBlockSemanticAction(NULL); }
 
 assignment_operation: 
 	NAME ASSIGN expression											{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
@@ -165,10 +175,19 @@ expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressi
 	| expression[left] MUL expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
 	| expression[left] SUB expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
 	| factor														{ $$ = FactorExpressionSemanticAction($1); }
+	| lambda														{ $$ = LambdaExpressionSemanticAction($1); }
 	;
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
+	;
+
+lambda: OPEN_PARENTHESIS CLOSE_PARENTHESIS block					{ $$ = LambdaSemanticAction(NULL, $3); }
+	| OPEN_PARENTHESIS var_list CLOSE_PARENTHESIS block				{ $$ = LambdaSemanticAction($2, $4); }
+	;
+
+var_list: variable_declaration										{ $$ = CreateVariableDeclarationListSemanticAction($1); }
+	| var_list COMMA variable_declaration							{ $$ = AppendVariableDeclarationSemanticAction($1, $3); }
 	;
 
 constant: C_INTEGER													{ $$ = ConstantSemanticAction(&$1, C_INT_TYPE); }

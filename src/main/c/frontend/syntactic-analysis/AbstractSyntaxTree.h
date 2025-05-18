@@ -31,6 +31,11 @@ typedef struct Instruction Instruction;
 
 typedef struct InstructionNode InstructionNode;
 typedef struct Block Block;
+
+typedef struct VariableDeclarationNode VariableDeclarationNode;
+typedef struct VariableDeclarationList VariableDeclarationList;
+typedef struct Lambda Lambda;
+
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -41,7 +46,8 @@ enum ExpressionType {
 	DIVISION,
 	FACTOR,
 	MULTIPLICATION,
-	SUBTRACTION
+	SUBTRACTION,
+	LAMBDA,
 };
 
 enum FactorType {
@@ -112,6 +118,7 @@ struct Expression {
 			Expression * leftExpression;
 			Expression * rightExpression;
 		};
+		Lambda * lambda;
 	};
 	ExpressionType type;
 };
@@ -152,6 +159,21 @@ struct Block {
 	InstructionNode * lastInstructionNode; // Append en O(1)
 };
 
+struct VariableDeclarationNode {
+	VariableDeclaration * variableDeclaration;
+	VariableDeclarationNode * next;
+};
+
+struct VariableDeclarationList{
+	VariableDeclarationNode * firstNode;
+	VariableDeclarationNode * lastNode;
+};
+
+struct Lambda {
+	VariableDeclarationList * variableDeclarationList;
+	Block * block;
+};
+
 struct Program {
 	Block * block;
 };
@@ -165,6 +187,8 @@ void releaseFactor(Factor * factor);
 void releaseName(char * name);
 void releaseVariableDeclaration(VariableDeclaration * variable);
 void releaseAssignmentOperation(AssignmentOperation * assignmentOperation);
+void releaseLambda(Lambda * lambda);
+
 void releaseProgram(Program * program);
 
 #endif

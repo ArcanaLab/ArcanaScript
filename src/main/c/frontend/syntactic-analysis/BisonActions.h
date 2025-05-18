@@ -48,6 +48,14 @@ Block * CreateBlockSemanticAction(Instruction * instruction);
 Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction);
 
 /**
+ * Lambdas.
+ */
+Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList, Block * block);
+Expression * LambdaExpressionSemanticAction(Lambda * lambda);
+VariableDeclarationList * CreateVariableDeclarationListSemanticAction(VariableDeclaration * variableDeclaration);
+VariableDeclarationList * AppendVariableDeclarationSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration);
+
+/**
  * Programs.
  */
 Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block);
