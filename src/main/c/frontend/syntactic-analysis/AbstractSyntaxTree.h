@@ -171,7 +171,7 @@ struct VariableDeclarationList{
 
 struct Lambda {
 	VariableDeclarationList * variableDeclarationList;
-	Block * block;
+	Instruction * instruction;
 };
 
 struct Program {

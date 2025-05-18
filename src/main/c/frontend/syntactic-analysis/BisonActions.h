@@ -50,7 +50,7 @@ Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction
 /**
  * Lambdas.
  */
-Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList, Block * block);
+Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList, Instruction * instruction);
 Expression * LambdaExpressionSemanticAction(Lambda * lambda);
 VariableDeclarationList * CreateVariableDeclarationListSemanticAction(VariableDeclaration * variableDeclaration);
 VariableDeclarationList * AppendVariableDeclarationSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration);

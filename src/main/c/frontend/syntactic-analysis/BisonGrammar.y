@@ -182,8 +182,8 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactor
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
 	;
 
-lambda: OPEN_PARENTHESIS CLOSE_PARENTHESIS block					{ $$ = LambdaSemanticAction(NULL, $3); }
-	| OPEN_PARENTHESIS var_list CLOSE_PARENTHESIS block				{ $$ = LambdaSemanticAction($2, $4); }
+lambda: OPEN_PARENTHESIS CLOSE_PARENTHESIS instruction				{ $$ = LambdaSemanticAction(NULL, $3); }
+	| OPEN_PARENTHESIS var_list CLOSE_PARENTHESIS instruction		{ $$ = LambdaSemanticAction($2, $4); }
 	;
 
 var_list: variable_declaration										{ $$ = CreateVariableDeclarationListSemanticAction($1); }

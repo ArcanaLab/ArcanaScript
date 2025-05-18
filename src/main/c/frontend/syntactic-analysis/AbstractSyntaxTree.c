@@ -151,7 +151,7 @@ void releaseLambda(Lambda * lambda) {
 	if(lambda == NULL) return;
 
 	releaseVariableDeclarationList(lambda->variableDeclarationList);
-	releaseBlock(lambda->block);
+	releaseInstruction(lambda->instruction);
 	free(lambda);
 }
 

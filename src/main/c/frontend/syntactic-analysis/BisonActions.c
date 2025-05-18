@@ -176,11 +176,11 @@ Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction
 	return block;
 }
 
-Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList, Block * block) {
+Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList,  Instruction * instruction) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Lambda * lambda = calloc(1, sizeof(Lambda));
 	lambda->variableDeclarationList = variableDeclarationList;
-	lambda->block = block;
+	lambda->instruction = instruction;
 	return lambda;
 }
 
