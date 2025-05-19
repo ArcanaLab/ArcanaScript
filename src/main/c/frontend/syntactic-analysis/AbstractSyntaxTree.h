@@ -20,7 +20,9 @@ typedef enum ConstantType ConstantType;
 typedef enum AssignmentOperatorType AssignmentOperatorType;
 typedef enum InstructionType InstructionType;
 typedef enum LoopType LoopType;
+typedef enum ConditionalType ConditionalType;
 
+typedef struct Conditional Conditional;
 typedef struct Constant Constant;
 typedef struct Expression Expression;
 typedef struct Factor Factor;
@@ -33,6 +35,11 @@ typedef struct Instruction Instruction;
 
 typedef struct InstructionNode InstructionNode;
 typedef struct Block Block;
+
+typedef struct VariableDeclarationNode VariableDeclarationNode;
+typedef struct VariableDeclarationList VariableDeclarationList;
+typedef struct Lambda Lambda;
+
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -43,9 +50,20 @@ enum ExpressionType {
 	DIVISION,
 	FACTOR,
 	MULTIPLICATION,
-	SUBTRACTION
+	SUBTRACTION,
+	LAMBDA,
+	LESS_TYPE,
+	GREATER_TYPE,
+	LESS_EQUAL_TYPE,
+	GREATER_EQUAL_TYPE,
+	EQUAL_EQUAL_TYPE,
+	NOT_EQUAL_TYPE,
 };
-
+enum ConditionalType {
+	IF_TYPE,
+	ELSE_IF_TYPE,
+	ELSE_TYPE,
+};
 enum FactorType {
 	CONSTANT,
 	EXPRESSION,
@@ -83,6 +101,7 @@ enum InstructionType {
 	INSTRUCTION_VARIABLE_DECLARATION,
 	INSTRUCTION_EXPRESSION,
 	INSTRUCTION_BLOCK,
+	INSTRUCTION_CONDITIONAL,
 	INSTRUCTION_LOOP,
 };
 
@@ -120,6 +139,13 @@ struct Expression {
 			Expression * leftExpression;
 			Expression * rightExpression;
 		};
+		struct 
+		{
+			Factor * leftFactor;
+			Factor * rightFactor;
+		};
+		
+		Lambda * lambda;
 	};
 	ExpressionType type;
 };
@@ -146,6 +172,11 @@ struct Loop {
 	char * collectionName;
 	Block * block;
 };
+struct Conditional {
+	Expression * expression;
+	Conditional * nextConditional;
+	ConditionalType ConditionalType;
+};
 
 struct Instruction {
 	union {
@@ -154,6 +185,7 @@ struct Instruction {
 		Expression * expression;
 		Block * block;
 		Loop * loop;
+		Conditional * conditional;
 	};
 
 	InstructionType type;
@@ -167,6 +199,21 @@ struct InstructionNode {
 struct Block {
 	InstructionNode * firstInstructionNode;// Prepend en O(1)
 	InstructionNode * lastInstructionNode; // Append en O(1)
+};
+
+struct VariableDeclarationNode {
+	VariableDeclaration * variableDeclaration;
+	VariableDeclarationNode * next;
+};
+
+struct VariableDeclarationList{
+	VariableDeclarationNode * firstNode;
+	VariableDeclarationNode * lastNode;
+};
+
+struct Lambda {
+	VariableDeclarationList * variableDeclarationList;
+	Instruction * instruction;
 };
 
 struct Program {
@@ -183,6 +230,12 @@ void releaseFactor(Factor * factor);
 void releaseName(char * name);
 void releaseVariableDeclaration(VariableDeclaration * variable);
 void releaseAssignmentOperation(AssignmentOperation * assignmentOperation);
+void releaseConditional(Conditional * conditional); 
+void releaseLambda(Lambda * lambda);
+
+void releaseInstruction(Instruction * instruction);
+void releaseBlock(Block * block);
+
 void releaseProgram(Program * program);
 void releaseLoop(Loop * loop);
 void releaseBlock(Block * block);

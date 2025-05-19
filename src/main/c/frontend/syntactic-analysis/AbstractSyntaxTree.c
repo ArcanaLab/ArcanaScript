@@ -37,6 +37,18 @@ void releaseExpression(Expression * expression) {
 		case FACTOR:
 			releaseFactor(expression->factor);
 			break;
+		case LESS_TYPE:
+		case GREATER_TYPE:
+		case LESS_EQUAL_TYPE:
+		case GREATER_EQUAL_TYPE:
+		case EQUAL_EQUAL_TYPE:
+		case NOT_EQUAL_TYPE:
+			releaseFactor(expression->leftFactor);
+			releaseFactor(expression->rightFactor);
+			break;
+		case LAMBDA:
+			releaseLambda(expression->lambda);
+			break;
 	}
 	free(expression);
 }
@@ -71,6 +83,17 @@ void releaseVariableDeclaration(VariableDeclaration * variable) {
 	free(variable);
 }
 
+void releaseConditional(Conditional * conditional){
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (!conditional) return;
+
+	releaseExpression(conditional->expression);
+
+	if (conditional->nextConditional)
+		releaseConditional(conditional->nextConditional);
+	free(conditional);
+}
+
 void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (assignmentOperation == NULL) return;
@@ -99,6 +122,9 @@ void releaseInstruction(Instruction * instruction) {
 			break;
 		case INSTRUCTION_LOOP:	
 			releaseLoop(instruction->loop);
+			break;
+		case INSTRUCTION_CONDITIONAL:
+			releaseConditional(instruction->conditional);
 			break;
 	}
 	free(instruction);
@@ -140,6 +166,29 @@ void releaseLoop(Loop * loop) {
 	releaseName(loop->itemName);
 	releaseName(loop->collectionName);
 	free(loop);
+}
+
+void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(variableDeclarationList == NULL) return;
+
+	VariableDeclarationNode * currentVariableDeclarationNode = variableDeclarationList->firstNode;
+	while(currentVariableDeclarationNode != NULL) {
+		VariableDeclarationNode * nextVariableDeclarationNode = currentVariableDeclarationNode->next;
+		releaseVariableDeclaration(currentVariableDeclarationNode->variableDeclaration);
+		free(currentVariableDeclarationNode);
+		currentVariableDeclarationNode = nextVariableDeclarationNode;
+	}
+	free(variableDeclarationList);
+}
+
+void releaseLambda(Lambda * lambda) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(lambda == NULL) return;
+
+	releaseVariableDeclarationList(lambda->variableDeclarationList);
+	releaseInstruction(lambda->instruction);
+	free(lambda);
 }
 
 void releaseProgram(Program * program) {

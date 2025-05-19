@@ -1,0 +1,41 @@
+fun =  () {
+    #! 
+        ... DO SOMETHING ...
+    !#
+    a: int = 1;
+};
+
+fun2 = (a: int) {};
+
+fun3 = (a: int = 1) {};
+
+fun4 = (a: int = 2) 1 + 3;;
+#!
+    var_declaration = expression;
+    ==== LAMBDA STRUCTURES ====
+    lambda: () block
+    lambda: (var_declaration1, var_declaration2, ..., var_declarationN) block
+
+
+    ==== FUNCTION STRUCTURES ====
+    function: Function<void> = () {
+
+    };
+
+    function: Function<void> = ();
+    function = () block;
+    function = (var_declaration1, var_declaration2, ..., var_declarationN) block;
+
+    var_declaration = expression;
+
+    ==== FUNCTION ARGUMENTS ====
+    Must be a list of var_declarations.
+    var_declaration_list
+
+    ==== FUNCTION BODY ====
+    Must be a block.
+
+    ==== LAMBDA END STRUCTURE ====
+    variableDeclarationList * variables; // This can be empty.
+    block * body; // THIS MUST EXIST.
+!#

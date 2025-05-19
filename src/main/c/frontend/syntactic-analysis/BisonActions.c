@@ -77,6 +77,17 @@ Expression * FactorExpressionSemanticAction(Factor * factor) {
 	return expression;
 }
 
+Expression * ComparatorExpressionSemanticAction(Factor * leftFactor, Factor * rightFactor, ExpressionType type) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->leftFactor = leftFactor;
+	expression->rightFactor = rightFactor;
+	expression->type = type;
+	return expression;
+}
+
+
+
 Factor * ConstantFactorSemanticAction(Constant * constant) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Factor * factor = calloc(1, sizeof(Factor));
@@ -163,6 +174,17 @@ AssignmentOperation * AssignmentOperatorSemanticAction(
 	return assignmentOperation;
 }
 
+Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	
+	Conditional * conditional = calloc(1, sizeof(Conditional));
+	conditional->expression = expression;
+	conditional->nextConditional = NULL;
+	conditional->ConditionalType = conditionalType;
+
+	return conditional;
+}
+
 Instruction * InstructionSemanticAction(void * value, InstructionType instructionType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Instruction * instruction = calloc(1, sizeof(Instruction));
@@ -183,6 +205,9 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 			break;
 		case INSTRUCTION_LOOP:
 			instruction->loop = value;
+			break;
+		case INSTRUCTION_CONDITIONAL:
+			instruction->conditional = value;
 			break;
 	}
 
@@ -206,6 +231,40 @@ Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction
 	block->lastInstructionNode = newInstructionNode;
 	return block;
 }
+
+Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList,  Instruction * instruction) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Lambda * lambda = calloc(1, sizeof(Lambda));
+	lambda->variableDeclarationList = variableDeclarationList;
+	lambda->instruction = instruction;
+	return lambda;
+}
+
+Expression * LambdaExpressionSemanticAction(Lambda * lambda) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->lambda = lambda;
+	expression->type = LAMBDA;
+	return expression;
+}
+
+VariableDeclarationList * CreateVariableDeclarationListSemanticAction(VariableDeclaration * variableDeclaration) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	VariableDeclarationList * variableDeclarationList = calloc(1, sizeof(VariableDeclarationList));
+	variableDeclarationList->firstNode = calloc(1, sizeof(VariableDeclarationNode));
+	variableDeclarationList->firstNode->variableDeclaration = variableDeclaration;
+	variableDeclarationList->lastNode = variableDeclarationList->firstNode;
+	return variableDeclarationList;
+}
+
+VariableDeclarationList * AppendVariableDeclarationSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	VariableDeclarationNode * newVariableDeclarationNode = calloc(1, sizeof(VariableDeclarationNode));
+	newVariableDeclarationNode->variableDeclaration = variableDeclaration;
+	variableDeclarationList->lastNode->next = newVariableDeclarationNode;
+	variableDeclarationList->lastNode = newVariableDeclarationNode;
+	return variableDeclarationList;
+}
 Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
@@ -220,4 +279,6 @@ Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * bloc
 	}
 	return program;
 }
+
+
 

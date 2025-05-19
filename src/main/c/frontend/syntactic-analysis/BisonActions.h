@@ -21,6 +21,10 @@ void shutdownBisonActionsModule();
 Constant * ConstantSemanticAction(const void * value, ConstantType constantType);
 Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
 Expression * FactorExpressionSemanticAction(Factor * factor);
+Expression * ComparatorExpressionSemanticAction(Factor * leftFactor, Factor * rightFactor, ExpressionType type);
+Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType);
+
+
 Factor * ConstantFactorSemanticAction(Constant * constant);
 Factor * ExpressionFactorSemanticAction(Expression * expression);
 Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block, char * itemName, char * collectionName);
@@ -49,6 +53,14 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
  */
 Block * CreateBlockSemanticAction(Instruction * instruction);
 Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction);
+
+/**
+ * Lambdas.
+ */
+Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList, Instruction * instruction);
+Expression * LambdaExpressionSemanticAction(Lambda * lambda);
+VariableDeclarationList * CreateVariableDeclarationListSemanticAction(VariableDeclaration * variableDeclaration);
+VariableDeclarationList * AppendVariableDeclarationSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration);
 
 /**
  * Programs.
