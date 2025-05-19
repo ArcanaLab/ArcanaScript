@@ -137,6 +137,8 @@ void releaseLoop(Loop * loop) {
 	if (loop == NULL) return;
 	releaseExpression(loop->expression);
 	releaseBlock(loop->block);
+	releaseName(loop->itemName);
+	releaseName(loop->collectionName);
 	free(loop);
 }
 

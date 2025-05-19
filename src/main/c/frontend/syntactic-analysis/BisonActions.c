@@ -104,13 +104,15 @@ VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableTyp
 	return variableDeclaration;
 }
 
-Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block){
+Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block, char * itemName, char * collectionName) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
 	Loop * loop = calloc(1, sizeof(Loop));
 	loop->type = type;
 	loop->expression = expression;
 	loop->block = block;
+	loop->itemName = itemName;
+	loop->collectionName = collectionName;
 	return loop;
 }
 Program * LoopProgramSemanticAction(CompilerState * compilerState, Loop * loop) {

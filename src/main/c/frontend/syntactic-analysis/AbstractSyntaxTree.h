@@ -142,6 +142,8 @@ struct AssignmentOperation {
 struct Loop {
 	Expression * expression;
 	LoopType type;
+	char * itemName;
+	char * collectionName;
 	Block * block;
 };
 

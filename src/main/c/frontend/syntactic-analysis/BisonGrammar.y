@@ -149,8 +149,8 @@ scope:
 	OPEN_BRACE block CLOSE_BRACE									{ $$ = $2; }
 
 loop:
-	WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS scope 				{ $$ = LoopSemanticAction($3, WHILE_LOOP, $5); }	
-	| FOR OPEN_PARENTHESIS expression CLOSE_PARENTHESIS scope				{ $$ = LoopSemanticAction($3, FOR_LOOP, $5); }
+	WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS scope 				{ $$ = LoopSemanticAction($3, WHILE_LOOP, $5, NULL, NULL); }	
+	| FOR OPEN_PARENTHESIS NAME COLON NAME CLOSE_PARENTHESIS scope				{ $$ = LoopSemanticAction(NULL, FOR_LOOP, $7, $3, $5); }
 	;
 assignment_operation: 
 	NAME ASSIGN expression											{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }

@@ -23,7 +23,7 @@ Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Exp
 Expression * FactorExpressionSemanticAction(Factor * factor);
 Factor * ConstantFactorSemanticAction(Constant * constant);
 Factor * ExpressionFactorSemanticAction(Expression * expression);
-Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block);
+Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block, char * itemName, char * collectionName);
 
 
 
