@@ -22,7 +22,8 @@ Constant * ConstantSemanticAction(const void * value, ConstantType constantType)
 Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
 Expression * FactorExpressionSemanticAction(Factor * factor);
 Expression * ComparatorExpressionSemanticAction(Factor * leftFactor, Factor * rightFactor, ExpressionType type);
-Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType);
+
+Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType,Block * block);
 
 
 Factor * ConstantFactorSemanticAction(Constant * constant);

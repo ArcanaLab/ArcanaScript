@@ -15,6 +15,15 @@ void shutdownAbstractSyntaxTreeModule() {
 }
 
 /** PUBLIC FUNCTIONS */
+
+void releaseBlock(Block * block) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(block == NULL) return;
+
+	releaseInstructionList(block->firstInstructionNode);
+	free(block);
+}
+
 void releaseConstant(Constant * constant) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (constant == NULL) return;
@@ -91,6 +100,7 @@ void releaseConditional(Conditional * conditional){
 
 	if (conditional->nextConditional)
 		releaseConditional(conditional->nextConditional);
+	releaseBlock(conditional->block);
 	free(conditional);
 }
 
@@ -150,13 +160,6 @@ void releaseInstructionList(InstructionNode * instructionNode) {
 	}
 }
 
-void releaseBlock(Block * block) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(block == NULL) return;
-
-	releaseInstructionList(block->firstInstructionNode);
-	free(block);
-}
 
 void releaseLoop(Loop * loop) {
 	logError(_logger, "Executing destructor: %s", __FUNCTION__);
