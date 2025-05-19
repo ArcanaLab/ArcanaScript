@@ -146,12 +146,13 @@ AssignmentOperation * AssignmentOperatorSemanticAction(
 	return assignmentOperation;
 }
 
-Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType) {
+Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType,Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
 	Conditional * conditional = calloc(1, sizeof(Conditional));
 	conditional->expression = expression;
 	conditional->nextConditional = NULL;
+	conditional->block = block;
 	conditional->ConditionalType = conditionalType;
 
 	return conditional;

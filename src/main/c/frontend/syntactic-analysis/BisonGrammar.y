@@ -181,12 +181,12 @@ variable_type:
 	TYPE 															{ $$ = $1; }
 	;
 
-if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS    			{ $$ = ConditionalSemanticAction($exp,IF_TYPE); }
-    | IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS else[con]	{ $$ = ConditionalSemanticAction($exp,IF_TYPE); $$->nextConditional = $con; }	
+if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS scope[block]   			{ $$ = ConditionalSemanticAction($exp,IF_TYPE,$block); }
+    | IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS scope[block] else[con]			{ $$ = ConditionalSemanticAction($exp,IF_TYPE,$block); $$->nextConditional = $con; }	
 	;
 else:
-	ELSE if															{ $$ = $2; }
-	| ELSE															{ $$ = ConditionalSemanticAction(NULL,ELSE_TYPE); }
+	ELSE if																{ $$ = $2; }
+	| ELSE scope[block]														{ $$ = ConditionalSemanticAction(NULL,ELSE_TYPE,$block); }
 
 comparator_expression: 	factor[left] GREATER factor[right]			{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_TYPE); }
 	| factor[left] GREATER_EQUAL factor[right]						{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_EQUAL_TYPE); }

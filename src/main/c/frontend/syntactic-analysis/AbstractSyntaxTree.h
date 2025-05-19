@@ -153,6 +153,7 @@ struct Conditional {
 	Expression * expression;
 	Conditional * nextConditional;
 	ConditionalType ConditionalType;
+	Block * block;
 };
 
 struct Instruction {
