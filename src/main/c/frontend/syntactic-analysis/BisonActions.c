@@ -283,3 +283,44 @@ Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * bloc
 
 
 
+FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressionList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
+	functionCall->name = name;
+	functionCall->expressionList = expressionList;
+	return functionCall;
+}
+
+ExpressionList * CreateExpressionListSemanticAction(Expression * expression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ExpressionList * expressionList = calloc(1, sizeof(ExpressionList));
+	expressionList->firstNode = calloc(1, sizeof(ExpressionNode));
+	expressionList->firstNode->expression = expression;
+	expressionList->lastNode = expressionList->firstNode;
+	return expressionList;
+}
+
+ExpressionList * AppendExpressionSemanticAction(ExpressionList * expressionList, Expression * expression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ExpressionNode * newExpressionNode = calloc(1, sizeof(ExpressionNode));
+	newExpressionNode->expression = expression;
+	expressionList->lastNode->next = newExpressionNode;
+	expressionList->lastNode = newExpressionNode;
+	return expressionList;
+}
+
+Expression * FunctionCallExpressionSemanticAction(FunctionCall * functionCall) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->functionCall = functionCall;
+	expression->type = FUNCTION_CALL;
+	return expression;
+}
+
+Expression * VariableExpressionSemanticAction(char * variable){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->variable = variable;
+	expression->type = VARIABLE_TYPE;
+	return expression;
+}

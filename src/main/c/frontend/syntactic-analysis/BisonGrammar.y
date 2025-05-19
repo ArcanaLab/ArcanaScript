@@ -42,6 +42,9 @@
 
 	Lambda * lambda;
 	VariableDeclarationList * varList;
+
+	FunctionCall * functionCall;
+	ExpressionList * expressionList;
 }
 
 /**
@@ -63,6 +66,8 @@
 %destructor { releaseBlock($$); } <block>
 %destructor { releaseLoop($$); } <loop>
 %destructor { releaseLambda($$); } <lambda>
+%destructor { releaseFunctionCall($$); } <functionCall>
+%destructor { releaseExpressionList($$); } <expressionList>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -139,6 +144,9 @@
 %type <lambda> lambda
 %type <varList> var_list
 
+%type <functionCall> function_call
+%type <expressionList> expression_list
+
 %type <instruction> instruction
 %type <block> block
 %type <block> scope
@@ -184,6 +192,7 @@ loop:
 	WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS scope 				{ $$ = LoopSemanticAction($3, WHILE_LOOP, $5, NULL, NULL); }	
 	| FOR OPEN_PARENTHESIS NAME COLON NAME CLOSE_PARENTHESIS scope				{ $$ = LoopSemanticAction(NULL, FOR_LOOP, $7, $3, $5); }
 	;
+
 assignment_operation: 
 	NAME ASSIGN expression											{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
 	| NAME ADD_ASSIGN expression									{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
@@ -222,7 +231,9 @@ expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressi
 	| expression[left] MUL expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
 	| expression[left] SUB expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
 	| factor														{ $$ = FactorExpressionSemanticAction($1); }
+	| function_call													{ $$ = FunctionCallExpressionSemanticAction($1); }
 	| lambda														{ $$ = LambdaExpressionSemanticAction($1); }
+	| NAME															{ $$ = VariableExpressionSemanticAction($1); }	
 	;
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
@@ -232,9 +243,19 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactor
 lambda: OPEN_PARENTHESIS CLOSE_PARENTHESIS instruction				{ $$ = LambdaSemanticAction(NULL, $3); }
 	| OPEN_PARENTHESIS var_list CLOSE_PARENTHESIS instruction		{ $$ = LambdaSemanticAction($2, $4); }
 	;
-
+	
 var_list: variable_declaration										{ $$ = CreateVariableDeclarationListSemanticAction($1); }
 	| var_list COMMA variable_declaration							{ $$ = AppendVariableDeclarationSemanticAction($1, $3); }
+	;
+
+function_call:
+	NAME OPEN_PARENTHESIS CLOSE_PARENTHESIS							{ $$ = FunctionCallSemanticAction($1, NULL); }
+	| NAME OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS		{ $$ = FunctionCallSemanticAction($1, $3); }
+	;
+	
+expression_list:
+	expression														{ $$ = CreateExpressionListSemanticAction($1); }
+	| expression_list COMMA expression								{ $$ = AppendExpressionSemanticAction($1, $3); }
 	;
 
 constant: C_INTEGER													{ $$ = ConstantSemanticAction(&$1, C_INT_TYPE); }

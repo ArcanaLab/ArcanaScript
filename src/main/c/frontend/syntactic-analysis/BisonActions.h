@@ -7,6 +7,7 @@
 #include "AbstractSyntaxTree.h"
 #include "SyntacticAnalyzer.h"
 #include <stdlib.h>
+#include <string.h>
 
 /** Initialize module's internal state. */
 void initializeBisonActionsModule();
@@ -22,6 +23,7 @@ Constant * ConstantSemanticAction(const void * value, ConstantType constantType)
 Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
 Expression * FactorExpressionSemanticAction(Factor * factor);
 Expression * ComparatorExpressionSemanticAction(Factor * leftFactor, Factor * rightFactor, ExpressionType type);
+Expression * VariableExpressionSemanticAction(char * variable);
 
 Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType,Block * block);
 
@@ -62,10 +64,18 @@ Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList,
 Expression * LambdaExpressionSemanticAction(Lambda * lambda);
 VariableDeclarationList * CreateVariableDeclarationListSemanticAction(VariableDeclaration * variableDeclaration);
 VariableDeclarationList * AppendVariableDeclarationSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration);
+/**
+ * Function calls.
+ */
+FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressionList);
+ExpressionList * CreateExpressionListSemanticAction(Expression * expression);
+ExpressionList * AppendExpressionSemanticAction(ExpressionList * expressionList, Expression * expression);
+Expression * FunctionCallExpressionSemanticAction(FunctionCall * functionCall);
 
 /**
  * Programs.
  */
 Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block);
 Program * LoopProgramSemanticAction(CompilerState * compilerState, Loop * loop);
+
 #endif

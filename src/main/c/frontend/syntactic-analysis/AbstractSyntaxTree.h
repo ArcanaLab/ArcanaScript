@@ -40,6 +40,10 @@ typedef struct VariableDeclarationNode VariableDeclarationNode;
 typedef struct VariableDeclarationList VariableDeclarationList;
 typedef struct Lambda Lambda;
 
+typedef struct ExpressionNode ExpressionNode;
+typedef struct ExpressionList ExpressionList;
+typedef struct FunctionCall FunctionCall;
+
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -52,12 +56,14 @@ enum ExpressionType {
 	MULTIPLICATION,
 	SUBTRACTION,
 	LAMBDA,
+	FUNCTION_CALL,
 	LESS_TYPE,
 	GREATER_TYPE,
 	LESS_EQUAL_TYPE,
 	GREATER_EQUAL_TYPE,
 	EQUAL_EQUAL_TYPE,
 	NOT_EQUAL_TYPE,
+	VARIABLE_TYPE,
 };
 enum ConditionalType {
 	IF_TYPE,
@@ -144,8 +150,9 @@ struct Expression {
 			Factor * leftFactor;
 			Factor * rightFactor;
 		};
-		
+		FunctionCall * functionCall;
 		Lambda * lambda;
+		char * variable;
 	};
 	ExpressionType type;
 };
@@ -217,6 +224,22 @@ struct Lambda {
 	Instruction * instruction;
 };
 
+struct FunctionCall {
+	char * name;
+	ExpressionList * expressionList;
+};
+
+
+struct ExpressionNode {
+	Expression * expression;
+	ExpressionNode * next;
+};
+
+struct ExpressionList {
+	ExpressionNode * firstNode;
+	ExpressionNode * lastNode;
+};
+
 struct Program {
 	Block * block;
 	Loop * loop;
@@ -240,5 +263,8 @@ void releaseBlock(Block * block);
 void releaseProgram(Program * program);
 void releaseLoop(Loop * loop);
 void releaseBlock(Block * block);
+
+void releaseFunctionCall(FunctionCall * functionCall);
+void releaseExpressionList(ExpressionList * expressionList);
 
 #endif

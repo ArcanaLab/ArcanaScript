@@ -30,6 +30,11 @@
         "scopeName": "source.arcana",
         "path": "./syntaxes/arcana.tmLanguage.json"
       }
-    ]
+    ],
+    "icons": {
+      "arcx": {
+        "path": "./assets/arcx.ico"
+      }
+    }
   }
 }

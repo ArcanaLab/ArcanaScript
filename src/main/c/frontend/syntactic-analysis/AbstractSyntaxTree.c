@@ -55,8 +55,14 @@ void releaseExpression(Expression * expression) {
 			releaseFactor(expression->leftFactor);
 			releaseFactor(expression->rightFactor);
 			break;
+		case FUNCTION_CALL:
+			releaseFunctionCall(expression->functionCall);
+			break;
 		case LAMBDA:
 			releaseLambda(expression->lambda);
+			break;
+		case VARIABLE_TYPE:
+			releaseName(expression->variable);
 			break;
 	}
 	free(expression);
@@ -201,4 +207,28 @@ void releaseProgram(Program * program) {
 	releaseBlock(program->block);
 	releaseLoop(program->loop);
 	free(program);
+}
+
+void releaseExpressionList(ExpressionList * expressionList) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(expressionList == NULL) return;
+
+	ExpressionNode * currentExpressionNode = expressionList->firstNode;
+	while(currentExpressionNode != NULL) {
+		ExpressionNode * nextExpressionNode = currentExpressionNode->next;
+		releaseExpression(currentExpressionNode->expression);
+		free(currentExpressionNode);
+		currentExpressionNode = nextExpressionNode;
+	}
+	free(expressionList);
+}
+
+
+void releaseFunctionCall(FunctionCall * functionCall) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(functionCall == NULL) return;
+
+	releaseExpressionList(functionCall->expressionList);
+	releaseName(functionCall->name);
+	free(functionCall);
 }
