@@ -86,9 +86,15 @@ void releaseVariableDeclaration(VariableDeclaration * variable) {
 
 	releaseExpression(variable->expression);
 	releaseName(variable->name);
+	if (variable->privacyModifierList != NULL) {
+		releaseList(variable->privacyModifierList,releasePrivacyModifier);
+	}
 	free(variable);
 }
-
+void releasePrivacyModifier(PrivacyModifier * modifier) {
+    if (modifier == NULL) return;
+    free(modifier);
+}
 void releaseConditional(Conditional * conditional){
 	logError(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (!conditional) return;
@@ -161,7 +167,6 @@ void releaseProgram(Program * program) {
 	if(program == NULL) return;
 
 	releaseBlock(program->block);
-	releaseLoop(program->loop);
 	free(program);
 }
 
@@ -218,7 +223,10 @@ void releaseVariableDeclarationList(VariableDeclarationList * variableDeclaratio
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(variableDeclarationList, releaseVariableDeclaration);
 }
-
+void releasePrivacyList(PrivacyList * privacyList){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	return releaseList(privacyList, releasePrivacyModifier);
+}
 // Instructions & Blocks.
 void releaseBlock(Block * block){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);

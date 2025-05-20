@@ -29,7 +29,8 @@
 	Program * program;
 	Loop * loop;
 
-
+	PrivacyModifier * privacy;
+	PrivacyList * privacyList;	
 	VariableDeclaration * variableDeclaration;
 	VariableType varType;
 
@@ -68,6 +69,8 @@
 %destructor { releaseLambda($$); } <lambda>
 %destructor { releaseFunctionCall($$); } <functionCall>
 %destructor { releaseExpressionList($$); } <expressionList>
+%destructor { releasePrivacyModifier($$); } <privacy>
+%destructor { releasePrivacyList($$); } <privacyList>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -80,6 +83,14 @@
 %token <c_float> C_FLOAT
 %token <c_boolean> C_BOOLEAN
 %token <c_string> C_STRING
+
+/** ===== Privacy Types ===== */
+%token <token> C_EXPOSED //Public
+%token <token> C_HIDDEN //Private
+%token <token> C_SHIELDED //Protected
+%token <token> C_ETERNAL //Static
+%token <token> C_IMMUTABLE //Const
+
 
 /** ===== Arithmetic Types ===== */
 %token <token> ADD
@@ -127,6 +138,9 @@
 
 /** ============== NON-TERMINALS. ============== */
 %type <constant> constant
+
+%type <privacyList> privacy_list
+%type <privacy> privacy_modifier
 
 %type <expression> expression
 %type <expression> comparator_expression
@@ -176,12 +190,12 @@ block:
 	;
 
 instruction:
-	assignment_operation SEMICOLON									{ $$ = InstructionSemanticAction($1, INSTRUCTION_ASSIGNMENT); }
+	assignment_operation SEMICOLON											{ $$ = InstructionSemanticAction($1, INSTRUCTION_ASSIGNMENT); }
 	| variable_declaration SEMICOLON								{ $$ = InstructionSemanticAction($1, INSTRUCTION_VARIABLE_DECLARATION); }
-	| expression SEMICOLON											{ $$ = InstructionSemanticAction($1, INSTRUCTION_EXPRESSION); }
-	| scope															{ $$ = InstructionSemanticAction($1, INSTRUCTION_BLOCK); }
-	| loop 															{ $$ = InstructionSemanticAction($1, INSTRUCTION_LOOP); }
-	| if															{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONDITIONAL); }
+	| expression SEMICOLON													{ $$ = InstructionSemanticAction($1, INSTRUCTION_EXPRESSION); }
+	| scope																	{ $$ = InstructionSemanticAction($1, INSTRUCTION_BLOCK); }
+	| loop 																	{ $$ = InstructionSemanticAction($1, INSTRUCTION_LOOP); }
+	| if																	{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONDITIONAL); }
 	;
 
 scope:
@@ -204,8 +218,10 @@ assignment_operation:
 	;
 
 variable_declaration:
-	NAME COLON variable_type										{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
-	| NAME COLON variable_type ASSIGN expression					{ $$ = VariableDeclarationSemanticAction($1, $3, $5); }
+	NAME[name] COLON variable_type[type]																			{ $$ = VariableDeclarationSemanticAction($name, $type, NULL,NULL); }
+	| NAME[name] COLON variable_type[type] ASSIGN expression[exp]													{ $$ = VariableDeclarationSemanticAction($name, $type, $exp,NULL); }
+	| privacy_list[priv] NAME[name] COLON variable_type[type]														{ $$ = VariableDeclarationSemanticAction($name, $type, NULL,$priv); }
+	| privacy_list[priv] NAME[name] COLON variable_type[type] ASSIGN expression[exp]								{ $$ = VariableDeclarationSemanticAction($name, $type, $exp,$priv); }
 	;
 
 variable_type:
@@ -216,7 +232,7 @@ if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS scope[block
     | IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS scope[block] else[con]			{ $$ = ConditionalSemanticAction($exp,IF_TYPE,$block); $$->nextConditional = $con; }	
 	;
 else:
-	ELSE if																{ $$ = $2; }
+	ELSE if																	{ $$ = $2; }
 	| ELSE scope[block]														{ $$ = ConditionalSemanticAction(NULL,ELSE_TYPE,$block); }
 
 comparator_expression: 	factor[left] GREATER factor[right]			{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_TYPE); }
@@ -265,5 +281,16 @@ constant: C_INTEGER													{ $$ = ConstantSemanticAction(&$1, C_INT_TYPE); 
 		| C_FLOAT													{ $$ = ConstantSemanticAction(&$1, C_FLOAT_TYPE); }
 		| C_BOOLEAN													{ $$ = ConstantSemanticAction(&$1, C_BOOLEAN_TYPE); }	
 	;
+
+privacy_list: privacy_modifier[mod]									{ $$ = PrivacyListSemanticAction(NULL,$mod); }
+	| privacy_list privacy_modifier[mod]							{ $$ = PrivacyListSemanticAction($1,$mod); }
+	;
+privacy_modifier:C_EXPOSED											{ $$ = PrivacyModifierSemanticAction(PUBLIC_A); }
+	| C_HIDDEN														{ $$ = PrivacyModifierSemanticAction(PRIVATE_A); }
+	| C_SHIELDED													{ $$ = PrivacyModifierSemanticAction(PROTECTED_A); }
+	| C_ETERNAL														{ $$ = PrivacyModifierSemanticAction(STATIC_A); }
+	| C_IMMUTABLE													{ $$ = PrivacyModifierSemanticAction(CONST_A);; }
+	;
+
 
 %%

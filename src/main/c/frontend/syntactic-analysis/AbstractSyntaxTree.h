@@ -21,6 +21,7 @@ typedef enum AssignmentOperatorType AssignmentOperatorType;
 typedef enum InstructionType InstructionType;
 typedef enum LoopType LoopType;
 typedef enum ConditionalType ConditionalType;
+typedef enum PrivacyType PrivacyType;
 
 typedef struct Conditional Conditional;
 typedef struct Constant Constant;
@@ -29,6 +30,7 @@ typedef struct Factor Factor;
 typedef struct Program Program;
 typedef struct Loop Loop;
 
+typedef struct PrivacyModifier PrivacyModifier;
 typedef struct VariableDeclaration VariableDeclaration;
 typedef struct AssignmentOperation AssignmentOperation;
 typedef struct Instruction Instruction;
@@ -54,9 +56,15 @@ typedef List ExpressionList;
 typedef Node VariableDeclarationNode;
 typedef List VariableDeclarationList;
 
+// Privacy
+typedef Node PrivacyNode;
+typedef List PrivacyList;
+
 // Instructions & Blocks.
 typedef Node InstructionNode;
 typedef List Block;
+
+
 
 
 /**
@@ -88,6 +96,14 @@ enum ConditionalType {
 enum FactorType {
 	CONSTANT,
 	EXPRESSION,
+};
+
+enum PrivacyType {
+	PRIVATE_A,
+	PUBLIC_A,
+	PROTECTED_A,
+	CONST_A,
+	STATIC_A,
 };
 
 enum VariableType {
@@ -172,10 +188,15 @@ struct Expression {
 	ExpressionType type;
 };
 
+struct PrivacyModifier {
+	PrivacyType type;
+};
+
 struct VariableDeclaration {
 	char * name;
 	VariableType type;
 	Expression * expression;
+	PrivacyList * privacyModifierList;
 };
 
 struct AssignmentOperation {
@@ -265,5 +286,6 @@ void releaseFunctionCall(FunctionCall * functionCall);
 
 void releaseExpressionList(ExpressionList * expressionList);
 void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList);
+void releasePrivacyModifier(PrivacyModifier * modifier);
 void releaseBlock(Block * block);
 #endif

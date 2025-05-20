@@ -104,13 +104,14 @@ Factor * ExpressionFactorSemanticAction(Expression * expression) {
 	return factor;
 }
 
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression) {
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, PrivacyList * privacyModifierList) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
 	VariableDeclaration * variableDeclaration = calloc(1, sizeof(VariableDeclaration));
 	variableDeclaration->name = name;
 	variableDeclaration->type = type;
 	variableDeclaration->expression = expression;
+	variableDeclaration->privacyModifierList = privacyModifierList;
 
 	return variableDeclaration;
 }
@@ -272,6 +273,14 @@ Expression * VariableExpressionSemanticAction(char * variable){
 	return expression;
 }
 
+
+PrivacyModifier * PrivacyModifierSemanticAction(PrivacyType privacyType) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	PrivacyModifier * privacyModifier = calloc(1, sizeof(PrivacyModifier));
+	privacyModifier->type = privacyType;
+	return privacyModifier;
+}
+
 /**
  * ============== LIST ==============
  */
@@ -327,6 +336,11 @@ ExpressionList * ExpressionListSemanticAction(ExpressionList * expressionList, 	
 VariableDeclarationList * VariableDeclarationListSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	return ListSemanticAction(variableDeclarationList, variableDeclaration);
+}
+// Privacy
+PrivacyList * PrivacyListSemanticAction(PrivacyList * privacyList, PrivacyModifier * modifier){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	return ListSemanticAction(privacyList, modifier);
 }
 
 // Instructions & Blocks.
