@@ -291,7 +291,7 @@ List * CreateListSemanticAction(void * data){
 }
 
 /**
- * @param list The List to insert data. If `NULL` it creates a new list with te data.
+ * @param list The List to insert data. If `NULL` it creates a new list with the data.
  * @param data the data to insert into the list. If `NULL`, there's nothing to insert and it returns the list as is.
  * 
  * @return A list with the data to be inserted. If `data = NULL` it returns the list. If both are `NULL` it returns a new empty list.
