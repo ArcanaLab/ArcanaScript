@@ -209,19 +209,19 @@ void releaseList(List * list, releaseDataFn release_fun) {
 
 // Expressions.
 void releaseExpressionList(ExpressionList * expressionList){
-	logDebugging(_logger, "Execucting destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(expressionList, releaseExpression);
 }
 
 // Variable declarations.
 void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList){
-	logDebugging(_logger, "Execucting destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(variableDeclarationList, releaseVariableDeclaration);
 }
 
 // Instructions & Blocks.
 void releaseBlock(Block * block){
-	logDebugging(_logger, "Execucting destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(block, releaseInstruction);
 }
 // And that's all. We now can do it multiple times, with multiple uses, and keep it simple.
