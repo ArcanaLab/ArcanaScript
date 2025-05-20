@@ -171,8 +171,8 @@ program:
 	;
 
 block:
-	instruction														{ $$ = CreateBlockSemanticAction($1); }
-	| block instruction												{ $$ = AppendInstructionSemanticAction($1, $2); }
+	instruction														{ $$ = BlockSemanticAction(NULL, $1); }
+	| block instruction												{ $$ = BlockSemanticAction($1, $2); }
 	;
 
 instruction:
@@ -186,11 +186,11 @@ instruction:
 
 scope:
 	OPEN_BRACE block CLOSE_BRACE									{ $$ = $2; }
-	| OPEN_BRACE CLOSE_BRACE										{ $$ = CreateBlockSemanticAction(NULL); }
+	| OPEN_BRACE CLOSE_BRACE										{ $$ = BlockSemanticAction(NULL, NULL); }
 
 loop:
-	WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS scope 				{ $$ = LoopSemanticAction($3, WHILE_LOOP, $5, NULL, NULL); }	
-	| FOR OPEN_PARENTHESIS NAME COLON NAME CLOSE_PARENTHESIS scope				{ $$ = LoopSemanticAction(NULL, FOR_LOOP, $7, $3, $5); }
+	WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS scope 		{ $$ = LoopSemanticAction($3, WHILE_LOOP, $5, NULL, NULL); }	
+	| FOR OPEN_PARENTHESIS NAME COLON NAME CLOSE_PARENTHESIS scope	{ $$ = LoopSemanticAction(NULL, FOR_LOOP, $7, $3, $5); }
 	;
 
 assignment_operation: 
@@ -212,7 +212,7 @@ variable_type:
 	TYPE 															{ $$ = $1; }
 	;
 
-if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS scope[block]   			{ $$ = ConditionalSemanticAction($exp,IF_TYPE,$block); }
+if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS scope[block]   					{ $$ = ConditionalSemanticAction($exp,IF_TYPE,$block); }
     | IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS scope[block] else[con]			{ $$ = ConditionalSemanticAction($exp,IF_TYPE,$block); $$->nextConditional = $con; }	
 	;
 else:
@@ -244,8 +244,8 @@ lambda: OPEN_PARENTHESIS CLOSE_PARENTHESIS instruction				{ $$ = LambdaSemanticA
 	| OPEN_PARENTHESIS var_list CLOSE_PARENTHESIS instruction		{ $$ = LambdaSemanticAction($2, $4); }
 	;
 	
-var_list: variable_declaration										{ $$ = CreateVariableDeclarationListSemanticAction($1); }
-	| var_list COMMA variable_declaration							{ $$ = AppendVariableDeclarationSemanticAction($1, $3); }
+var_list: variable_declaration										{ $$ = VariableDeclarationListSemanticAction(NULL, $1); }
+	| var_list COMMA variable_declaration							{ $$ = VariableDeclarationListSemanticAction($1, $3); }
 	;
 
 function_call:
@@ -254,8 +254,8 @@ function_call:
 	;
 	
 expression_list:
-	expression														{ $$ = CreateExpressionListSemanticAction($1); }
-	| expression_list COMMA expression								{ $$ = AppendExpressionSemanticAction($1, $3); }
+	expression														{ $$ = ExpressionListSemanticAction(NULL, $1); }
+	| expression_list COMMA expression								{ $$ = ExpressionListSemanticAction($1, $3); }
 	;
 
 constant: C_INTEGER													{ $$ = ConstantSemanticAction(&$1, C_INT_TYPE); }

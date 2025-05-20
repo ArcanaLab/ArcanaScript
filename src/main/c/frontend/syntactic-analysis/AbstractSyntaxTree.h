@@ -32,17 +32,32 @@ typedef struct Loop Loop;
 typedef struct VariableDeclaration VariableDeclaration;
 typedef struct AssignmentOperation AssignmentOperation;
 typedef struct Instruction Instruction;
-
-typedef struct InstructionNode InstructionNode;
-typedef struct Block Block;
-
-typedef struct VariableDeclarationNode VariableDeclarationNode;
-typedef struct VariableDeclarationList VariableDeclarationList;
 typedef struct Lambda Lambda;
 
-typedef struct ExpressionNode ExpressionNode;
-typedef struct ExpressionList ExpressionList;
 typedef struct FunctionCall FunctionCall;
+
+
+/** Lists */
+typedef struct Node Node;
+typedef struct List List;
+typedef void (*releaseDataFn)(void *);
+
+/**
+ * Specialized lists.
+ */
+
+// Expressions.
+typedef Node ExpressionNode;
+typedef List ExpressionList;
+
+// Variable declarations.
+typedef Node VariableDeclarationNode;
+typedef List VariableDeclarationList;
+
+// Instructions & Blocks.
+typedef Node InstructionNode;
+typedef List Block;
+
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -199,26 +214,6 @@ struct Instruction {
 	InstructionType type;
 };
 
-struct InstructionNode {
-	Instruction * instruction;
-	InstructionNode * nextInstructionNode;
-};
-
-struct Block {
-	InstructionNode * firstInstructionNode;// Prepend en O(1)
-	InstructionNode * lastInstructionNode; // Append en O(1)
-};
-
-struct VariableDeclarationNode {
-	VariableDeclaration * variableDeclaration;
-	VariableDeclarationNode * next;
-};
-
-struct VariableDeclarationList{
-	VariableDeclarationNode * firstNode;
-	VariableDeclarationNode * lastNode;
-};
-
 struct Lambda {
 	VariableDeclarationList * variableDeclarationList;
 	Instruction * instruction;
@@ -229,20 +224,24 @@ struct FunctionCall {
 	ExpressionList * expressionList;
 };
 
-
-struct ExpressionNode {
-	Expression * expression;
-	ExpressionNode * next;
-};
-
-struct ExpressionList {
-	ExpressionNode * firstNode;
-	ExpressionNode * lastNode;
-};
-
 struct Program {
 	Block * block;
 	Loop * loop;
+};
+
+
+/***
+ * LISTS
+ */
+struct Node {
+	void * data;
+	Node * next;
+};
+
+struct List {
+	Node * first;
+	Node * last;
+	int size;
 };
 
 /**
@@ -258,13 +257,13 @@ void releaseConditional(Conditional * conditional);
 void releaseLambda(Lambda * lambda);
 
 void releaseInstruction(Instruction * instruction);
-void releaseBlock(Block * block);
 
 void releaseProgram(Program * program);
 void releaseLoop(Loop * loop);
-void releaseBlock(Block * block);
 
 void releaseFunctionCall(FunctionCall * functionCall);
-void releaseExpressionList(ExpressionList * expressionList);
 
+void releaseExpressionList(ExpressionList * expressionList);
+void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList);
+void releaseBlock(Block * block);
 #endif
