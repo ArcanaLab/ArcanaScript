@@ -55,6 +55,10 @@ void releaseExpression(Expression * expression) {
 		case VARIABLE_TYPE:
 			releaseName(expression->variable);
 			break;
+		case INCREMENT_TYPE:
+		case DECREMENT_TYPE:
+			releaseName(expression->variable);
+			break;
 	}
 	free(expression);
 }

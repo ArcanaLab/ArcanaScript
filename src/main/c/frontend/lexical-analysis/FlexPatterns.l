@@ -81,6 +81,10 @@ single_line_comment     "#"[^!].*
 "-="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), SUB_ASSIGN); }
 "*="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), MUL_ASSIGN); }
 
+"++"                                { return UnaryOperatorLexemeAction(createLexicalAnalyzerContext(), INCREMENT); }
+"--"                                { return UnaryOperatorLexemeAction(createLexicalAnalyzerContext(), DECREMENT); }
+
+
 "true"|"false"                      { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_BOOLEAN); }
 [0-9]+\.[0-9]+f						{ return ConstantLexemeAction(createLexicalAnalyzerContext(), C_FLOAT); }
 [0-9]+\.[0-9]+						{ return ConstantLexemeAction(createLexicalAnalyzerContext(), C_DOUBLE); }
