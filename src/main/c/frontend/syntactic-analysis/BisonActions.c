@@ -272,6 +272,14 @@ Expression * VariableExpressionSemanticAction(char * variable){
 	return expression;
 }
 
+Expression * UnaryExpressionSemanticAction(char * name,  ExpressionType type){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->variable = name;
+	expression->type = type;
+	return expression;
+}
+
 /**
  * ============== LIST ==============
  */

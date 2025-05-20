@@ -79,6 +79,8 @@ enum ExpressionType {
 	EQUAL_EQUAL_TYPE,
 	NOT_EQUAL_TYPE,
 	VARIABLE_TYPE,
+	INCREMENT_TYPE,
+	DECREMENT_TYPE,
 };
 enum ConditionalType {
 	IF_TYPE,

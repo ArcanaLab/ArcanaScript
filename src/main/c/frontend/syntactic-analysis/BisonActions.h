@@ -24,6 +24,7 @@ Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Exp
 Expression * FactorExpressionSemanticAction(Factor * factor);
 Expression * ComparatorExpressionSemanticAction(Factor * leftFactor, Factor * rightFactor, ExpressionType type);
 Expression * VariableExpressionSemanticAction(char * variable);
+Expression * UnaryExpressionSemanticAction(char * name,  ExpressionType type);
 
 Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType,Block * block);
 

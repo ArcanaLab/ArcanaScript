@@ -87,6 +87,10 @@
 %token <token> MUL
 %token <token> SUB
 
+/** ===== Unary Operations ===== */
+%token <token> INCREMENT
+%token <token> DECREMENT
+
 /** ===== Loops ===== */
 %token <token> WHILE
 %token <token> FOR
@@ -234,6 +238,8 @@ expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressi
 	| function_call													{ $$ = FunctionCallExpressionSemanticAction($1); }
 	| lambda														{ $$ = LambdaExpressionSemanticAction($1); }
 	| NAME															{ $$ = VariableExpressionSemanticAction($1); }	
+	| NAME INCREMENT 												{ $$ = UnaryExpressionSemanticAction($1, INCREMENT_TYPE); }
+	| NAME DECREMENT 												{ $$ = UnaryExpressionSemanticAction($1, DECREMENT_TYPE); }
 	;
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
