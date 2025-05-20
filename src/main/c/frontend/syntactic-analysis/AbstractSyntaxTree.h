@@ -36,6 +36,8 @@ typedef struct Lambda Lambda;
 
 typedef struct FunctionCall FunctionCall;
 
+typedef struct Object Object;
+typedef struct Generic Generic;
 
 /** Lists */
 typedef struct Node Node;
@@ -58,6 +60,9 @@ typedef List VariableDeclarationList;
 typedef Node InstructionNode;
 typedef List Block;
 
+// Generic List
+typedef Node GenericListNode;
+typedef List GenericList;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -101,6 +106,7 @@ enum VariableType {
 	V_FLOAT,
 	V_LONG,
 	V_SHORT,
+	OBJECT
 };
 
 enum ConstantType {
@@ -176,8 +182,9 @@ struct Expression {
 
 struct VariableDeclaration {
 	char * name;
-	VariableType type;
 	Expression * expression;
+	Object * object;
+	VariableType type;
 };
 
 struct AssignmentOperation {
@@ -226,6 +233,16 @@ struct FunctionCall {
 	ExpressionList * expressionList;
 };
 
+struct Object {
+	char * name;
+	GenericList * genericList;
+};
+
+struct Generic {
+	Object * object;
+	Object * isObject;
+};
+
 struct Program {
 	Block * block;
 	Loop * loop;
@@ -268,4 +285,7 @@ void releaseFunctionCall(FunctionCall * functionCall);
 void releaseExpressionList(ExpressionList * expressionList);
 void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList);
 void releaseBlock(Block * block);
+void releaseGenericList(GenericList * genericList);
+void releaseObject(Object * object);
+void releaseGeneric(Generic * generic);
 #endif

@@ -79,8 +79,8 @@ void releaseFactor(Factor * factor) {
 }
 
 void releaseName(char * name) {
-	if(name == NULL) return;
 	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(name == NULL) return;
 	free(name);
 }
 
@@ -90,6 +90,7 @@ void releaseVariableDeclaration(VariableDeclaration * variable) {
 
 	releaseExpression(variable->expression);
 	releaseName(variable->name);
+	releaseObject(variable->object);
 	free(variable);
 }
 
@@ -178,6 +179,24 @@ void releaseFunctionCall(FunctionCall * functionCall) {
 	free(functionCall);
 }
 
+void releaseObject(Object * object) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(object == NULL) return;
+
+	releaseName(object->name);
+	releaseGenericList(object->genericList);
+	free(object);
+}
+
+void releaseGeneric(Generic * generic) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(generic == NULL) return;
+
+	releaseObject(generic->object);
+	releaseObject(generic->isObject);
+	free(generic);
+}
+
 /** 
  * 
  * How to release Nodes List in General.
@@ -221,6 +240,12 @@ void releaseExpressionList(ExpressionList * expressionList){
 void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(variableDeclarationList, releaseVariableDeclaration);
+}
+
+// Generics.
+void releaseGenericList(GenericList * genericList){
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	return releaseList(genericList, releaseGeneric);
 }
 
 // Instructions & Blocks.

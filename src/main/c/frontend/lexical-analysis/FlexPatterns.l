@@ -99,6 +99,9 @@ single_line_comment     "#"[^!].*
 "if"                                { return ConditionalStructureLexemeAction(createLexicalAnalyzerContext(), IF); }
 "else"                              { return ConditionalStructureLexemeAction(createLexicalAnalyzerContext(), ELSE); }
 
+"is"                                { return ExtensionLexemeAction(createLexicalAnalyzerContext(), IS); }
+"using"                             { return ExtensionLexemeAction(createLexicalAnalyzerContext(), USING); }
+
 {name}                              { return NameLexemeAction(createLexicalAnalyzerContext()); }
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 

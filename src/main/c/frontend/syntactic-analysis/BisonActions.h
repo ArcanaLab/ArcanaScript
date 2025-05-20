@@ -39,7 +39,7 @@ Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block,
  * Variable declarations.
  * 
  */
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression);
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object);
 
 /**
  * Assignment operations.
@@ -77,6 +77,16 @@ ExpressionList * ExpressionListSemanticAction(ExpressionList * expressionList, E
 Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block);
 Program * LoopProgramSemanticAction(CompilerState * compilerState, Loop * loop);
 
+/**
+ * Objects.
+ */
+Object * ObjectSemanticAction(char * name, GenericList * genericList);
+
+/**
+ * Generics.
+ */
+Generic * GenericSemanticAction(Object * object, Object * isObject);
+GenericList * GenericListSemanticAction(GenericList * genericList, Generic * generic);
 
 /**
  * Lists.
