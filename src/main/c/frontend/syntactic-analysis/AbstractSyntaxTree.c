@@ -192,7 +192,7 @@ void releaseFunctionCall(FunctionCall * functionCall) {
  * @param release_fun The given function to release the data inside of a Node.
  */
 void releaseList(List * list, releaseDataFn release_fun) {
-	logDebugging(_logger, "Execucting destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(list == NULL) return;
 
 	Node * current = list->first;
