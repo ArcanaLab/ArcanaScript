@@ -15,15 +15,6 @@ void shutdownAbstractSyntaxTreeModule() {
 }
 
 /** PUBLIC FUNCTIONS */
-
-void releaseBlock(Block * block) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(block == NULL) return;
-
-	releaseInstructionList(block->firstInstructionNode);
-	free(block);
-}
-
 void releaseConstant(Constant * constant) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (constant == NULL) return;
@@ -146,27 +137,6 @@ void releaseInstruction(Instruction * instruction) {
 	free(instruction);
 }
 
-void releaseInstructionNode(InstructionNode * instructionNode) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(instructionNode == NULL) return;
-
-	releaseInstruction(instructionNode->instruction);
-	free(instructionNode);
-}
-
-void releaseInstructionList(InstructionNode * instructionNode) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(instructionNode == NULL) return;
-	
-	InstructionNode * currentInstructionNode = instructionNode;
-	while(currentInstructionNode != NULL) {
-		InstructionNode * nextInstructionNode = currentInstructionNode->nextInstructionNode;
-		releaseInstructionNode(currentInstructionNode);
-		currentInstructionNode = nextInstructionNode;
-	}
-}
-
-
 void releaseLoop(Loop * loop) {
 	logError(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (loop == NULL) return;
@@ -175,20 +145,6 @@ void releaseLoop(Loop * loop) {
 	releaseName(loop->itemName);
 	releaseName(loop->collectionName);
 	free(loop);
-}
-
-void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(variableDeclarationList == NULL) return;
-
-	VariableDeclarationNode * currentVariableDeclarationNode = variableDeclarationList->firstNode;
-	while(currentVariableDeclarationNode != NULL) {
-		VariableDeclarationNode * nextVariableDeclarationNode = currentVariableDeclarationNode->next;
-		releaseVariableDeclaration(currentVariableDeclarationNode->variableDeclaration);
-		free(currentVariableDeclarationNode);
-		currentVariableDeclarationNode = nextVariableDeclarationNode;
-	}
-	free(variableDeclarationList);
 }
 
 void releaseLambda(Lambda * lambda) {
@@ -209,21 +165,6 @@ void releaseProgram(Program * program) {
 	free(program);
 }
 
-void releaseExpressionList(ExpressionList * expressionList) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(expressionList == NULL) return;
-
-	ExpressionNode * currentExpressionNode = expressionList->firstNode;
-	while(currentExpressionNode != NULL) {
-		ExpressionNode * nextExpressionNode = currentExpressionNode->next;
-		releaseExpression(currentExpressionNode->expression);
-		free(currentExpressionNode);
-		currentExpressionNode = nextExpressionNode;
-	}
-	free(expressionList);
-}
-
-
 void releaseFunctionCall(FunctionCall * functionCall) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(functionCall == NULL) return;
@@ -232,3 +173,55 @@ void releaseFunctionCall(FunctionCall * functionCall) {
 	releaseName(functionCall->name);
 	free(functionCall);
 }
+
+/** 
+ * 
+ * How to release Nodes List in General.
+ */
+
+
+/**
+ * ============== LISTS ==============
+ */
+// ======= General purpose ======= //
+
+/**
+ * Function is used to release a List.
+ * 
+ * @param list The List to release the memory.
+ * @param release_fun The given function to release the data inside of a Node.
+ */
+void releaseList(List * list, releaseDataFn release_fun) {
+	logDebugging(_logger, "Execucting destructor: %s", __FUNCTION__);
+	if(list == NULL) return;
+
+	Node * current = list->first;
+	while(current != NULL){
+		Node * next = current->next;
+		release_fun(current->data);
+		free(current);
+		current = next;
+	}
+	free(list);
+}
+
+// ======= Specialized lists ======= //
+
+// Expressions.
+void releaseExpressionList(ExpressionList * expressionList){
+	logDebugging(_logger, "Execucting destructor: %s", __FUNCTION__);
+	return releaseList(expressionList, releaseExpression);
+}
+
+// Variable declarations.
+void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList){
+	logDebugging(_logger, "Execucting destructor: %s", __FUNCTION__);
+	return releaseList(variableDeclarationList, releaseVariableDeclaration);
+}
+
+// Instructions & Blocks.
+void releaseBlock(Block * block){
+	logDebugging(_logger, "Execucting destructor: %s", __FUNCTION__);
+	return releaseList(block, releaseInstruction);
+}
+// And that's all. We now can do it multiple times, with multiple uses, and keep it simple.

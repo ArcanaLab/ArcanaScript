@@ -54,28 +54,33 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 /**
  * Blocks.
  */
-Block * CreateBlockSemanticAction(Instruction * instruction);
-Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction);
+Block * BlockSemanticAction(Block * block, Instruction * instruction);
 
 /**
  * Lambdas.
  */
 Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList, Instruction * instruction);
 Expression * LambdaExpressionSemanticAction(Lambda * lambda);
-VariableDeclarationList * CreateVariableDeclarationListSemanticAction(VariableDeclaration * variableDeclaration);
-VariableDeclarationList * AppendVariableDeclarationSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration);
+VariableDeclarationList * VariableDeclarationListSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration);
+
 /**
  * Function calls.
  */
 FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressionList);
-ExpressionList * CreateExpressionListSemanticAction(Expression * expression);
-ExpressionList * AppendExpressionSemanticAction(ExpressionList * expressionList, Expression * expression);
 Expression * FunctionCallExpressionSemanticAction(FunctionCall * functionCall);
+ExpressionList * ExpressionListSemanticAction(ExpressionList * expressionList, Expression * expression);
 
 /**
  * Programs.
  */
 Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block);
 Program * LoopProgramSemanticAction(CompilerState * compilerState, Loop * loop);
+
+
+/**
+ * Lists.
+ */
+List * CreateListSemanticAction(void * data);
+List * ListSemanticAction(List * list, void * data);
 
 #endif
