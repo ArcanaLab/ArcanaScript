@@ -86,9 +86,7 @@ void releaseVariableDeclaration(VariableDeclaration * variable) {
 
 	releaseExpression(variable->expression);
 	releaseName(variable->name);
-	if (variable->privacyModifierList != NULL) {
-		releaseList(variable->privacyModifierList,releasePrivacyModifier);
-	}
+	releasePrivacyList(variable->privacyModifierList);
 	free(variable);
 }
 void releasePrivacyModifier(PrivacyModifier * modifier) {
@@ -215,21 +213,21 @@ void releaseList(List * list, releaseDataFn release_fun) {
 // Expressions.
 void releaseExpressionList(ExpressionList * expressionList){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	return releaseList(expressionList, releaseExpression);
+	return releaseList(expressionList,  (releaseDataFn) releaseExpression);
 }
 
 // Variable declarations.
 void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	return releaseList(variableDeclarationList, releaseVariableDeclaration);
+	return releaseList(variableDeclarationList, (releaseDataFn) releaseVariableDeclaration);
 }
 void releasePrivacyList(PrivacyList * privacyList){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	return releaseList(privacyList, releasePrivacyModifier);
+	return releaseList(privacyList, (releaseDataFn) releasePrivacyModifier);
 }
 // Instructions & Blocks.
 void releaseBlock(Block * block){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	return releaseList(block, releaseInstruction);
+	return releaseList(block, (releaseDataFn) releaseInstruction);
 }
 // And that's all. We now can do it multiple times, with multiple uses, and keep it simple.

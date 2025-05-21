@@ -287,5 +287,6 @@ void releaseFunctionCall(FunctionCall * functionCall);
 void releaseExpressionList(ExpressionList * expressionList);
 void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList);
 void releasePrivacyModifier(PrivacyModifier * modifier);
+void releasePrivacyList(PrivacyList * privacyList);
 void releaseBlock(Block * block);
 #endif

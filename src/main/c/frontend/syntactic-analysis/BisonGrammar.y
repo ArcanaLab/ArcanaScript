@@ -69,8 +69,6 @@
 %destructor { releaseLambda($$); } <lambda>
 %destructor { releaseFunctionCall($$); } <functionCall>
 %destructor { releaseExpressionList($$); } <expressionList>
-%destructor { releasePrivacyModifier($$); } <privacy>
-%destructor { releasePrivacyList($$); } <privacyList>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
