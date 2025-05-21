@@ -75,10 +75,17 @@ single_line_comment     "#"[^!].*
 "short"                             { return TypeLexemeAction(createLexicalAnalyzerContext(), V_SHORT); } 
 "boolean"                           { return TypeLexemeAction(createLexicalAnalyzerContext(), V_BOOLEAN); } 
 
+"while"                             { return LoopLexemeAction(createLexicalAnalyzerContext(), WHILE); }
+"for"                               { return LoopLexemeAction(createLexicalAnalyzerContext(), FOR); }
+
 "="                                 { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), ASSIGN); }
 "+="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), ADD_ASSIGN); }
 "-="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), SUB_ASSIGN); }
 "*="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), MUL_ASSIGN); }
+
+"++"                                { return UnaryOperatorLexemeAction(createLexicalAnalyzerContext(), INCREMENT); }
+"--"                                { return UnaryOperatorLexemeAction(createLexicalAnalyzerContext(), DECREMENT); }
+
 
 "true"|"false"                      { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_BOOLEAN); }
 [0-9]+\.[0-9]+f						{ return ConstantLexemeAction(createLexicalAnalyzerContext(), C_FLOAT); }
@@ -93,6 +100,9 @@ single_line_comment     "#"[^!].*
 
 "if"                                { return ConditionalStructureLexemeAction(createLexicalAnalyzerContext(), IF); }
 "else"                              { return ConditionalStructureLexemeAction(createLexicalAnalyzerContext(), ELSE); }
+
+"is"                                { return ExtensionLexemeAction(createLexicalAnalyzerContext(), IS); }
+"using"                             { return ExtensionLexemeAction(createLexicalAnalyzerContext(), USING); }
 
 {name}                              { return NameLexemeAction(createLexicalAnalyzerContext()); }
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }

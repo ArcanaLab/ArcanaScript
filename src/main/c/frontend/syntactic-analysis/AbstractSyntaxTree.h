@@ -19,6 +19,7 @@ typedef enum VariableType VariableType;
 typedef enum ConstantType ConstantType;
 typedef enum AssignmentOperatorType AssignmentOperatorType;
 typedef enum InstructionType InstructionType;
+typedef enum LoopType LoopType;
 typedef enum ConditionalType ConditionalType;
 
 typedef struct Conditional Conditional;
@@ -26,19 +27,44 @@ typedef struct Constant Constant;
 typedef struct Expression Expression;
 typedef struct Factor Factor;
 typedef struct Program Program;
+typedef struct Loop Loop;
 
 typedef struct VariableDeclaration VariableDeclaration;
 typedef struct AssignmentOperation AssignmentOperation;
 typedef struct Instruction Instruction;
-
-typedef struct InstructionNode InstructionNode;
-typedef struct Block Block;
-
-typedef struct VariableDeclarationNode VariableDeclarationNode;
-typedef struct VariableDeclarationList VariableDeclarationList;
 typedef struct Lambda Lambda;
 typedef struct Class Class;
 
+
+typedef struct FunctionCall FunctionCall;
+
+typedef struct Object Object;
+typedef struct Generic Generic;
+
+/** Lists */
+typedef struct Node Node;
+typedef struct List List;
+typedef void (*releaseDataFn)(void *);
+
+/**
+ * Specialized lists.
+ */
+
+// Expressions.
+typedef Node ExpressionNode;
+typedef List ExpressionList;
+
+// Variable declarations.
+typedef Node VariableDeclarationNode;
+typedef List VariableDeclarationList;
+
+// Instructions & Blocks.
+typedef Node InstructionNode;
+typedef List Block;
+
+// Generic List
+typedef Node GenericListNode;
+typedef List GenericList;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -52,12 +78,16 @@ enum ExpressionType {
 	MULTIPLICATION,
 	SUBTRACTION,
 	LAMBDA,
+	FUNCTION_CALL,
 	LESS_TYPE,
 	GREATER_TYPE,
 	LESS_EQUAL_TYPE,
 	GREATER_EQUAL_TYPE,
 	EQUAL_EQUAL_TYPE,
 	NOT_EQUAL_TYPE,
+	VARIABLE_TYPE,
+	INCREMENT_TYPE,
+	DECREMENT_TYPE,
 };
 enum ConditionalType {
 	IF_TYPE,
@@ -78,6 +108,7 @@ enum VariableType {
 	V_FLOAT,
 	V_LONG,
 	V_SHORT,
+	OBJECT
 };
 
 enum ConstantType {
@@ -102,7 +133,13 @@ enum InstructionType {
 	INSTRUCTION_EXPRESSION,
 	INSTRUCTION_BLOCK,
 	INSTRUCTION_CONDITIONAL,
+	INSTRUCTION_LOOP,
 	INSTRUCTION_CLASS,
+};
+
+enum LoopType {
+	WHILE_LOOP,
+	FOR_LOOP,
 };
 
 /** ============== STRUCTS ============== */
@@ -139,16 +176,18 @@ struct Expression {
 			Factor * leftFactor;
 			Factor * rightFactor;
 		};
-		
+		FunctionCall * functionCall;
 		Lambda * lambda;
+		char * variable;
 	};
 	ExpressionType type;
 };
 
 struct VariableDeclaration {
 	char * name;
-	VariableType type;
 	Expression * expression;
+	Object * object;
+	VariableType type;
 };
 
 struct AssignmentOperation {
@@ -159,10 +198,19 @@ struct AssignmentOperation {
 	Expression * expression;
 	AssignmentOperatorType assignmentOperator;
 };
+
+struct Loop {
+	Expression * expression;
+	LoopType type;
+	char * itemName;
+	char * collectionName;
+	Block * block;
+};
 struct Conditional {
 	Expression * expression;
 	Conditional * nextConditional;
 	ConditionalType ConditionalType;
+	Block * block;
 };
 
 struct Instruction {
@@ -171,31 +219,12 @@ struct Instruction {
 		VariableDeclaration * variableDeclaration;
 		Expression * expression;
 		Block * block;
+		Loop * loop;
 		Conditional * conditional;
 		Class * class;
 	};
 
 	InstructionType type;
-};
-
-struct InstructionNode {
-	Instruction * instruction;
-	InstructionNode * nextInstructionNode;
-};
-
-struct Block {
-	InstructionNode * firstInstructionNode;// Prepend en O(1)
-	InstructionNode * lastInstructionNode; // Append en O(1)
-};
-
-struct VariableDeclarationNode {
-	VariableDeclaration * variableDeclaration;
-	VariableDeclarationNode * next;
-};
-
-struct VariableDeclarationList{
-	VariableDeclarationNode * firstNode;
-	VariableDeclarationNode * lastNode;
 };
 
 struct Lambda {
@@ -208,8 +237,39 @@ struct Class {
 	Block * block;
 };
 
+struct FunctionCall {
+	char * name;
+	ExpressionList * expressionList;
+};
+
+struct Object {
+	char * name;
+	GenericList * genericList;
+};
+
+struct Generic {
+	Object * object;
+	Object * isObject;
+};
+
 struct Program {
 	Block * block;
+	Loop * loop;
+};
+
+
+/***
+ * LISTS
+ */
+struct Node {
+	void * data;
+	Node * next;
+};
+
+struct List {
+	Node * first;
+	Node * last;
+	int size;
 };
 
 /**
@@ -226,8 +286,16 @@ void releaseLambda(Lambda * lambda);
 void releaseClass(Class * class);
 
 void releaseInstruction(Instruction * instruction);
-void releaseBlock(Block * block);
 
 void releaseProgram(Program * program);
+void releaseLoop(Loop * loop);
 
+void releaseFunctionCall(FunctionCall * functionCall);
+
+void releaseExpressionList(ExpressionList * expressionList);
+void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList);
+void releaseBlock(Block * block);
+void releaseGenericList(GenericList * genericList);
+void releaseObject(Object * object);
+void releaseGeneric(Generic * generic);
 #endif

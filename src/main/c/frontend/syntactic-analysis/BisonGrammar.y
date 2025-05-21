@@ -27,6 +27,7 @@
 
 	Factor * factor;
 	Program * program;
+	Loop * loop;
 
 
 	VariableDeclaration * variableDeclaration;
@@ -43,6 +44,13 @@
 	VariableDeclarationList * varList;
 
 	Class * class;
+
+	FunctionCall * functionCall;
+	ExpressionList * expressionList;
+
+	Object * object;
+	Generic * generic;
+	GenericList * genericList;
 }
 
 /**
@@ -62,7 +70,13 @@
 %destructor { releaseAssignmentOperation($$); } <assignmentOperation>
 %destructor { releaseInstruction($$); } <instruction>
 %destructor { releaseBlock($$); } <block>
+%destructor { releaseLoop($$); } <loop>
 %destructor { releaseLambda($$); } <lambda>
+%destructor { releaseFunctionCall($$); } <functionCall>
+%destructor { releaseExpressionList($$); } <expressionList>
+%destructor { releaseObject($$); } <object>
+%destructor { releaseGeneric($$); } <generic>
+%destructor { releaseGenericList($$); } <genericList>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -81,6 +95,14 @@
 %token <token> DIV
 %token <token> MUL
 %token <token> SUB
+
+/** ===== Unary Operations ===== */
+%token <token> INCREMENT
+%token <token> DECREMENT
+
+/** ===== Loops ===== */
+%token <token> WHILE
+%token <token> FOR
 
 /** ===== Comparator ===== */
 %token <token> GREATER
@@ -114,6 +136,8 @@
 
 /** ===== CLASS ===== */
 %token <token> CLASS
+%token <token> IS
+%token <token> USING
 
 %token <token> UNKNOWN
 
@@ -128,6 +152,7 @@
 %type <conditional> else
 
 %type <factor> factor
+%type <loop> loop
 
 %type <variableDeclaration> variable_declaration
 %type <varType> variable_type
@@ -136,6 +161,13 @@
 
 %type <lambda> lambda
 %type <varList> var_list
+
+%type <functionCall> function_call
+%type <expressionList> expression_list
+
+%type <object> object
+%type <generic> generic
+%type <genericList> generic_list
 
 %type <instruction> instruction
 %type <block> block
@@ -164,8 +196,8 @@ program:
 	;
 
 block:
-	instruction														{ $$ = CreateBlockSemanticAction($1); }
-	| block instruction												{ $$ = AppendInstructionSemanticAction($1, $2); }
+	instruction														{ $$ = BlockSemanticAction(NULL, $1); }
+	| block instruction												{ $$ = BlockSemanticAction($1, $2); }
 	;
 
 instruction:
@@ -173,6 +205,7 @@ instruction:
 	| variable_declaration SEMICOLON								{ $$ = InstructionSemanticAction($1, INSTRUCTION_VARIABLE_DECLARATION); }
 	| expression SEMICOLON											{ $$ = InstructionSemanticAction($1, INSTRUCTION_EXPRESSION); }
 	| scope															{ $$ = InstructionSemanticAction($1, INSTRUCTION_BLOCK); }
+	| loop 															{ $$ = InstructionSemanticAction($1, INSTRUCTION_LOOP); }
 	| if															{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONDITIONAL); }
 	| class															{ $$ = InstructionSemanticAction($1, INSTRUCTION_CLASS); }
 	;
@@ -183,7 +216,12 @@ class:
 
 scope:
 	OPEN_BRACE block CLOSE_BRACE									{ $$ = $2; }
-	| OPEN_BRACE CLOSE_BRACE										{ $$ = CreateBlockSemanticAction(NULL); }
+	| OPEN_BRACE CLOSE_BRACE										{ $$ = BlockSemanticAction(NULL, NULL); }
+
+loop:
+	WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS scope 		{ $$ = LoopSemanticAction($3, WHILE_LOOP, $5, NULL, NULL); }	
+	| FOR OPEN_PARENTHESIS NAME COLON NAME CLOSE_PARENTHESIS scope	{ $$ = LoopSemanticAction(NULL, FOR_LOOP, $7, $3, $5); }
+	;
 
 assignment_operation: 
 	NAME ASSIGN expression											{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
@@ -196,20 +234,23 @@ assignment_operation:
 	;
 
 variable_declaration:
-	NAME COLON variable_type										{ $$ = VariableDeclarationSemanticAction($1, $3, NULL); }
-	| NAME COLON variable_type ASSIGN expression					{ $$ = VariableDeclarationSemanticAction($1, $3, $5); }
+	NAME COLON variable_type										{ $$ = VariableDeclarationSemanticAction($1, $3, NULL, NULL); }
+	| NAME COLON variable_type ASSIGN expression					{ $$ = VariableDeclarationSemanticAction($1, $3, $5, NULL); }
+	| NAME COLON object												{ $$ = VariableDeclarationSemanticAction($1, OBJECT, NULL, $3); }
+	| NAME COLON object ASSIGN expression							{ $$ = VariableDeclarationSemanticAction($1, OBJECT, $5, $3); }
 	;
 
 variable_type:
 	TYPE 															{ $$ = $1; }
 	;
 
-if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS    			{ $$ = ConditionalSemanticAction($exp,IF_TYPE); }
-    | IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS else[con]	{ $$ = ConditionalSemanticAction($exp,IF_TYPE); $$->nextConditional = $con; }	
+if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS scope[block]   					{ $$ = ConditionalSemanticAction($exp,IF_TYPE,$block); }
+    | IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS scope[block] else[con]			{ $$ = ConditionalSemanticAction($exp,IF_TYPE,$block); $$->nextConditional = $con; }	
 	;
+	
 else:
 	ELSE if															{ $$ = $2; }
-	| ELSE															{ $$ = ConditionalSemanticAction(NULL,ELSE_TYPE); }
+	| ELSE scope[block]												{ $$ = ConditionalSemanticAction(NULL,ELSE_TYPE,$block); }
 
 comparator_expression: 	factor[left] GREATER factor[right]			{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_TYPE); }
 	| factor[left] GREATER_EQUAL factor[right]						{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_EQUAL_TYPE); }
@@ -223,7 +264,11 @@ expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressi
 	| expression[left] MUL expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
 	| expression[left] SUB expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
 	| factor														{ $$ = FactorExpressionSemanticAction($1); }
+	| function_call													{ $$ = FunctionCallExpressionSemanticAction($1); }
 	| lambda														{ $$ = LambdaExpressionSemanticAction($1); }
+	| NAME															{ $$ = VariableExpressionSemanticAction($1); }	
+	| NAME INCREMENT 												{ $$ = UnaryExpressionSemanticAction($1, INCREMENT_TYPE); }
+	| NAME DECREMENT 												{ $$ = UnaryExpressionSemanticAction($1, DECREMENT_TYPE); }
 	;
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
@@ -233,10 +278,37 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactor
 lambda: OPEN_PARENTHESIS CLOSE_PARENTHESIS instruction				{ $$ = LambdaSemanticAction(NULL, $3); }
 	| OPEN_PARENTHESIS var_list CLOSE_PARENTHESIS instruction		{ $$ = LambdaSemanticAction($2, $4); }
 	;
-
-var_list: variable_declaration										{ $$ = CreateVariableDeclarationListSemanticAction($1); }
-	| var_list COMMA variable_declaration							{ $$ = AppendVariableDeclarationSemanticAction($1, $3); }
+	
+var_list: variable_declaration										{ $$ = VariableDeclarationListSemanticAction(NULL, $1); }
+	| var_list COMMA variable_declaration							{ $$ = VariableDeclarationListSemanticAction($1, $3); }
 	;
+
+function_call:
+	NAME OPEN_PARENTHESIS CLOSE_PARENTHESIS							{ $$ = FunctionCallSemanticAction($1, NULL); }
+	| NAME OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS		{ $$ = FunctionCallSemanticAction($1, $3); }
+	;
+	
+expression_list:
+	expression														{ $$ = ExpressionListSemanticAction(NULL, $1); }
+	| expression_list COMMA expression								{ $$ = ExpressionListSemanticAction($1, $3); }
+	;
+
+/** ===== Objects ===== */
+object:
+	NAME															{ $$ = ObjectSemanticAction($1, NULL); }
+	| NAME LESS generic_list GREATER								{ $$ = ObjectSemanticAction($1, $3); }
+	;
+
+generic: 
+	object															{ $$ = GenericSemanticAction($1, NULL); }
+	| object IS object												{ $$ = GenericSemanticAction($1, $3); }
+
+/** ===== Generics ===== */
+generic_list:
+	generic															{ $$ = GenericListSemanticAction(NULL, $1); }
+	| generic_list COMMA generic									{ $$ = GenericListSemanticAction($1, $3); }
+	;
+	
 
 constant: C_INTEGER													{ $$ = ConstantSemanticAction(&$1, C_INT_TYPE); }
 		| C_CHARACTER												{ $$ = ConstantSemanticAction(&$1, C_CHAR_TYPE); }

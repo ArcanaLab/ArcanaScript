@@ -104,15 +104,43 @@ Factor * ExpressionFactorSemanticAction(Expression * expression) {
 	return factor;
 }
 
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression) {
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
 	VariableDeclaration * variableDeclaration = calloc(1, sizeof(VariableDeclaration));
 	variableDeclaration->name = name;
 	variableDeclaration->type = type;
 	variableDeclaration->expression = expression;
-
+	variableDeclaration->object = object;
 	return variableDeclaration;
+}
+
+Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block, char * itemName, char * collectionName) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	
+	Loop * loop = calloc(1, sizeof(Loop));
+	loop->type = type;
+	loop->expression = expression;
+	loop->block = block;
+	loop->itemName = itemName;
+	loop->collectionName = collectionName;
+	return loop;
+}
+Program * LoopProgramSemanticAction(CompilerState * compilerState, Loop * loop) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Program * program = calloc(1, sizeof(Program));
+	program->loop = loop;
+
+	compilerState->abstractSyntaxtTree = program;
+	if (0 < flexCurrentContext()) {
+		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
+		compilerState->succeed = false;
+	}
+	else {
+		compilerState->succeed = true;
+	}
+	return program;
+
 }
 /**
  * Assignment operations.
@@ -146,12 +174,13 @@ AssignmentOperation * AssignmentOperatorSemanticAction(
 	return assignmentOperation;
 }
 
-Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType) {
+Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType,Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
 	Conditional * conditional = calloc(1, sizeof(Conditional));
 	conditional->expression = expression;
 	conditional->nextConditional = NULL;
+	conditional->block = block;
 	conditional->ConditionalType = conditionalType;
 
 	return conditional;
@@ -175,6 +204,9 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 		case INSTRUCTION_BLOCK:
 			instruction->block = value;
 			break;
+		case INSTRUCTION_LOOP:
+			instruction->loop = value;
+			break;
 		case INSTRUCTION_CONDITIONAL:
 			instruction->conditional = value;
 			break;
@@ -184,24 +216,6 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 	}
 
 	return instruction;
-}
-
-Block * CreateBlockSemanticAction(Instruction * instruction) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Block * block = calloc(1, sizeof(Block));
-	block->firstInstructionNode = calloc(1, sizeof(InstructionNode));
-	block->firstInstructionNode->instruction = instruction;
-	block->lastInstructionNode = block->firstInstructionNode;
-	return block;
-}
-
-Block * AppendInstructionSemanticAction(Block * block, Instruction * instruction) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	InstructionNode * newInstructionNode = calloc(1, sizeof(InstructionNode));
-	newInstructionNode->instruction = instruction;
-	block->lastInstructionNode->nextInstructionNode = newInstructionNode;
-	block->lastInstructionNode = newInstructionNode;
-	return block;
 }
 
 Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList,  Instruction * instruction) {
@@ -220,23 +234,6 @@ Expression * LambdaExpressionSemanticAction(Lambda * lambda) {
 	return expression;
 }
 
-VariableDeclarationList * CreateVariableDeclarationListSemanticAction(VariableDeclaration * variableDeclaration) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	VariableDeclarationList * variableDeclarationList = calloc(1, sizeof(VariableDeclarationList));
-	variableDeclarationList->firstNode = calloc(1, sizeof(VariableDeclarationNode));
-	variableDeclarationList->firstNode->variableDeclaration = variableDeclaration;
-	variableDeclarationList->lastNode = variableDeclarationList->firstNode;
-	return variableDeclarationList;
-}
-
-VariableDeclarationList * AppendVariableDeclarationSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	VariableDeclarationNode * newVariableDeclarationNode = calloc(1, sizeof(VariableDeclarationNode));
-	newVariableDeclarationNode->variableDeclaration = variableDeclaration;
-	variableDeclarationList->lastNode->next = newVariableDeclarationNode;
-	variableDeclarationList->lastNode = newVariableDeclarationNode;
-	return variableDeclarationList;
-}
 Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
@@ -258,4 +255,120 @@ Class * ClassSemanticAction(char * name, Block * block) {
 	class->name = name;
 	class->block = block;
 	return class;
+}FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressionList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
+	functionCall->name = name;
+	functionCall->expressionList = expressionList;
+	return functionCall;
+}
+
+Expression * FunctionCallExpressionSemanticAction(FunctionCall * functionCall) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->functionCall = functionCall;
+	expression->type = FUNCTION_CALL;
+	return expression;
+}
+
+Expression * VariableExpressionSemanticAction(char * variable){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->variable = variable;
+	expression->type = VARIABLE_TYPE;
+	return expression;
+}
+
+Expression * UnaryExpressionSemanticAction(char * name,  ExpressionType type){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->variable = name;
+	expression->type = type;
+	return expression;
+}
+
+Object * ObjectSemanticAction(char * name, GenericList * genericList){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Object * object = calloc(1, sizeof(Object));
+	object->name = name;
+	object->genericList = genericList;
+
+	return object;
+}
+
+Generic * GenericSemanticAction(Object * object, Object * isObject){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Generic * generic = calloc(1, sizeof(Generic));
+	generic->object = object;
+	generic->isObject = isObject;
+	return generic;
+}
+
+/**
+ * ============== LIST ==============
+ */
+
+// ======= General purpose =======
+/**
+ * @param data the data to insert into the list
+ */
+List * CreateListSemanticAction(void * data){
+	List * list = calloc(1, sizeof(List));
+	list->first = NULL;
+	list->last = NULL;
+	list->size = 0;
+
+	if(data == NULL) return list;
+	return ListSemanticAction(list, data);	
+}
+
+/**
+ * @param list The List to insert data. If `NULL` it creates a new list with the data.
+ * @param data the data to insert into the list. If `NULL`, there's nothing to insert and it returns the list as is.
+ * 
+ * @return A list with the data to be inserted. If `data = NULL` it returns the list. If both are `NULL` it returns a new empty list.
+ */
+List * ListSemanticAction(List * list, void * data){
+	if(list == NULL) return CreateListSemanticAction(data);
+	if(data == NULL) return list;
+
+	Node * node = calloc(1, sizeof(Node));
+
+	node->data = data; // YOUR DATA
+
+	Node * last = list->last;
+
+	if(last != NULL) last->next = node;
+	else if(list->first == NULL) list->first = node;
+
+	list->last = node;
+	list->size += 1;
+
+	return list;
+}
+
+// ======= Specialized lists ======= //
+
+// Expressions.
+ExpressionList * ExpressionListSemanticAction(ExpressionList * expressionList, 	Expression * expression){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	return ListSemanticAction(expressionList, expression);
+}
+
+// Variable declarations.
+VariableDeclarationList * VariableDeclarationListSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	return ListSemanticAction(variableDeclarationList, variableDeclaration);
+}
+
+// Generic List
+GenericList * GenericListSemanticAction(GenericList * genericList, Generic * generic){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	return ListSemanticAction(genericList, generic);
+}
+
+// Instructions & Blocks.
+Block * BlockSemanticAction(Block * block, Instruction * instruction){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	return ListSemanticAction(block, instruction);
 }

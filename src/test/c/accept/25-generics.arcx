@@ -1,0 +1,2 @@
+fun: Function;
+fun: Function<Integer> = () { 1; };

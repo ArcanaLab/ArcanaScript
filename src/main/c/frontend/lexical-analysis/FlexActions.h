@@ -45,7 +45,13 @@ Token ComparatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token AssignmentOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
+Token LoopLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+
 Token ConditionalStructureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+
+Token UnaryOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+
+Token ExtensionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
 
 /**
