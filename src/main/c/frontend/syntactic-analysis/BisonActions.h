@@ -24,6 +24,7 @@ Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Exp
 Expression * FactorExpressionSemanticAction(Factor * factor);
 Expression * ComparatorExpressionSemanticAction(Factor * leftFactor, Factor * rightFactor, ExpressionType type);
 Expression * VariableExpressionSemanticAction(char * variable);
+Expression * UnaryExpressionSemanticAction(char * name,  ExpressionType type);
 
 Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType,Block * block);
 
@@ -38,7 +39,7 @@ Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block,
  * Variable declarations.
  * 
  */
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression,PrivacyList * privacyModifierList);
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object, PrivacyList * privacyModifierList);
 
 /**
  * Assignment operations.
@@ -82,6 +83,16 @@ ExpressionList * ExpressionListSemanticAction(ExpressionList * expressionList, E
 Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block);
 Program * LoopProgramSemanticAction(CompilerState * compilerState, Loop * loop);
 
+/**
+ * Objects.
+ */
+Object * ObjectSemanticAction(char * name, GenericList * genericList);
+
+/**
+ * Generics.
+ */
+Generic * GenericSemanticAction(Object * object, Object * isObject);
+GenericList * GenericListSemanticAction(GenericList * genericList, Generic * generic);
 
 /**
  * Lists.

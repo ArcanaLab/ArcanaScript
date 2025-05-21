@@ -46,6 +46,10 @@
 
 	FunctionCall * functionCall;
 	ExpressionList * expressionList;
+
+	Object * object;
+	Generic * generic;
+	GenericList * genericList;
 }
 
 /**
@@ -69,6 +73,9 @@
 %destructor { releaseLambda($$); } <lambda>
 %destructor { releaseFunctionCall($$); } <functionCall>
 %destructor { releaseExpressionList($$); } <expressionList>
+%destructor { releaseObject($$); } <object>
+%destructor { releaseGeneric($$); } <generic>
+%destructor { releaseGenericList($$); } <genericList>
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -95,6 +102,10 @@
 %token <token> DIV
 %token <token> MUL
 %token <token> SUB
+
+/** ===== Unary Operations ===== */
+%token <token> INCREMENT
+%token <token> DECREMENT
 
 /** ===== Loops ===== */
 %token <token> WHILE
@@ -130,6 +141,10 @@
 %token <token> IF
 %token <token> ELSE
 
+/** ===== CLASS ===== */
+%token <token> IS
+%token <token> USING
+
 %token <token> UNKNOWN
 
 /** ============== TERMINALS ENDS. ============== */
@@ -158,6 +173,10 @@
 
 %type <functionCall> function_call
 %type <expressionList> expression_list
+
+%type <object> object
+%type <generic> generic
+%type <genericList> generic_list
 
 %type <instruction> instruction
 %type <block> block
@@ -216,10 +235,15 @@ assignment_operation:
 	;
 
 variable_declaration:
-	NAME[name] COLON variable_type[type]																			{ $$ = VariableDeclarationSemanticAction($name, $type, NULL,NULL); }
-	| NAME[name] COLON variable_type[type] ASSIGN expression[exp]													{ $$ = VariableDeclarationSemanticAction($name, $type, $exp,NULL); }
-	| privacy_list[priv] NAME[name] COLON variable_type[type]														{ $$ = VariableDeclarationSemanticAction($name, $type, NULL,$priv); }
-	| privacy_list[priv] NAME[name] COLON variable_type[type] ASSIGN expression[exp]								{ $$ = VariableDeclarationSemanticAction($name, $type, $exp,$priv); }
+	NAME[name] COLON variable_type[type]																			{ $$ = VariableDeclarationSemanticAction($name, $type, NULL, NULL, NULL); }
+	| NAME[name] COLON variable_type[type] ASSIGN expression[exp]													{ $$ = VariableDeclarationSemanticAction($name, $type, $exp, NULL, NULL); }
+	| privacy_list[priv] NAME[name] COLON variable_type[type]														{ $$ = VariableDeclarationSemanticAction($name, $type, NULL, NULL, $priv); }
+	| privacy_list[priv] NAME[name] COLON variable_type[type] ASSIGN expression[exp]								{ $$ = VariableDeclarationSemanticAction($name, $type, $exp, NULL, $priv); }
+	
+	| NAME[name] COLON object[obj]																				{ $$ = VariableDeclarationSemanticAction($name, OBJECT, NULL, $obj, NULL); }
+	| NAME[name] COLON object[obj] ASSIGN expression[exp]														{ $$ = VariableDeclarationSemanticAction($name, OBJECT, $exp, $obj, NULL); }
+	| privacy_list[priv] NAME[name] COLON object[obj]															{ $$ = VariableDeclarationSemanticAction($name, OBJECT, NULL, $obj, $priv); }
+	| privacy_list[priv] NAME[name] COLON object[obj] ASSIGN expression[exp]									{ $$ = VariableDeclarationSemanticAction($name, OBJECT, $exp, $obj, $priv); }
 	;
 
 variable_type:
@@ -229,6 +253,7 @@ variable_type:
 if: IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS scope[block]   					{ $$ = ConditionalSemanticAction($exp,IF_TYPE,$block); }
     | IF OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS scope[block] else[con]			{ $$ = ConditionalSemanticAction($exp,IF_TYPE,$block); $$->nextConditional = $con; }	
 	;
+	
 else:
 	ELSE if																	{ $$ = $2; }
 	| ELSE scope[block]														{ $$ = ConditionalSemanticAction(NULL,ELSE_TYPE,$block); }
@@ -248,6 +273,8 @@ expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressi
 	| function_call													{ $$ = FunctionCallExpressionSemanticAction($1); }
 	| lambda														{ $$ = LambdaExpressionSemanticAction($1); }
 	| NAME															{ $$ = VariableExpressionSemanticAction($1); }	
+	| NAME INCREMENT 												{ $$ = UnaryExpressionSemanticAction($1, INCREMENT_TYPE); }
+	| NAME DECREMENT 												{ $$ = UnaryExpressionSemanticAction($1, DECREMENT_TYPE); }
 	;
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
@@ -271,6 +298,23 @@ expression_list:
 	expression														{ $$ = ExpressionListSemanticAction(NULL, $1); }
 	| expression_list COMMA expression								{ $$ = ExpressionListSemanticAction($1, $3); }
 	;
+
+/** ===== Objects ===== */
+object:
+	NAME															{ $$ = ObjectSemanticAction($1, NULL); }
+	| NAME LESS generic_list GREATER								{ $$ = ObjectSemanticAction($1, $3); }
+	;
+
+generic: 
+	object															{ $$ = GenericSemanticAction($1, NULL); }
+	| object IS object												{ $$ = GenericSemanticAction($1, $3); }
+
+/** ===== Generics ===== */
+generic_list:
+	generic															{ $$ = GenericListSemanticAction(NULL, $1); }
+	| generic_list COMMA generic									{ $$ = GenericListSemanticAction($1, $3); }
+	;
+	
 
 constant: C_INTEGER													{ $$ = ConstantSemanticAction(&$1, C_INT_TYPE); }
 		| C_CHARACTER												{ $$ = ConstantSemanticAction(&$1, C_CHAR_TYPE); }

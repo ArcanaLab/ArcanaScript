@@ -104,7 +104,7 @@ Factor * ExpressionFactorSemanticAction(Expression * expression) {
 	return factor;
 }
 
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, PrivacyList * privacyModifierList) {
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object, PrivacyList * privacyModifierList) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
 	VariableDeclaration * variableDeclaration = calloc(1, sizeof(VariableDeclaration));
@@ -112,7 +112,7 @@ VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableTyp
 	variableDeclaration->type = type;
 	variableDeclaration->expression = expression;
 	variableDeclaration->privacyModifierList = privacyModifierList;
-
+	variableDeclaration->object = object;
 	return variableDeclaration;
 }
 
@@ -273,12 +273,36 @@ Expression * VariableExpressionSemanticAction(char * variable){
 	return expression;
 }
 
-
 PrivacyModifier * PrivacyModifierSemanticAction(PrivacyType privacyType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	PrivacyModifier * privacyModifier = calloc(1, sizeof(PrivacyModifier));
 	privacyModifier->type = privacyType;
 	return privacyModifier;
+}
+
+Expression * UnaryExpressionSemanticAction(char * name,  ExpressionType type){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->variable = name;
+	expression->type = type;
+	return expression;
+}
+
+Object * ObjectSemanticAction(char * name, GenericList * genericList){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Object * object = calloc(1, sizeof(Object));
+	object->name = name;
+	object->genericList = genericList;
+
+	return object;
+}
+
+Generic * GenericSemanticAction(Object * object, Object * isObject){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Generic * generic = calloc(1, sizeof(Generic));
+	generic->object = object;
+	generic->isObject = isObject;
+	return generic;
 }
 
 /**
@@ -341,6 +365,12 @@ VariableDeclarationList * VariableDeclarationListSemanticAction(VariableDeclarat
 PrivacyList * PrivacyListSemanticAction(PrivacyList * privacyList, PrivacyModifier * modifier){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	return ListSemanticAction(privacyList, modifier);
+}
+
+// Generic List
+GenericList * GenericListSemanticAction(GenericList * genericList, Generic * generic){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	return ListSemanticAction(genericList, generic);
 }
 
 // Instructions & Blocks.

@@ -55,6 +55,10 @@ void releaseExpression(Expression * expression) {
 		case VARIABLE_TYPE:
 			releaseName(expression->variable);
 			break;
+		case INCREMENT_TYPE:
+		case DECREMENT_TYPE:
+			releaseName(expression->variable);
+			break;
 	}
 	free(expression);
 }
@@ -75,8 +79,8 @@ void releaseFactor(Factor * factor) {
 }
 
 void releaseName(char * name) {
-	if(name == NULL) return;
 	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(name == NULL) return;
 	free(name);
 }
 
@@ -87,6 +91,7 @@ void releaseVariableDeclaration(VariableDeclaration * variable) {
 	releaseExpression(variable->expression);
 	releaseName(variable->name);
 	releasePrivacyList(variable->privacyModifierList);
+	releaseObject(variable->object);
 	free(variable);
 }
 void releasePrivacyModifier(PrivacyModifier * modifier) {
@@ -177,6 +182,24 @@ void releaseFunctionCall(FunctionCall * functionCall) {
 	free(functionCall);
 }
 
+void releaseObject(Object * object) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(object == NULL) return;
+
+	releaseName(object->name);
+	releaseGenericList(object->genericList);
+	free(object);
+}
+
+void releaseGeneric(Generic * generic) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(generic == NULL) return;
+
+	releaseObject(generic->object);
+	releaseObject(generic->isObject);
+	free(generic);
+}
+
 /** 
  * 
  * How to release Nodes List in General.
@@ -221,10 +244,19 @@ void releaseVariableDeclarationList(VariableDeclarationList * variableDeclaratio
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(variableDeclarationList, (releaseDataFn) releaseVariableDeclaration);
 }
+
+// Generics.
+void releaseGenericList(GenericList * genericList){
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	return releaseList(genericList, (releaseDataFn) releaseGeneric);
+}
+
+// Privacy modifiers.
 void releasePrivacyList(PrivacyList * privacyList){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(privacyList, (releaseDataFn) releasePrivacyModifier);
 }
+
 // Instructions & Blocks.
 void releaseBlock(Block * block){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);

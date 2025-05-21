@@ -187,6 +187,19 @@ Token ConditionalStructureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerC
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
 }
+Token UnaryOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return token;
+}
+
+Token ExtensionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token){
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return token;
+}
 
 Token DecoratorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext,Token token) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
