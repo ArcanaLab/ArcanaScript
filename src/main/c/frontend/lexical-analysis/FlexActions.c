@@ -245,3 +245,16 @@ Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return CLASS;
 }
+
+Token ImportLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = IMPORT;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return IMPORT;
+}
+Token ImportFileLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = IMPORT_PATH;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return IMPORT_PATH;
+}

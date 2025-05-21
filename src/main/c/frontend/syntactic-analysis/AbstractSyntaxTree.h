@@ -36,6 +36,7 @@ typedef struct Instruction Instruction;
 typedef struct Lambda Lambda;
 typedef struct Class Class;
 typedef struct Interface Interface;
+typedef struct Import Import;
 
 typedef struct FunctionCall FunctionCall;
 
@@ -54,6 +55,9 @@ typedef void (*releaseDataFn)(void *);
 #pragma region Specialized Lists
 typedef Node ExpressionNode;
 typedef List ExpressionList;
+
+typedef Node ImportStatementNode;
+typedef List ImportList;
 
 typedef Node VariableDeclarationNode;
 typedef List VariableDeclarationList;
@@ -252,6 +256,10 @@ struct Lambda {
 	Instruction * instruction;
 };
 
+struct Import{
+	char * PathToFile;
+};
+
 struct Class {
 	Object * object;
 	Object * inherits;
@@ -281,6 +289,7 @@ struct Generic {
 };
 
 struct Program {
+	ImportList * importList;
 	Block * block;
 	Loop * loop;
 };
@@ -441,6 +450,18 @@ void releaseImplementationList(ImplementationList * implementationList);
  * @param interface Pointer to the interface to be released.
  */
 void releaseInterface(Interface * interface);
+
+/**
+ * @brief Releases all resources associated with the given ImportList.
+ *
+ * This function frees any memory allocated for the ImportList and its contents.
+ * After calling this function, the ImportList pointer should not be used unless reinitialized.
+ *
+ * @param importList Pointer to the ImportList to be released.
+ */
+void releaseImportList(ImportList * importList);
+
+void releaseImport(Import * import_statement);
 #pragma endregion
 // =======================================================
 

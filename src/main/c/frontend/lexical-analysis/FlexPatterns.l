@@ -16,13 +16,15 @@
 %x CHAR_CONSTANT
 %x STRING_CONSTANT
 
+
 /** ========================================= Reusable patterns. ========================================= */
 /** ------------------ [ @see https://westes.github.io/flex/manual/Matching.html ] ------------------*/
 /** ------------------ [ @see https://westes.github.io/flex/manual/Patterns.html ] ------------------*/
 digit			      [0-9]
 char                  [a-zA-Z_]
 name                  {char}({char}|{digit})*
-single_line_comment     "#"[^!].*
+path                  \"[^\"]*\\.arcx\"
+single_line_comment   "#"[^!].*
 
 %%
 "#!"								{ BEGIN(MULTILINE_COMMENT); BeginMultilineCommentLexemeAction(createLexicalAnalyzerContext()); }
@@ -31,7 +33,10 @@ single_line_comment     "#"[^!].*
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>"!#"				{ EndMultilineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
 
-<INITIAL>{single_line_comment}               { IgnoredLexemeAction(createLexicalAnalyzerContext()); }  
+<INITIAL>{single_line_comment}      { IgnoredLexemeAction(createLexicalAnalyzerContext()); }  
+
+"#import"                         	{ return ImportLexemeAction(createLexicalAnalyzerContext()); }
+{path}                				{ return ImportFileLexemeAction(createLexicalAnalyzerContext()); }
 
 "-"						            { return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), MUL); }
