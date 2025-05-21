@@ -1,0 +1,19 @@
+class Class1 is ArcanaCard using Test
+{
+    # BEST PROGRAM YAY! :DDDDDDDDD
+}
+
+class Class2 is Class1
+{
+    # NO I'M THE BEST PROGRAM >:(
+}
+
+
+class Class3 is Class2<Class1> {
+    # GET CLASS3'd I'M THE BEST
+}
+
+class Class4<K> is Class3<K> using Test<K> {
+    # NON
+}
+

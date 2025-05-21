@@ -36,7 +36,7 @@ typedef struct AssignmentOperation AssignmentOperation;
 typedef struct Instruction Instruction;
 typedef struct Lambda Lambda;
 typedef struct Class Class;
-
+typedef struct Interface Interface;
 
 typedef struct FunctionCall FunctionCall;
 
@@ -68,10 +68,13 @@ typedef List PrivacyList;
 typedef Node InstructionNode;
 typedef List Block;
 
-
 // Generic List
 typedef Node GenericListNode;
 typedef List GenericList;
+
+// Implementation List
+typedef Node ImplementationListNode;
+typedef List ImplementationList;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -150,6 +153,7 @@ enum InstructionType {
 	INSTRUCTION_CONDITIONAL,
 	INSTRUCTION_LOOP,
 	INSTRUCTION_CLASS,
+	INSTRUCTION_INTERFACE,
 };
 
 enum LoopType {
@@ -242,6 +246,7 @@ struct Instruction {
 		Loop * loop;
 		Conditional * conditional;
 		Class * class;
+		Interface * interface;
 	};
 
 	InstructionType type;
@@ -253,7 +258,15 @@ struct Lambda {
 };
 
 struct Class {
-	char * name;
+	Object * object;
+	Object * inherits;
+	ImplementationList * implementationList;
+	Block * block;
+};
+
+struct Interface{
+	Object * object;
+	ImplementationList * extends;
 	Block * block;
 };
 
@@ -320,4 +333,6 @@ void releaseBlock(Block * block);
 void releaseGenericList(GenericList * genericList);
 void releaseObject(Object * object);
 void releaseGeneric(Generic * generic);
+void releaseImplementationList(ImplementationList * implementationList);
+void releaseInterface(Interface * interface);
 #endif

@@ -145,6 +145,9 @@ void releaseInstruction(Instruction * instruction) {
 		case INSTRUCTION_CLASS:
 			releaseClass(instruction->class);
 			break;
+		case INSTRUCTION_INTERFACE:
+			releaseInterface(instruction->interface);
+			break;
 	}
 	free(instruction);
 }
@@ -173,6 +176,9 @@ void releaseClass(Class * class) {
 	if(class == NULL) return;
 
 	releaseBlock(class->block);
+	releaseObject(class->object);
+	releaseObject(class->inherits);
+	releaseImplementationList(class->implementationList);
 	free(class);
 }
 
@@ -209,6 +215,16 @@ void releaseGeneric(Generic * generic) {
 	releaseObject(generic->object);
 	releaseObject(generic->isObject);
 	free(generic);
+}
+
+void releaseInterface(Interface * interface) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(interface == NULL) return;
+
+	releaseObject(interface->object);
+	releaseImplementationList(interface->extends);
+	releaseBlock(interface->block);
+	free(interface);
 }
 
 /** 
@@ -268,9 +284,17 @@ void releasePrivacyList(PrivacyList * privacyList){
 	return releaseList(privacyList, (releaseDataFn) releasePrivacyModifier);
 }
 
+// Implementation List.
+void releaseImplementationList(ImplementationList * implementationList){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	return releaseList(implementationList, (releaseDataFn) releaseObject);
+}
+
 // Instructions & Blocks.
 void releaseBlock(Block * block){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(block, (releaseDataFn) releaseInstruction);
 }
+
+
 // And that's all. We now can do it multiple times, with multiple uses, and keep it simple.

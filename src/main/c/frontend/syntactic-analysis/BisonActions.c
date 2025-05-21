@@ -214,6 +214,9 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 		case INSTRUCTION_CLASS:
 			instruction->class = value;
 			break;
+		case INSTRUCTION_INTERFACE:
+			instruction->interface = value;
+			break;
 	}
 
 	return instruction;
@@ -250,13 +253,17 @@ Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * bloc
 	return program;
 }
 
-Class * ClassSemanticAction(char * name, Block * block) {
+Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationList * implementationList, Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Class * class = calloc(1, sizeof(Class));
-	class->name = name;
+	class->object = object;
+	class->inherits = inherits;
+	class->implementationList = implementationList;
 	class->block = block;
 	return class;
-}FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressionList) {
+}
+
+FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressionList) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
 	functionCall->name = name;
@@ -310,6 +317,16 @@ Generic * GenericSemanticAction(Object * object, Object * isObject){
 	generic->object = object;
 	generic->isObject = isObject;
 	return generic;
+}
+
+// ===== Interfaces =====
+Interface * InterfaceSemanticAction(Object * object, ImplementationList * extends, Block * block){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Interface * interface = calloc(1, sizeof(Interface));
+	interface->object = object;
+	interface->extends = extends;
+	interface->block = block;
+	return interface;
 }
 
 /**
@@ -378,6 +395,12 @@ PrivacyList * PrivacyListSemanticAction(PrivacyList * privacyList, PrivacyModifi
 GenericList * GenericListSemanticAction(GenericList * genericList, Generic * generic){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	return ListSemanticAction(genericList, generic);
+}
+
+// Implementation List.
+ImplementationList * ImplementationListSemanticAction(ImplementationList * implementationList, Object * object){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	return ListSemanticAction(implementationList, object);
 }
 
 // Instructions & Blocks.

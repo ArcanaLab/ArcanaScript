@@ -9,3 +9,62 @@ class ClassName {
 }
 
 class ClassName2 { }
+
+#!
+    class ObjectName is ObjectName using ObjectName {}
+
+    class ObjectName {}
+    class ObjectName is ... {}
+    class ObjectName using ... {}
+    class ObjectName is ... using ... {}
+    class ObjectName is ... using ..., ... {}
+
+    class:
+        CLASS ObjectName scope
+        CLASS ObjectName inheritance_class scope
+        CLASS ObjectName implementation scope
+        CLASS ObjectName inheritance_class implementation scope
+
+    interface:
+        INTERFACE ObjectName scope
+        INTERFACE ObjectName inheritance_interface scope
+
+    inheritance_class:
+        IS ObjectName
+
+    inheritance_interface:
+        IS implementation_list
+
+    implementation:
+        USING implementation_list
+
+    implementation_list:
+        ObjectName                                      
+        implementation_list COMMA ObjectName            
+
+
+    ===== CLASES REBORN =====
+    class {
+        Object * object;
+        Object * inherits;
+        ImplementationList * implementation;
+        Block * block;
+    }
+
+    interface {
+        Object * object;
+        ImplementationList * extends;
+        Block * block;
+    }
+
+    ====== INTERFACES  ======
+    interface ObjectName is ObjectName {}
+    interface ObjectName is ObjectName, ObjectName, ..., ObjectName {}
+
+--------------- Bison Grammar ---------------
+    ObjectName:
+        ClassName
+        ClassName<K>
+        ClassName<K, V, ..., V>
+        ClassName<K is V, ..., V is K>
+!#
