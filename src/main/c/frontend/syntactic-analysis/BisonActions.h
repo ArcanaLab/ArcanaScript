@@ -39,7 +39,7 @@ Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block,
  * Variable declarations.
  * 
  */
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object);
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object, PrivacyList * privacyModifierList);
 
 /**
  * Assignment operations.
@@ -70,6 +70,12 @@ Expression * LambdaExpressionSemanticAction(Lambda * lambda);
 VariableDeclarationList * VariableDeclarationListSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration);
 
 /**
+ * Privacy.
+ */
+PrivacyList * PrivacyListSemanticAction(PrivacyList * privacyList, PrivacyModifier * modifier);
+PrivacyModifier * PrivacyModifierSemanticAction(PrivacyType privacyType);
+
+/**
  * Function calls.
  */
 FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressionList);
@@ -98,5 +104,7 @@ GenericList * GenericListSemanticAction(GenericList * genericList, Generic * gen
  */
 List * CreateListSemanticAction(void * data);
 List * ListSemanticAction(List * list, void * data);
+
+
 
 #endif

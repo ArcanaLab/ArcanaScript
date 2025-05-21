@@ -63,6 +63,13 @@ single_line_comment     "#"[^!].*
 
 <INITIAL>":"                        { return ColonLexemeAction(createLexicalAnalyzerContext()); }
 ";"                                 { return SemicolonLexemeAction(createLexicalAnalyzerContext()); }
+""
+
+"@exposed"                          { return DecoratorLexemeAction(createLexicalAnalyzerContext(), C_EXPOSED); }
+"@hidden"                           { return DecoratorLexemeAction(createLexicalAnalyzerContext(), C_HIDDEN); }
+"@eternal"                          { return DecoratorLexemeAction(createLexicalAnalyzerContext(), C_ETERNAL); }
+"@shielded"                         { return DecoratorLexemeAction(createLexicalAnalyzerContext(), C_SHIELDED); }
+"@immutable"                        { return DecoratorLexemeAction(createLexicalAnalyzerContext(), C_IMMUTABLE); }
 
 "class"                             { return ClassLexemeAction(createLexicalAnalyzerContext()); }
 

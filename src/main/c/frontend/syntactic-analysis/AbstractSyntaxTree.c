@@ -90,10 +90,14 @@ void releaseVariableDeclaration(VariableDeclaration * variable) {
 
 	releaseExpression(variable->expression);
 	releaseName(variable->name);
+	releasePrivacyList(variable->privacyModifierList);
 	releaseObject(variable->object);
 	free(variable);
 }
-
+void releasePrivacyModifier(PrivacyModifier * modifier) {
+    if (modifier == NULL) return;
+    free(modifier);
+}
 void releaseConditional(Conditional * conditional){
 	logError(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (!conditional) return;
@@ -177,7 +181,6 @@ void releaseProgram(Program * program) {
 	if(program == NULL) return;
 
 	releaseBlock(program->block);
-	releaseLoop(program->loop);
 	free(program);
 }
 
@@ -244,13 +247,13 @@ void releaseList(List * list, releaseDataFn release_fun) {
 // Expressions.
 void releaseExpressionList(ExpressionList * expressionList){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	return releaseList(expressionList, releaseExpression);
+	return releaseList(expressionList,  (releaseDataFn) releaseExpression);
 }
 
 // Variable declarations.
 void releaseVariableDeclarationList(VariableDeclarationList * variableDeclarationList){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	return releaseList(variableDeclarationList, releaseVariableDeclaration);
+	return releaseList(variableDeclarationList, (releaseDataFn) releaseVariableDeclaration);
 }
 
 // Generics.
@@ -259,9 +262,15 @@ void releaseGenericList(GenericList * genericList){
 	return releaseList(genericList, (releaseDataFn) releaseGeneric);
 }
 
+// Privacy modifiers.
+void releasePrivacyList(PrivacyList * privacyList){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	return releaseList(privacyList, (releaseDataFn) releasePrivacyModifier);
+}
+
 // Instructions & Blocks.
 void releaseBlock(Block * block){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	return releaseList(block, releaseInstruction);
+	return releaseList(block, (releaseDataFn) releaseInstruction);
 }
 // And that's all. We now can do it multiple times, with multiple uses, and keep it simple.
