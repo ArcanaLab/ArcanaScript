@@ -4,10 +4,14 @@
 #include "../../shared/CompilerState.h"
 #include "../../shared/Logger.h"
 #include "../../shared/Type.h"
+#include "utils/ContextStack.h"
 #include "AbstractSyntaxTree.h"
 #include "SyntacticAnalyzer.h"
 #include <stdlib.h>
 #include <string.h>
+
+/** HAS ABORTED DUE TO CRITICAL ERROR */
+int hasAborted(void);
 
 // ================== [ Initialization ] ==================
 #pragma region Initialization
@@ -229,7 +233,7 @@ Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationLi
  * @param instruction The lambda instruction.
  * @return A pointer to the created lambda.
  */
-Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList, Instruction * instruction);
+Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList, Block * block);
 #pragma endregion
 // ========================================================
 

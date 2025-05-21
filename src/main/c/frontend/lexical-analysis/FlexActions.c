@@ -245,3 +245,17 @@ Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return CLASS;
 }
+
+Token ReturnLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = RETURN;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return RETURN;
+}
+
+Token PassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = PASS;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return PASS;
+}

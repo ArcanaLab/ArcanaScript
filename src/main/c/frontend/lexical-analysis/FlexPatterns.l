@@ -104,6 +104,9 @@ single_line_comment     "#"[^!].*
 "is"                                { return ExtensionLexemeAction(createLexicalAnalyzerContext(), IS); }
 "using"                             { return ExtensionLexemeAction(createLexicalAnalyzerContext(), USING); }
 
+"return"                            { return ReturnLexemeAction(createLexicalAnalyzerContext()); }
+"pass"                              { return PassLexemeAction(createLexicalAnalyzerContext()); }
+
 {name}                              { return NameLexemeAction(createLexicalAnalyzerContext()); }
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 

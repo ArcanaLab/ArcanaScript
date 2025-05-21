@@ -152,6 +152,9 @@ void releaseInstruction(Instruction * instruction) {
 		case INSTRUCTION_INTERFACE:
 			releaseInterface(instruction->interface);
 			break;
+		case INSTRUCTION_RETURN:
+			releaseInstruction(instruction->returnInstruction);
+			break;
 	}
 	free(instruction);
 }
@@ -171,7 +174,7 @@ void releaseLambda(Lambda * lambda) {
 	if(lambda == NULL) return;
 
 	releaseVariableDeclarationList(lambda->variableDeclarationList);
-	releaseInstruction(lambda->instruction);
+	releaseBlock(lambda->block);
 	free(lambda);
 }
 
