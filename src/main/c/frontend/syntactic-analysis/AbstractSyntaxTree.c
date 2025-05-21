@@ -14,7 +14,7 @@ void shutdownAbstractSyntaxTreeModule() {
 	}
 }
 
-/** PUBLIC FUNCTIONS */
+
 void releaseConstant(Constant * constant) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (constant == NULL) return;
@@ -22,6 +22,7 @@ void releaseConstant(Constant * constant) {
 	if(constant->type == C_STRING_TYPE) free(constant->stringValue);
 	free(constant);
 }
+
 
 void releaseExpression(Expression * expression) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
@@ -78,11 +79,13 @@ void releaseFactor(Factor * factor) {
 	}
 }
 
+
 void releaseName(char * name) {
 	logError(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(name == NULL) return;
 	free(name);
 }
+
 
 void releaseVariableDeclaration(VariableDeclaration * variable) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
@@ -94,6 +97,7 @@ void releaseVariableDeclaration(VariableDeclaration * variable) {
 	releaseObject(variable->object);
 	free(variable);
 }
+
 void releasePrivacyModifier(PrivacyModifier * modifier) {
     if (modifier == NULL) return;
     free(modifier);

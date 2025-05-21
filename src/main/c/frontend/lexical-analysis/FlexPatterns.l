@@ -4,28 +4,21 @@
 #include <stdlib.h>
 
 %}
+/** ============================ Enable start condition manipulation functions.. ============================ */
+	// ------------------ [ Non-Tokens ] ------------------
 
-/**
- * Enable start condition manipulation functions.
- */
+/** ============================ Enable start condition manipulation functions.. =========================== */
 %option stack
 
-/**
- * Flex contexts (a.k.a. start conditions).
- *
- * @see https://westes.github.io/flex/manual/Start-Conditions.html
- */
+/** ============================== Flex contexts (a.k.a. start conditions). ============================= */
+/* ------------------ [ @see https://westes.github.io/flex/manual/Start-Conditions.html ] ------------------ */
 %x MULTILINE_COMMENT
 %x CHAR_CONSTANT
 %x STRING_CONSTANT
 
-/**
- * Reusable patterns.
- *
- * @see https://westes.github.io/flex/manual/Matching.html
- * @see https://westes.github.io/flex/manual/Patterns.html
- */
-
+/** ========================================= Reusable patterns. ========================================= */
+/** ------------------ [ @see https://westes.github.io/flex/manual/Matching.html ] ------------------*/
+/** ------------------ [ @see https://westes.github.io/flex/manual/Patterns.html ] ------------------*/
 digit			      [0-9]
 char                  [a-zA-Z_]
 name                  {char}({char}|{digit})*
