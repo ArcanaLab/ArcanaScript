@@ -104,14 +104,14 @@ Factor * ExpressionFactorSemanticAction(Expression * expression) {
 	return factor;
 }
 
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression) {
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
 	VariableDeclaration * variableDeclaration = calloc(1, sizeof(VariableDeclaration));
 	variableDeclaration->name = name;
 	variableDeclaration->type = type;
 	variableDeclaration->expression = expression;
-
+	variableDeclaration->object = object;
 	return variableDeclaration;
 }
 
@@ -280,6 +280,23 @@ Expression * UnaryExpressionSemanticAction(char * name,  ExpressionType type){
 	return expression;
 }
 
+Object * ObjectSemanticAction(char * name, GenericList * genericList){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Object * object = calloc(1, sizeof(Object));
+	object->name = name;
+	object->genericList = genericList;
+
+	return object;
+}
+
+Generic * GenericSemanticAction(Object * object, Object * isObject){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Generic * generic = calloc(1, sizeof(Generic));
+	generic->object = object;
+	generic->isObject = isObject;
+	return generic;
+}
+
 /**
  * ============== LIST ==============
  */
@@ -335,6 +352,12 @@ ExpressionList * ExpressionListSemanticAction(ExpressionList * expressionList, 	
 VariableDeclarationList * VariableDeclarationListSemanticAction(VariableDeclarationList * variableDeclarationList, VariableDeclaration * variableDeclaration){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	return ListSemanticAction(variableDeclarationList, variableDeclaration);
+}
+
+// Generic List
+GenericList * GenericListSemanticAction(GenericList * genericList, Generic * generic){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	return ListSemanticAction(genericList, generic);
 }
 
 // Instructions & Blocks.

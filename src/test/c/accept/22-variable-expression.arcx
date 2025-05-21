@@ -1,2 +1,57 @@
 a:int = 5;
 b:int = a;
+
+#!
+    var_declaration = expression;
+
+    ==== VARIABLE EXPRESSION ====
+    NAME
+
+    ==== VARIABLE DECLARATION ====
+    NAME COLON TYPE EQUAL expression
+
+    ==== VARIABLE ASSIGNMENT ====
+    NAME EQUAL expression
+
+
+    KEYWORDS:
+        is, using ->
+        class ObjectName is ... using ... {
+        }
+
+        a: Class<int>; 
+        object: ObjectName= ...;
+
+        VarType:
+            ...
+            ObjectName
+
+        ObjectName:
+            NAME
+            | NAME<GenericList>
+        
+       
+
+        GenericList
+            Generic
+            | GenericList COMMA Generic
+            
+        
+        Gotcha! Debe retornar un Generic! No un Object. Porque son estructuras diferentes.
+        Generic:
+              ObjectName
+            | Generic is ObjectName
+
+        ¿La primera opción sería sino ObjectName is ObjectName? 
+
+         Object es {
+            char * name;
+            GenericList * genericList; --> Puede ser NULL.
+        }
+        
+        Entonces Generic es {
+            Object * object;
+            Object * isObject;
+        }
+
+!#
