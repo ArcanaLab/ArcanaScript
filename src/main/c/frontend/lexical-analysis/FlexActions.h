@@ -37,6 +37,8 @@ Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 //Nuestro
 Token SemicolonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token DecoratorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext,Token token);
+
 Token NameLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, VariableType token); 
@@ -48,7 +50,6 @@ Token AssignmentOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerCon
 Token LoopLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
 Token ConditionalStructureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
-
 Token UnaryOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
 Token ExtensionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
