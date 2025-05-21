@@ -238,3 +238,10 @@ Token ComparatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
 }
+
+Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = CLASS;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return CLASS;
+}

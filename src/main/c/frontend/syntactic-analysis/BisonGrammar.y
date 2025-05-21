@@ -44,12 +44,17 @@
 	Lambda * lambda;
 	VariableDeclarationList * varList;
 
+	Class * class;
+	Interface * inter;
+
 	FunctionCall * functionCall;
 	ExpressionList * expressionList;
 
 	Object * object;
 	Generic * generic;
 	GenericList * genericList;
+
+	ImplementationList * implementationList;
 }
 
 /**
@@ -76,6 +81,8 @@
 %destructor { releaseObject($$); } <object>
 %destructor { releaseGeneric($$); } <generic>
 %destructor { releaseGenericList($$); } <genericList>
+%destructor { releaseClass($$); } <class>
+
 
 /** ============== TERMINALS. ============== */
 %token <name> NAME
@@ -142,8 +149,10 @@
 %token <token> ELSE
 
 /** ===== CLASS ===== */
+%token <token> CLASS
 %token <token> IS
 %token <token> USING
+%token <token> INTERFACE
 
 %token <token> UNKNOWN
 
@@ -178,9 +187,20 @@
 %type <generic> generic
 %type <genericList> generic_list
 
+
+%type <object> inheritance_class
+%type <inter> interface
+
+%type <implementationList> inheritance_interface
+%type <implementationList> implementation
+%type <implementationList> implementation_list
+
+%type <class> class
+
 %type <instruction> instruction
 %type <block> block
 %type <block> scope
+
 %type <program> program
 /**
  * Precedence and associativity.
@@ -213,7 +233,22 @@ instruction:
 	| scope																	{ $$ = InstructionSemanticAction($1, INSTRUCTION_BLOCK); }
 	| loop 																	{ $$ = InstructionSemanticAction($1, INSTRUCTION_LOOP); }
 	| if																	{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONDITIONAL); }
+	| class																{ $$ = InstructionSemanticAction($1, INSTRUCTION_CLASS); }
+	| interface															{ $$ = InstructionSemanticAction($1, INSTRUCTION_INTERFACE); }
 	;
+
+/** ===== Class ===== */
+
+class: 
+	CLASS object scope												{ $$ = ClassSemanticAction($2, NULL, NULL, $3); }
+	| CLASS object inheritance_class scope							{ $$ = ClassSemanticAction($2, $3, NULL, $4); }
+	| CLASS object implementation scope									{ $$ = ClassSemanticAction($2, NULL, $3, $4); }
+	| CLASS object inheritance_class implementation scope				{ $$ = ClassSemanticAction($2, $3, $4, $5); }
+	;
+
+interface:
+	INTERFACE object scope											{$$ = InterfaceSemanticAction($2, NULL, $3); }
+	| INTERFACE object inheritance_interface scope					{$$ = InterfaceSemanticAction($2, $3,   $4); }
 
 scope:
 	OPEN_BRACE block CLOSE_BRACE									{ $$ = $2; }
@@ -314,7 +349,26 @@ generic_list:
 	generic															{ $$ = GenericListSemanticAction(NULL, $1); }
 	| generic_list COMMA generic									{ $$ = GenericListSemanticAction($1, $3); }
 	;
-	
+
+/** ===== INHERITANCE ===== */
+
+inheritance_class:
+	IS object														{ $$ = $2; }
+	;
+
+inheritance_interface:
+	IS implementation_list											{ $$ = $2; }
+	;
+
+implementation:
+	USING implementation_list										{ $$ = $2; }
+	;
+
+
+implementation_list:
+	object															{ $$ = ImplementationListSemanticAction(NULL, $1); }
+	| implementation_list COMMA object								{ $$ = ImplementationListSemanticAction($1, $3); }
+	;
 
 constant: C_INTEGER													{ $$ = ConstantSemanticAction(&$1, C_INT_TYPE); }
 		| C_CHARACTER												{ $$ = ConstantSemanticAction(&$1, C_CHAR_TYPE); }

@@ -58,6 +58,11 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 Block * BlockSemanticAction(Block * block, Instruction * instruction);
 
 /**
+ * Class.
+ */
+Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationList * implementationList, Block * block);
+
+/**
  * Lambdas.
  */
 Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList, Instruction * instruction);
@@ -95,11 +100,19 @@ Generic * GenericSemanticAction(Object * object, Object * isObject);
 GenericList * GenericListSemanticAction(GenericList * genericList, Generic * generic);
 
 /**
+ * Interfaces.
+ */
+Interface * InterfaceSemanticAction(Object * object, ImplementationList * implementationList, Block * block);
+
+/**
+ * Inheritance.
+ */
+ImplementationList * ImplementationListSemanticAction(ImplementationList * implementationList, Object * object);
+
+/**
  * Lists.
  */
 List * CreateListSemanticAction(void * data);
 List * ListSemanticAction(List * list, void * data);
-
-
 
 #endif

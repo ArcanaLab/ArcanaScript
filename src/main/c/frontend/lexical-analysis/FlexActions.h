@@ -54,4 +54,10 @@ Token UnaryOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext,
 
 Token ExtensionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
+
+/**
+ * Class.
+ */
+Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 #endif
