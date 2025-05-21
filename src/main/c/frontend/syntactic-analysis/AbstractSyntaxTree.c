@@ -245,7 +245,7 @@ void releaseVariableDeclarationList(VariableDeclarationList * variableDeclaratio
 // Generics.
 void releaseGenericList(GenericList * genericList){
 	logError(_logger, "Executing destructor: %s", __FUNCTION__);
-	return releaseList(genericList, releaseGeneric);
+	return releaseList(genericList, (releaseDataFn) releaseGeneric);
 }
 
 // Instructions & Blocks.
