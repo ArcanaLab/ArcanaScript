@@ -66,20 +66,6 @@ Expression * FactorExpressionSemanticAction(Factor * factor);
  */
 Expression * ComparatorExpressionSemanticAction(Factor * leftFactor, Factor * rightFactor, ExpressionType type);
 
-/**
- * Creates a variable expression with the specified name.
- * @param variable The name of the variable.
- * @return A pointer to the created variable expression.
- */
-Expression * VariableExpressionSemanticAction(char * variable);
-
-/**
- * Creates a unary expression with the specified name and type.
- * @param name The name of the unary expression.
- * @param type The type of the expression.
- * @return A pointer to the created unary expression.
- */
-Expression * UnaryExpressionSemanticAction(char * name,  ExpressionType type);
 
 /**
  * Creates an expression from a lambda.
@@ -105,6 +91,21 @@ Expression * FunctionCallExpressionSemanticAction(FunctionCall * functionCall);
  * @return A pointer to the created factor.
  */
 Factor * ConstantFactorSemanticAction(Constant * constant);
+
+/**
+ * Creates a variable expression with the specified name.
+ * @param variable The name of the variable.
+ * @return A pointer to the created variable expression.
+ */
+Factor * VariableExpressionSemanticAction(char * variable);
+
+/**
+ * Creates a unary expression with the specified name and type.
+ * @param name The name of the unary expression.
+ * @param type The type of the expression.
+ * @return A pointer to the created unary expression.
+ */
+Factor * UnaryExpressionSemanticAction(char * name,  ExpressionType type);
 
 /**
  * Creates a factor from an expression.

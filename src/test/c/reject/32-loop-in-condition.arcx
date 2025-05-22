@@ -1,0 +1,3 @@
+if (while (a < 10) { a:int=1; }) {
+    b:int=2;
+} 

@@ -91,9 +91,6 @@ enum ExpressionType {
 	GREATER_EQUAL_TYPE,
 	EQUAL_EQUAL_TYPE,
 	NOT_EQUAL_TYPE,
-	VARIABLE_TYPE,
-	INCREMENT_TYPE,
-	DECREMENT_TYPE,
 };
 
 enum ConditionalType {
@@ -103,6 +100,9 @@ enum ConditionalType {
 };
 
 enum FactorType {
+	VARIABLE_TYPE,
+	INCREMENT_TYPE,
+	DECREMENT_TYPE,
 	CONSTANT,
 	EXPRESSION,
 };
@@ -180,6 +180,7 @@ struct Factor {
 	union {
 		Constant * constant;
 		Expression * expression;
+		char * variable;
 	};
 	FactorType type;
 };
@@ -197,7 +198,6 @@ struct Expression {
 		};
 		FunctionCall * functionCall;
 		Lambda * lambda;
-		char * variable;
 	};
 	ExpressionType type;
 };

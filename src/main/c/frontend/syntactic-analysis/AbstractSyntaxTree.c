@@ -53,13 +53,6 @@ void releaseExpression(Expression * expression) {
 		case LAMBDA:
 			releaseLambda(expression->lambda);
 			break;
-		case VARIABLE_TYPE:
-			releaseName(expression->variable);
-			break;
-		case INCREMENT_TYPE:
-		case DECREMENT_TYPE:
-			releaseName(expression->variable);
-			break;
 	}
 	free(expression);
 }
@@ -73,6 +66,13 @@ void releaseFactor(Factor * factor) {
 				break;
 			case EXPRESSION:
 				releaseExpression(factor->expression);
+				break;
+			case VARIABLE_TYPE:
+				releaseName(factor->variable);
+				break;
+			case INCREMENT_TYPE:
+			case DECREMENT_TYPE:
+				releaseName(factor->variable);
 				break;
 		}
 		free(factor);

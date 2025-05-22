@@ -271,6 +271,7 @@
 %precedence ELSE
 %precedence IF
 
+
 %start program
 %%
 	// IMPORTANT: To use λ in the following grammar, use the %empty symbol.
@@ -428,6 +429,7 @@
 			| factor[left] LESS_EQUAL factor[right]																		{ $$ = ComparatorExpressionSemanticAction($left, $right, LESS_EQUAL_TYPE); }
 			| factor[left] EQUAL_EQUAL factor[right]																	{ $$ = ComparatorExpressionSemanticAction($left, $right, EQUAL_EQUAL_TYPE); }
 			| factor[left] NOT_EQUAL factor[right]																		{ $$ = ComparatorExpressionSemanticAction($left, $right, NOT_EQUAL_TYPE); }
+			;
 
 	// ------------------ [ Expressions ] ------------------------
 
@@ -438,13 +440,13 @@
 			| factor																									{ $$ = FactorExpressionSemanticAction($1); }
 			| function_call																								{ $$ = FunctionCallExpressionSemanticAction($1); }
 			| lambda																									{ $$ = LambdaExpressionSemanticAction($1); }
-			| NAME																										{ $$ = VariableExpressionSemanticAction($1); }	
-			| NAME INCREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, INCREMENT_TYPE); }
-			| NAME DECREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, DECREMENT_TYPE); }
 			;
 
 		/** ===== Factor ===== */
 		factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS															{ $$ = ExpressionFactorSemanticAction($2); }
+			| NAME																										{ $$ = VariableExpressionSemanticAction($1); }	
+			| NAME INCREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, INCREMENT_TYPE); }
+			| NAME DECREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, DECREMENT_TYPE); }
 			| constant																									{ $$ = ConstantFactorSemanticAction($1); }
 			;
 

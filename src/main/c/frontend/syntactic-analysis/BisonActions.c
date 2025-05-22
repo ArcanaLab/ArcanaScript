@@ -307,12 +307,12 @@ Expression * FunctionCallExpressionSemanticAction(FunctionCall * functionCall) {
 	return expression;
 }
 
-Expression * VariableExpressionSemanticAction(char * variable){
+Factor * VariableExpressionSemanticAction(char * variable){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
-	expression->variable = variable;
-	expression->type = VARIABLE_TYPE;
-	return expression;
+	Factor * factor = calloc(1, sizeof(Factor));
+	factor->variable = variable;
+	factor->type = VARIABLE_TYPE;
+	return factor;
 }
 
 PrivacyModifier * PrivacyModifierSemanticAction(PrivacyType privacyType) {
@@ -322,12 +322,12 @@ PrivacyModifier * PrivacyModifierSemanticAction(PrivacyType privacyType) {
 	return privacyModifier;
 }
 
-Expression * UnaryExpressionSemanticAction(char * name,  ExpressionType type){
+Factor * UnaryExpressionSemanticAction(char * name,  ExpressionType type){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
-	expression->variable = name;
-	expression->type = type;
-	return expression;
+	Factor * factor = calloc(1, sizeof(Factor));
+	factor->variable = name;
+	factor->type = type;
+	return factor;
 }
 
 Object * ObjectSemanticAction(char * name, GenericList * genericList){

@@ -1,0 +1,7 @@
+while (a == b) {
+    for(i in list) {
+        while (x < 10) {
+            a:int = 1;
+        
+    }
+} 
