@@ -8,7 +8,6 @@ funC: Function<Integer> = (a: int, b: int) {
     while(true) {
         return;
     }
-    pass;
 };
 funC(funA(), funB(1, 2));
 
