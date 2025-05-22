@@ -1,0 +1,6 @@
+if (a == b)
+    a:int=0;
+else
+{
+    b:int=0;
+} 

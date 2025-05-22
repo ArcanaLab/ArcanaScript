@@ -301,12 +301,18 @@ Token PassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token ImportLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 /**
+
  * @brief Handles the action of importing a file lexeme during lexical analysis.
  *
  * This function processes the current lexeme as an import file directive within the lexical analyzer context.
  *
  * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
  * @return Token representing the result of the import file lexeme action.
+
+Token InterfaceLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+/**
+ * Return.
  */
 Token ImportFileLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 #pragma endregion

@@ -1,0 +1,1 @@
+@exposed @eternal variable: int = 5; 
