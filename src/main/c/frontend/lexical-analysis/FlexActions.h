@@ -227,6 +227,17 @@ Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Variable
 Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 /**
+ * @brief Processes an interface lexeme during lexical analysis.
+ *
+ * This function is called when an interface-related lexeme is recognized by the lexical analyzer.
+ * It performs the necessary actions to create and return a Token representing the interface lexeme.
+ *
+ * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
+ * @return Token representing the identified interface lexeme.
+ */
+Token InterfaceLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+/**
  * Processes a decorator lexeme during lexical analysis.
  *
  * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
