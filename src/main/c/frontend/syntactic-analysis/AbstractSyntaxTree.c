@@ -81,7 +81,7 @@ void releaseFactor(Factor * factor) {
 
 
 void releaseName(char * name) {
-	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(name == NULL) return;
 	free(name);
 }
@@ -103,7 +103,7 @@ void releasePrivacyModifier(PrivacyModifier * modifier) {
     free(modifier);
 }
 void releaseConditional(Conditional * conditional){
-	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (!conditional) return;
 
 	releaseExpression(conditional->expression);
@@ -124,7 +124,7 @@ void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
 }
 
 void releaseInstruction(Instruction * instruction) {
-	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(instruction == NULL) return;
 
 	switch (instruction->type) {
@@ -160,7 +160,7 @@ void releaseInstruction(Instruction * instruction) {
 }
 
 void releaseLoop(Loop * loop) {
-	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (loop == NULL) return;
 	releaseExpression(loop->expression);
 	releaseBlock(loop->block);
@@ -276,7 +276,7 @@ void releaseList(List * list, releaseDataFn release_fun) {
 // ======= Specialized lists ======= //
 void releaseImportList(ImportList * importList)
 {
-	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(importList,  (releaseDataFn) releaseImport);
 }
 // Expressions.
@@ -293,7 +293,7 @@ void releaseVariableDeclarationList(VariableDeclarationList * variableDeclaratio
 
 // Generics.
 void releaseGenericList(GenericList * genericList){
-	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(genericList, (releaseDataFn) releaseGeneric);
 }
 
@@ -305,7 +305,7 @@ void releasePrivacyList(PrivacyList * privacyList){
 
 // Implementation List.
 void releaseImplementationList(ImplementationList * implementationList){
-	logError(_logger, "Executing destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(implementationList, (releaseDataFn) releaseObject);
 }
 

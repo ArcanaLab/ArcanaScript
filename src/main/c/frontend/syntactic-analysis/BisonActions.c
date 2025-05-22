@@ -30,7 +30,6 @@ static void _logSyntacticAnalyzerAction(const char * functionName);
  */
 static void _logSyntacticAnalyzerAction(const char * functionName) {
 	logDebugging(_logger, "%s", functionName);
-	logError(_logger, "%s", functionName);
 }
 
 /* PUBLIC FUNCTIONS */

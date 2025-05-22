@@ -46,7 +46,7 @@ const int main(const int count, const char ** arguments) {
  		// ...end of the Backend. -----------------------------------------------------------------
 		// ----------------------------------------------------------------------------------------
 
-		logError(logger, "The syntactic is ok");
+		logDebugging(logger, "The syntactic is ok");
 		logDebugging(logger, "Releasing AST resources...");
 		releaseProgram(program);
 	}

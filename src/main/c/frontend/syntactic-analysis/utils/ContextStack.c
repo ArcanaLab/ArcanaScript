@@ -69,7 +69,6 @@ boolean inContext(ContextStackType type) {
     
     ContextStackNode * currentNode = _contextStack->top;
     while (currentNode != NULL) {
-        logError(_logger, "Current node type: %d, expected type: %d", currentNode->type, type);
         if (currentNode->type == type) return true;
         currentNode = currentNode->next;
     }
