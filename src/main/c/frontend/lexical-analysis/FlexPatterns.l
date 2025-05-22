@@ -23,7 +23,6 @@
 digit			      [0-9]
 char                  [a-zA-Z_]
 name                  {char}({char}|{digit})*
-path                  \"[^\"]*\\.arcx\"
 single_line_comment   "#"[^!].*
 
 %%
