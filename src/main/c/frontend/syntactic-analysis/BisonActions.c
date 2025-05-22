@@ -335,7 +335,7 @@ Import * ImportSemanticAction(char * path)
 {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Import * import_statement = calloc(1,sizeof(Import));
-	import_statement->PathToFile;
+	import_statement->PathToFile = path;
 	return import_statement;
 }
 

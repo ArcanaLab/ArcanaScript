@@ -190,17 +190,13 @@ void releaseImport(Import * import_statement)
 {
 	if (import_statement == NULL)return;
 
-	if(import_statement->PathToFile != NULL)
-	{
-		free(import_statement->PathToFile);
-		free(import_statement);
-	}
+	free(import_statement->PathToFile);
+	free(import_statement);
 
 }
 
 void releaseProgram(Program * program) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(program == NULL) return;
 	releaseImportList(program->importList);
 	releaseBlock(program->block);
 	free(program);
@@ -277,7 +273,7 @@ void releaseList(List * list, releaseDataFn release_fun) {
 // ======= Specialized lists ======= //
 void releaseImportList(ImportList * importList)
 {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(importList,  (releaseDataFn) releaseImport);
 }
 // Expressions.
@@ -306,7 +302,7 @@ void releasePrivacyList(PrivacyList * privacyList){
 
 // Implementation List.
 void releaseImplementationList(ImplementationList * implementationList){
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	logError(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(implementationList, (releaseDataFn) releaseObject);
 }
 

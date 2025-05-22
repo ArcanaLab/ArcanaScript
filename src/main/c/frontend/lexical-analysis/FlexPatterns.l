@@ -35,8 +35,7 @@ single_line_comment   "#"[^!].*
 
 <INITIAL>{single_line_comment}      { IgnoredLexemeAction(createLexicalAnalyzerContext()); }  
 
-"#import"                         	{ return ImportLexemeAction(createLexicalAnalyzerContext()); }
-{path}                				{ return ImportFileLexemeAction(createLexicalAnalyzerContext()); }
+"import"                         	{ return ImportLexemeAction(createLexicalAnalyzerContext()); }
 
 "-"						            { return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), SUB); }
 "*"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext(), MUL); }

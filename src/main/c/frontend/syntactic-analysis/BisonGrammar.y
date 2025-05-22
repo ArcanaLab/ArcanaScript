@@ -89,6 +89,8 @@
 %destructor { releaseImplementationList($$); } <implementationList>
 %destructor { releasePrivacyList($$); } <privacyList>
 %destructor { releasePrivacyModifier($$); } <privacy>
+%destructor { releaseImportList($$); } <importList>
+%destructor { releaseImport($$); } <importStatement>
 
 /** ============== TERMINALS. ============== */
 	// ------------------ [ Non-Tokens ] ------------------
@@ -268,8 +270,8 @@
 
 	// ------------------ [ Program Structure ] ------------------
 		program:
-			import_list[import] block[code]																				{ $$ = BlockProgramSemanticAction(currentCompilerState(),$import,$1); }
-			| block[code]																								{ $$ = BlockProgramSemanticAction(currentCompilerState(),NULL ,$1); }
+			import_list block																							{ $$ = BlockProgramSemanticAction(currentCompilerState(),$1,$2); }
+			| block																										{ $$ = BlockProgramSemanticAction(currentCompilerState(),NULL ,$1); }
 			;
 
 		block:
@@ -277,12 +279,12 @@
 			| block instruction																							{ $$ = BlockSemanticAction($1, $2); }
 			;
 
-		import_list:
-			import_list import_statment																					{ $$ = ImportListSemanticAction($1, $2); }	
+		import_list: import_statment																					{ $$ = ImportListSemanticAction(NULL,$1); }
+			| import_list import_statment																				{ $$ = ImportListSemanticAction($1, $2); }	
 			;
 
 		import_statment:
-			IMPORT IMPORT_PATH 																							{ $$ = ImportStatementSemanticAction($2); }
+			IMPORT C_STRING 																						  	{ $$ = ImportSemanticAction($2); }
 			;
 		instruction:
 			assignment_operation SEMICOLON																				{ $$ = InstructionSemanticAction($1, INSTRUCTION_ASSIGNMENT); }
