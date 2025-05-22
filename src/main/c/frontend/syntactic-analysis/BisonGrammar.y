@@ -2,6 +2,8 @@
 
 #include "BisonActions.h"
 
+#define HAS_CRITICAL_ABORT if(hasAborted() == 1) return 1;
+
 %}
 
 // You touch this, and you die.
@@ -162,6 +164,9 @@
 		%token <token> IF
 		%token <token> ELSE
 
+		/** ===== Control Flow ===== */
+		%token <token> PASS
+
 	// ------------------ [ Classes ] ---------------------
 		/** ===== Class ===== */
 		%token <token> CLASS
@@ -174,6 +179,9 @@
 		%token <token> USING
 
 
+	// ------------------ [ Functions ] -------------------
+		/** ===== Return ===== */
+		%token <token> RETURN
 	// ------------------ [ Unknown ] ---------------------
 		%token <token> UNKNOWN
 
@@ -223,7 +231,6 @@
 			%type <varList> var_list
 		/** ===== Function Call ===== */
 			%type <functionCall> function_call
-			
 	// ------------------ [ OOP ] ------------------
 		/** ===== Object ===== */
 			%type <object> object
@@ -276,6 +283,9 @@
 			| if																										{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONDITIONAL); }
 			| class																										{ $$ = InstructionSemanticAction($1, INSTRUCTION_CLASS); }
 			| interface																									{ $$ = InstructionSemanticAction($1, INSTRUCTION_INTERFACE); }
+			| RETURN instruction[ret]																					{ $$ = InstructionSemanticAction($ret, INSTRUCTION_RETURN); HAS_CRITICAL_ABORT }
+			| RETURN SEMICOLON																							{ $$ = InstructionSemanticAction(NULL, INSTRUCTION_RETURN); HAS_CRITICAL_ABORT }
+			| PASS SEMICOLON																							{ $$ = InstructionSemanticAction(NULL, INSTRUCTION_PASS); HAS_CRITICAL_ABORT }
 			;
 
 		scope:
@@ -287,15 +297,15 @@
 		/** ===== DECLARATION ===== */
 
 			class: 
-				CLASS object scope																							{ $$ = ClassSemanticAction($2, NULL, NULL, $3); }
-				| CLASS object inheritance_class scope																		{ $$ = ClassSemanticAction($2, $3, NULL, $4); }
-				| CLASS object implementation scope																			{ $$ = ClassSemanticAction($2, NULL, $3, $4); }
-				| CLASS object inheritance_class implementation scope														{ $$ = ClassSemanticAction($2, $3, $4, $5); }
+				CLASS object[obj] { pushContext(CLASS_CONTEXT); } scope[scope_block]																	{ $$ = ClassSemanticAction($obj, NULL, NULL, $scope_block); popContext(); }
+				| CLASS object[obj] inheritance_class[inherit] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, $inherit, NULL, $scope_block); popContext(); }
+				| CLASS object[obj] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, NULL, $implement, $scope_block); popContext(); }
+				| CLASS object[obj] inheritance_class[inherit] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]				{ $$ = ClassSemanticAction($obj, $inherit, $implement, $scope_block); popContext(); }
 				;
 
 			interface:
-				INTERFACE object scope																						{$$ = InterfaceSemanticAction($2, NULL, $3); }
-				| INTERFACE object inheritance_interface scope																{$$ = InterfaceSemanticAction($2, $3,   $4); }
+				INTERFACE object[obj] { pushContext(INTERFACE_CONTEXT); } scope[scope_block]																						{$$ = InterfaceSemanticAction($obj, NULL, $scope_block); popContext(); }
+				| INTERFACE object[obj] inheritance_interface[inherit] { pushContext(INTERFACE_CONTEXT); } scope[scope_block]														{$$ = InterfaceSemanticAction($obj, $inherit, $scope_block); popContext(); }
 
 		/** ===== INHERITANCE ===== */
 
@@ -319,8 +329,8 @@
 	// ------------------ [ Control Structures ] -----------------
 		/** ===== Loops ===== */
 		loop:
-			WHILE OPEN_PARENTHESIS expression CLOSE_PARENTHESIS scope 													{ $$ = LoopSemanticAction($3, WHILE_LOOP, $5, NULL, NULL); }	
-			| FOR OPEN_PARENTHESIS NAME COLON NAME CLOSE_PARENTHESIS scope												{ $$ = LoopSemanticAction(NULL, FOR_LOOP, $7, $3, $5); }
+			WHILE OPEN_PARENTHESIS expression[exp] CLOSE_PARENTHESIS { pushContext(LOOP_CONTEXT); } scope[scope_block] 											{ $$ = LoopSemanticAction($exp, WHILE_LOOP, $scope_block, NULL, NULL); popContext(); }	
+			| FOR OPEN_PARENTHESIS NAME[item] COLON NAME[collection] CLOSE_PARENTHESIS { pushContext(LOOP_CONTEXT); } scope[scope_block]						{ $$ = LoopSemanticAction(NULL, FOR_LOOP, $scope_block, $item, $collection); popContext(); }
 			;
 
 		/** ===== Conditionals ===== */
@@ -422,8 +432,8 @@
 	// ------------------ [ Miscellaneous ] ----------------------
 
 		/** ===== Lambda ===== */
-		lambda: OPEN_PARENTHESIS CLOSE_PARENTHESIS instruction															{ $$ = LambdaSemanticAction(NULL, $3); }
-			| OPEN_PARENTHESIS var_list CLOSE_PARENTHESIS instruction													{ $$ = LambdaSemanticAction($2, $4); }
+		lambda: OPEN_PARENTHESIS CLOSE_PARENTHESIS { pushContext(LAMBDA_CONTEXT); } scope[scope_block]					{ $$ = LambdaSemanticAction(NULL, $scope_block); popContext(); }
+			| OPEN_PARENTHESIS var_list[args] CLOSE_PARENTHESIS { pushContext(LAMBDA_CONTEXT); } scope[scope_block]											{ $$ = LambdaSemanticAction($args, $scope_block); popContext(); }
 			;
 
 		/** ===== Argument List (Lambda) ===== */

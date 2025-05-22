@@ -148,6 +148,8 @@ enum InstructionType {
 	INSTRUCTION_LOOP,
 	INSTRUCTION_CLASS,
 	INSTRUCTION_INTERFACE,
+	INSTRUCTION_RETURN,
+	INSTRUCTION_PASS,
 };
 
 enum LoopType {
@@ -242,6 +244,7 @@ struct Instruction {
 		Conditional * conditional;
 		Class * class;
 		Interface * interface;
+		Instruction * returnInstruction;
 	};
 
 	InstructionType type;
@@ -249,7 +252,7 @@ struct Instruction {
 
 struct Lambda {
 	VariableDeclarationList * variableDeclarationList;
-	Instruction * instruction;
+	Block * block;
 };
 
 struct Class {

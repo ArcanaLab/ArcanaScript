@@ -1,8 +1,12 @@
 #include "BisonActions.h"
 
 /* MODULE INTERNAL STATE */
-
 static Logger * _logger = NULL;
+static int _abort_parse = 0;
+
+int hasAborted(void) {
+	return _abort_parse;
+}
 
 void initializeBisonActionsModule() {
 	_logger = createLogger("BisonActions");
@@ -15,7 +19,6 @@ void shutdownBisonActionsModule() {
 }
 
 /** IMPORTED FUNCTIONS */
-
 extern unsigned int flexCurrentContext(void);
 
 /* PRIVATE FUNCTIONS */
@@ -187,6 +190,14 @@ Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType
 	return conditional;
 }
 
+void ValidateContext(ContextStackType contextType, const char * errorMessage){
+	if (!inContext(contextType)) {
+		logError(_logger, errorMessage);
+		yyerror(errorMessage);
+		_abort_parse = 1;
+	}
+}
+
 Instruction * InstructionSemanticAction(void * value, InstructionType instructionType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Instruction * instruction = calloc(1, sizeof(Instruction));
@@ -196,37 +207,53 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 		case INSTRUCTION_ASSIGNMENT:
 			instruction->assignment = value;
 			break;
+			
 		case INSTRUCTION_VARIABLE_DECLARATION:
 			instruction->variableDeclaration = value;
 			break;
+
 		case INSTRUCTION_EXPRESSION:
 			instruction->expression = value;
 			break;
+
 		case INSTRUCTION_BLOCK:
 			instruction->block = value;
 			break;
+
 		case INSTRUCTION_LOOP:
 			instruction->loop = value;
 			break;
+
 		case INSTRUCTION_CONDITIONAL:
 			instruction->conditional = value;
 			break;
+
 		case INSTRUCTION_CLASS:
 			instruction->class = value;
 			break;
+
 		case INSTRUCTION_INTERFACE:
 			instruction->interface = value;
+			break;
+
+		case INSTRUCTION_RETURN:
+			instruction->returnInstruction = value;
+			ValidateContext(LAMBDA_CONTEXT, "Return statements are not allowed outside functions.");
+			break;
+
+		case INSTRUCTION_PASS:
+			ValidateContext(LOOP_CONTEXT, "Pass statements are not allowed outside loops.");
 			break;
 	}
 
 	return instruction;
 }
 
-Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList,  Instruction * instruction) {
+Lambda * LambdaSemanticAction(VariableDeclarationList * variableDeclarationList, Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Lambda * lambda = calloc(1, sizeof(Lambda));
 	lambda->variableDeclarationList = variableDeclarationList;
-	lambda->instruction = instruction;
+	lambda->block = block;
 	return lambda;
 }
 

@@ -8,6 +8,8 @@
 #include "shared/Logger.h"
 #include "shared/String.h"
 
+#include "frontend/syntactic-analysis/utils/ContextStack.h"
+
 /**
  * The main entry-point of the entire application. If you use "strtok" to
  * parse anything inside this project instead of using Flex and Bison, I will
@@ -20,7 +22,8 @@ const int main(const int count, const char ** arguments) {
 	initializeSyntacticAnalyzerModule();
 	initializeAbstractSyntaxTreeModule();
 	// initializeGeneratorModule();
-
+	initializeContextStack();
+	
 	// Logs the arguments of the application.
 	for (int k = 0; k < count; ++k) {
 		logDebugging(logger, "Argument %d: \"%s\"", k, arguments[k]);
@@ -53,6 +56,7 @@ const int main(const int count, const char ** arguments) {
 	}
 	
 	logDebugging(logger, "Releasing modules resources...");
+	shutdownContextStack();
 	// shutdownGeneratorModule();
 	shutdownAbstractSyntaxTreeModule();
 	shutdownSyntacticAnalyzerModule();
