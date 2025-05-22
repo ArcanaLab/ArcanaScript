@@ -1,0 +1,5 @@
+class Outer {
+    class Inner {
+        a:int=1;
+    // Falta cierre de clase Inner y Outer
+} 
