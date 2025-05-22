@@ -1,0 +1,7 @@
+interface MyInterface is Something {
+    @exposed
+    foo: int;
+
+    @exposed
+    bar: string;
+} 

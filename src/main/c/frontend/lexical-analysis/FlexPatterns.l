@@ -69,6 +69,7 @@ single_line_comment   "#"[^!].*
 "@immutable"                        { return DecoratorLexemeAction(createLexicalAnalyzerContext(), C_IMMUTABLE); }
 
 "class"                             { return ClassLexemeAction(createLexicalAnalyzerContext()); }
+"interface"                         { return InterfaceLexemeAction(createLexicalAnalyzerContext()); }
 
 "int"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), V_INT); }
 "char"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), V_CHAR); } 

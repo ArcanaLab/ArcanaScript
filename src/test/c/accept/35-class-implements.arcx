@@ -1,0 +1,3 @@
+class Implementadora using MiInterfaz {
+    foo: int = 1;
+} 

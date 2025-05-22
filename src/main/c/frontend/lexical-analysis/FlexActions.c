@@ -246,6 +246,13 @@ Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	return CLASS;
 }
 
+Token InterfaceLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = INTERFACE;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return INTERFACE;
+}
+
 Token ImportLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->token = IMPORT;
