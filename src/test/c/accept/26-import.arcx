@@ -1,0 +1,2 @@
+import "this/is/a/test.arcx"
+class ClassName { }

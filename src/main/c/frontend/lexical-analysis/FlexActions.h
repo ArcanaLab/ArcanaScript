@@ -39,6 +39,9 @@ Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token SemicolonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token DecoratorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext,Token token);
 
+Token ImportLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ImportFileLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 Token NameLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, VariableType token); 

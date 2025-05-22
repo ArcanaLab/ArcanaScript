@@ -198,7 +198,23 @@ AssignmentOperation * AssignmentOperatorSemanticAction(char * name, Expression *
 Instruction * InstructionSemanticAction(void * value, InstructionType instructionType);
 #pragma endregion
 // ========================================================
+// ================== [ Imports ] ==========================
+#pragma region Imports
+/**
+ * Creates an import statement with the specified module name.
+ * @param path The path to the module to import with the name.
+ * @return A pointer to the created import statement.
+ */
+Import * ImportSemanticAction(char * path);
 
+/**
+ * Creates an import list with the specified list and import statement.
+ * @param importList The existing list of imports.
+ * @param importStatement The import statement to add.
+ * @return A pointer to the created import list.
+ */
+ImportList * ImportListSemanticAction(ImportList * importList, Import * importStatement);
+#pragma endregion
 // ================== [ Blocks ] ==========================
 #pragma region Blocks
 /**
@@ -288,7 +304,7 @@ ExpressionList * ExpressionListSemanticAction(ExpressionList * expressionList, E
  * @param block The program block.
  * @return A pointer to the created program.
  */
-Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block);
+Program * BlockProgramSemanticAction(CompilerState * compilerState,ImportList * importList, Block * block);
 
 /**
  * Creates a program from a loop.

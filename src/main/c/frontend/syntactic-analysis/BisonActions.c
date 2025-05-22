@@ -265,9 +265,10 @@ Expression * LambdaExpressionSemanticAction(Lambda * lambda) {
 	return expression;
 }
 
-Program * BlockProgramSemanticAction(CompilerState * compilerState, Block * block) {
+Program * BlockProgramSemanticAction(CompilerState * compilerState,ImportList * importList, Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
+	program->importList = importList;
 	program->block = block;
 	compilerState->abstractSyntaxtTree = program;
 	if (0 < flexCurrentContext()) {
@@ -356,6 +357,16 @@ Interface * InterfaceSemanticAction(Object * object, ImplementationList * extend
 	return interface;
 }
 
+// ===== Imports =====
+Import * ImportSemanticAction(char * path)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Import * import_statement = calloc(1,sizeof(Import));
+	import_statement->PathToFile = path;
+	return import_statement;
+}
+
+
 /**
  * ============== LIST ==============
  */
@@ -434,4 +445,9 @@ ImplementationList * ImplementationListSemanticAction(ImplementationList * imple
 Block * BlockSemanticAction(Block * block, Instruction * instruction){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	return ListSemanticAction(block, instruction);
+}
+ImportList * ImportListSemanticAction(ImportList * importList, Import * importStatement)
+{
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	return ListSemanticAction(importList,importStatement);
 }

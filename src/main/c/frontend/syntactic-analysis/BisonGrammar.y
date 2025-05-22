@@ -21,16 +21,19 @@
 	Token token;
 	
 	/** Non-terminals. */
+	ImportList * importList;
+	Import * importStatement;
+
 	Constant * constant;
 	Conditional * conditional;
 
 	Expression * expression;
-	Expression * comparator_expression;
+	Expression * comparatorExpression;
 
 	Factor * factor;
 	Program * program;
 	Loop * loop;
-
+	
 	PrivacyModifier * privacy;
 	PrivacyList * privacyList;	
 	VariableDeclaration * variableDeclaration;
@@ -88,6 +91,8 @@
 %destructor { releaseImplementationList($$); } <implementationList>
 %destructor { releasePrivacyList($$); } <privacyList>
 %destructor { releasePrivacyModifier($$); } <privacy>
+%destructor { releaseImportList($$); } <importList>
+%destructor { releaseImport($$); } <importStatement>
 
 /** ============== TERMINALS. ============== */
 	// ------------------ [ Non-Tokens ] ------------------
@@ -155,7 +160,7 @@
 		%token <token> SUB_ASSIGN
 		%token <token> MUL_ASSIGN
 
-	// ------------------ [ Control Structures ] ----------
+	// ------------------ [ Control Structures ] ------------------
 		/** ===== Loops ===== */
 		%token <token> WHILE
 		%token <token> FOR
@@ -168,6 +173,10 @@
 		%token <token> PASS
 
 	// ------------------ [ Classes ] ---------------------
+		/** ===== Imports ===== */
+		%token <token> IMPORT
+		%token <c_string> IMPORT_PATH
+
 		/** ===== Class ===== */
 		%token <token> CLASS
 
@@ -209,6 +218,8 @@
 		%type <loop> loop
 
 	// ------------------ [ Program Structure ] ------------------
+		%type <importList> import_list
+		%type <importStatement> import_statment
 		%type <program> program
 		%type <block> block
 		%type <block> scope
@@ -242,8 +253,8 @@
 			%type <genericList> generic_list
 		/** ===== Interfaces ===== */
 			%type <inter> interface
-		/** ===== IMplementactions ===== */
-	
+
+		/** ===== Implementactions ===== */
 			%type <implementationList> implementation
 			%type <implementationList> implementation_list
 		/** ===== Inheritance ===== */
@@ -265,8 +276,9 @@
 	// IMPORTANT: To use λ in the following grammar, use the %empty symbol.
 
 	// ------------------ [ Program Structure ] ------------------
-		program: 
-			block																										{ $$ = BlockProgramSemanticAction(currentCompilerState(), $1); }
+		program:
+			import_list block																							{ $$ = BlockProgramSemanticAction(currentCompilerState(),$1,$2); }
+			| block																										{ $$ = BlockProgramSemanticAction(currentCompilerState(),NULL ,$1); }
 			;
 
 		block:
@@ -274,6 +286,13 @@
 			| block instruction																							{ $$ = BlockSemanticAction($1, $2); }
 			;
 
+		import_list: import_statment																					{ $$ = ImportListSemanticAction(NULL,$1); }
+			| import_list import_statment																				{ $$ = ImportListSemanticAction($1, $2); }	
+			;
+
+		import_statment:
+			IMPORT C_STRING 																						  	{ $$ = ImportSemanticAction($2); }
+			;
 		instruction:
 			assignment_operation SEMICOLON																				{ $$ = InstructionSemanticAction($1, INSTRUCTION_ASSIGNMENT); }
 			| variable_declaration SEMICOLON																			{ $$ = InstructionSemanticAction($1, INSTRUCTION_VARIABLE_DECLARATION); }
