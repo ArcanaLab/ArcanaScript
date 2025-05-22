@@ -4,8 +4,12 @@ funA();
 funB = (a: int, b: int) {};
 funB(1, 2);
 
-
-funC = (a: int, b: int) 1+2;;
+funC: Function<Integer> = (a: int, b: int) { 
+    while(true) {
+        return;
+    }
+    pass;
+};
 funC(funA(), funB(1, 2));
 
 #!

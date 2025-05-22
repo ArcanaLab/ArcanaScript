@@ -63,4 +63,11 @@ Token ExtensionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Tok
  */
 Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
+/**
+ * Return.
+ */
+Token ReturnLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token PassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 #endif
