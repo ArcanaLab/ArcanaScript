@@ -21,7 +21,7 @@ const int main(const int count, const char ** arguments) {
 	initializeBisonActionsModule();
 	initializeSyntacticAnalyzerModule();
 	initializeAbstractSyntaxTreeModule();
-	// initializeGeneratorModule();
+	initializeGeneratorModule();
 	initializeContextStack();
 	
 	// Logs the arguments of the application.
@@ -41,8 +41,9 @@ const int main(const int count, const char ** arguments) {
 		// ----------------------------------------------------------------------------------------
 		// Beginning of the Backend... ------------------------------------------------------------
 		
-		// logDebugging(logger, "Computing expression value...");
+		logDebugging(logger, "Computing expression value...");
 		Program * program = compilerState.abstractSyntaxtTree;
+		generate(program);
  		// ...end of the Backend. -----------------------------------------------------------------
 		// ----------------------------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ const int main(const int count, const char ** arguments) {
 	
 	logDebugging(logger, "Releasing modules resources...");
 	shutdownContextStack();
-	// shutdownGeneratorModule();
+	shutdownGeneratorModule();
 	shutdownAbstractSyntaxTreeModule();
 	shutdownSyntacticAnalyzerModule();
 	shutdownBisonActionsModule();
