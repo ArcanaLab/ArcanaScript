@@ -76,9 +76,10 @@ static void _generateExpression(const unsigned int indentationLevel, Expression 
 		case DIVISION:
 		case MULTIPLICATION:
 		case SUBTRACTION:
-			_generateExpression(1 + indentationLevel, expression->leftExpression);
-			_output(1 + indentationLevel, "%c");
-			_generateExpression(1 + indentationLevel, expression->rightExpression);
+                        _generateExpression(1 + indentationLevel, expression->leftExpression);
+                        char op = _expressionTypeToCharacter(expression->type);
+                        _output(1 + indentationLevel, "%c", op);
+                        _generateExpression(1 + indentationLevel, expression->rightExpression);
 			break;
 		case FACTOR:
 			_generateFactor(1 + indentationLevel, expression->factor);

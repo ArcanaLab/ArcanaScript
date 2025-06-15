@@ -105,7 +105,7 @@ char* generateExpression(const unsigned int indentationLevel, Expression* expres
             char* operator = _expressionTypeToOperator(expression->type);
             
             if (leftExpr && rightExpr && operator) {
-                result = concatenate(5, indent, "(", leftExpr, " ", operator, " ", rightExpr, ")");
+                result = concatenate(8, indent, "(", leftExpr, " ", operator, " ", rightExpr, ")");
             }
             
             free(leftExpr);
