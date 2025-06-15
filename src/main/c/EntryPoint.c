@@ -43,8 +43,20 @@ const int main(const int count, const char ** arguments) {
 		
 		logDebugging(logger, "Computing expression value...");
 		Program * program = compilerState.abstractSyntaxtTree;
+		
+		// Generate output to stdout
 		generate(&compilerState);
- 		// ...end of the Backend. -----------------------------------------------------------------
+		
+		// If a test name is provided as an argument, write the output to a file
+		if (count > 1) {
+			const char* testName = arguments[1];
+			if (!writeGeneratedOutputToFile(&compilerState, testName)) {
+				logError(logger, "Failed to write test output to file for test: %s", testName);
+				compilationStatus = FAILED;
+			}
+		}
+		
+		// ...end of the Backend. -----------------------------------------------------------------
 		// ----------------------------------------------------------------------------------------
 
 		logDebugging(logger, "The syntactic is ok");

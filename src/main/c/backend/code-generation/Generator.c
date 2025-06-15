@@ -1,10 +1,13 @@
 #include "Generator.h"
+#include <stdbool.h>
+#include <sys/stat.h>
 
 /* MODULE INTERNAL STATE */
 
 const char _indentationCharacter = ' ';
 const char _indentationSize = 4;
 static Logger * _logger = NULL;
+static FILE* _outputFile = NULL;
 
 void initializeGeneratorModule() {
 	_logger = createLogger("Generator");
@@ -13,6 +16,10 @@ void initializeGeneratorModule() {
 void shutdownGeneratorModule() {
 	if (_logger != NULL) {
 		destroyLogger(_logger);
+	}
+	if (_outputFile != NULL) {
+		fclose(_outputFile);
+		_outputFile = NULL;
 	}
 }
 
@@ -26,11 +33,10 @@ static void _generateFactor(const unsigned int indentationLevel, Factor * factor
 static void _generateInstruction(const unsigned int identationLevel, Instruction * instruction);
 static void _generateBlock(const unsigned int identationLevel, Block * block);
 static void _generateProgram(Program * program);
-
-
 static void _generatePrologue(void);
 static char * _indentation(const unsigned int indentationLevel);
 static void _output(const unsigned int indentationLevel, const char * const format, ...);
+static bool _ensureTestResultsDirectory(void);
 
 /**
  * Converts and expression type to the proper character of the operation
@@ -131,8 +137,15 @@ static void _output(const unsigned int indentationLevel, const char * const form
 	va_start(arguments, format);
 	char * indentation = _indentation(indentationLevel);
 	char * effectiveFormat = concatenate(2, indentation, format);
-	vfprintf(stdout, effectiveFormat, arguments);
-	fflush(stdout);
+	
+	if (_outputFile != NULL) {
+		vfprintf(_outputFile, effectiveFormat, arguments);
+		fflush(_outputFile);
+	} else {
+		vfprintf(stdout, effectiveFormat, arguments);
+		fflush(stdout);
+	}
+	
 	free(effectiveFormat);
 	free(indentation);
 	va_end(arguments);
@@ -209,11 +222,54 @@ static void _generateBlock (const unsigned int identationLevel, Block * block) {
 	}
 }
 
+/**
+ * Ensures the test_results directory exists.
+ * @return true if the directory exists or was created successfully, false otherwise
+ */
+static bool _ensureTestResultsDirectory(void) {
+	struct stat st = {0};
+	if (stat("test_results", &st) == -1) {
+		#ifdef _WIN32
+			if (mkdir("test_results") == -1) {
+				logError(_logger, "Failed to create test_results directory");
+				return false;
+			}
+		#else
+			if (mkdir("test_results", 0700) == -1) {
+				logError(_logger, "Failed to create test_results directory");
+				return false;
+			}
+		#endif
+	}
+	return true;
+}
+
 /** PUBLIC FUNCTIONS */
+
+bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testName) {
+	if (!_ensureTestResultsDirectory()) {
+		return false;
+	}
+
+	char* filename = concatenate(3, "test_results/", testName, ".out");
+	_outputFile = fopen(filename, "w");
+	free(filename);
+
+	if (_outputFile == NULL) {
+		logError(_logger, "Failed to open output file for test: %s", testName);
+		return false;
+	}
+
+	logDebugging(_logger, "Writing generated output to file for test: %s", testName);
+	_generateProgram(compilerState->abstractSyntaxtTree);
+	
+	fclose(_outputFile);
+	_outputFile = NULL;
+	return true;
+}
+
 void generate(CompilerState * compilerState) {
 	logDebugging(_logger, "Generating final output...");
-	// _generatePrologue();
 	_generateProgram(compilerState->abstractSyntaxtTree);
-	// _generateEpilogue(compilerState->value);
 	logDebugging(_logger, "Generation is done.");
 }
