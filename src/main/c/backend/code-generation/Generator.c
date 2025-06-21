@@ -1,5 +1,6 @@
 #include "Generator.h"
 #include "ExpressionGenerator.h"
+#include "StructureGenerator.h"
 #include <stdbool.h>
 #include <sys/stat.h>
 
@@ -26,11 +27,6 @@ void shutdownGeneratorModule() {
 
 /** PRIVATE FUNCTIONS */
 
-static void _generateEpilogue(const int value);
-static void _generateInstruction(const unsigned int identationLevel, Instruction * instruction);
-static void _generateBlock(const unsigned int identationLevel, Block * block);
-static void _generateProgram(Program * program);
-static void _generatePrologue(void);
 static char * _indentation(const unsigned int indentationLevel);
 static void _output(const unsigned int indentationLevel, const char * const format, ...);
 static bool _ensureTestResultsDirectory(void);
@@ -47,13 +43,6 @@ static bool _ensureTestResultsDirectory(void);
 // 		"\\end{document}\n\n"
 // 	);
 // }
-
-/**
- * Generates the output of the program.
- */
-static void _generateProgram(Program * program) {
-	_generateBlock(3, program->block);
-}
 
 /**
  * Creates the prologue of the generated output, a Latex document that renders
@@ -129,27 +118,6 @@ void generatorOutput(const unsigned int indentationLevel, const char * const for
 	va_end(arguments);
 }
 
-static void _generateInstruction(const unsigned int identationLevel, Instruction * instruction)
-{
-    switch (instruction->type){
-		case INSTRUCTION_EXPRESSION:
-			generateExpression(identationLevel + 1, instruction->expression);
-			break;
-		default:
-			logError(_logger, "Instruction type %d does not exists", instruction->type);
-			exit(140);
-			break;
-	}
-}
-
-static void _generateBlock (const unsigned int identationLevel, Block * block) {
-	InstructionNode * currentInstruction = block->first;
-	while(currentInstruction != NULL) {
-		_generateInstruction(identationLevel + 1, (Instruction *) currentInstruction->data);
-		currentInstruction = currentInstruction->next;
-	}
-}
-
 /**
  * Ensures the test_results directory exists.
  * @return true if the directory exists or was created successfully, false otherwise
@@ -189,7 +157,7 @@ bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testNa
 	}
 
 	logDebugging(_logger, "Writing generated output to file for test: %s", testName);
-	_generateProgram(compilerState->abstractSyntaxtTree);
+	generateProgram(3, (Program*)compilerState->abstractSyntaxtTree);
 	
 	fclose(_outputFile);
 	_outputFile = NULL;
@@ -198,6 +166,6 @@ bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testNa
 
 void generate(CompilerState * compilerState) {
 	logDebugging(_logger, "Generating final output...");
-	_generateProgram(compilerState->abstractSyntaxtTree);
+	generateProgram(3, (Program*)compilerState->abstractSyntaxtTree); //ESTE CASTEO ES DUDOSISIMO AYUDAME LOCO
 	logDebugging(_logger, "Generation is done.");
 }

@@ -11,7 +11,7 @@
 /obj/
 /script/
 /logs/
-
+/test_results/
 # Files.
 .DS_Store
 .env*
