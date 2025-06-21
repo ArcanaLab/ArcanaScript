@@ -123,7 +123,7 @@ bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testNa
 	}
 
 	logDebugging(_logger, "Writing generated output to file for test: %s", testName);
-	generateProgram(3, (Program*)compilerState->abstractSyntaxtTree);
+	generateProgram(0, (Program*)compilerState->abstractSyntaxtTree);
 	
 	fclose(_outputFile);
 	_outputFile = NULL;
@@ -132,6 +132,6 @@ bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testNa
 
 void generate(CompilerState * compilerState) {
 	logDebugging(_logger, "Generating final output...");
-	generateProgram(3, (Program*)compilerState->abstractSyntaxtTree); //ESTE CASTEO ES DUDOSISIMO AYUDAME LOCO
+	generateProgram(0, (Program*)compilerState->abstractSyntaxtTree); //ESTE CASTEO ES DUDOSISIMO AYUDAME LOCO
 	logDebugging(_logger, "Generation is done.");
 }

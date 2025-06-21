@@ -156,7 +156,7 @@ Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block,
  * @param ruleNumber The rule number that was matched (for debugging).
  * @return A pointer to the VariableDeclaration object representing the declaration.
  */
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object, PrivacyList * privacyModifierList, int ruleNumber);
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object, PrivacyList * privacyModifierList);
 
 /**
  * Creates a variable declaration list with the specified list and declaration.

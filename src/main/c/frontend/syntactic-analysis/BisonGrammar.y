@@ -366,15 +366,15 @@
 	// ------------------ [ Variables ] --------------------------
 		/** ===== Variable Declaration ===== */
 		variable_declaration:
-			NAME[name] COLON variable_type[type] { $$ = VariableDeclarationSemanticAction($name, $type, NULL, NULL, NULL, 1); }
-			| NAME[name] COLON variable_type[type] ASSIGN expression[exp] { $$ = VariableDeclarationSemanticAction($name, $type, $exp, NULL, NULL, 2); }
-			| privacy_list[priv] NAME[name] COLON variable_type[type] { $$ = VariableDeclarationSemanticAction($name, $type, NULL, NULL, $priv, 3); }
-			| privacy_list[priv] NAME[name] COLON variable_type[type] ASSIGN expression[exp] { $$ = VariableDeclarationSemanticAction($name, $type, $exp, NULL, $priv, 4); }
+			NAME[name] COLON variable_type[type] 																		{ $$ = VariableDeclarationSemanticAction($name, $type, NULL, NULL, NULL); }
+			| NAME[name] COLON variable_type[type] ASSIGN expression[exp] 												{ $$ = VariableDeclarationSemanticAction($name, $type, $exp, NULL, NULL); }
+			| privacy_list[priv] NAME[name] COLON variable_type[type] 													{ $$ = VariableDeclarationSemanticAction($name, $type, NULL, NULL, $priv); }
+			| privacy_list[priv] NAME[name] COLON variable_type[type] ASSIGN expression[exp] 							{ $$ = VariableDeclarationSemanticAction($name, $type, $exp, NULL, $priv); }
 			
-			| NAME[name] COLON object[obj] { $$ = VariableDeclarationSemanticAction($name, OBJECT, NULL, $obj, NULL, 5); }
-			| NAME[name] COLON object[obj] ASSIGN expression[exp] { $$ = VariableDeclarationSemanticAction($name, OBJECT, $exp, $obj, NULL, 6); }
-			| privacy_list[priv] NAME[name] COLON object[obj] { $$ = VariableDeclarationSemanticAction($name, OBJECT, NULL, $obj, $priv, 7); }
-			| privacy_list[priv] NAME[name] COLON object[obj] ASSIGN expression[exp] { $$ = VariableDeclarationSemanticAction($name, OBJECT, $exp, $obj, $priv, 8); }
+			| NAME[name] COLON object[obj] 																				{ $$ = VariableDeclarationSemanticAction($name, OBJECT, NULL, $obj, NULL); }
+			| NAME[name] COLON object[obj] ASSIGN expression[exp] 														{ $$ = VariableDeclarationSemanticAction($name, OBJECT, $exp, $obj, NULL); }
+			| privacy_list[priv] NAME[name] COLON object[obj] 															{ $$ = VariableDeclarationSemanticAction($name, OBJECT, NULL, $obj, $priv); }
+			| privacy_list[priv] NAME[name] COLON object[obj] ASSIGN expression[exp] 									{ $$ = VariableDeclarationSemanticAction($name, OBJECT, $exp, $obj, $priv); }
 			;
 		/** ===== Variable Privacy ===== */
 		privacy_list: privacy_modifier[mod]																				{ $$ = PrivacyListSemanticAction(NULL,$mod); }
