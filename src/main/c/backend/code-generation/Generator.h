@@ -8,12 +8,19 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "ExpressionGenerator.h"
 
 /** Initialize module's internal state. */
 void initializeGeneratorModule();
 
 /** Shutdown module's internal state. */
 void shutdownGeneratorModule();
+
+/**
+ * Outputs a formatted string using the generator's output system.
+ * This function will write to either stdout or a file depending on the current configuration.
+ */
+void generatorOutput(const unsigned int indentationLevel, const char * const format, ...);
 
 /**
  * Generates the final output using the current compiler state.
