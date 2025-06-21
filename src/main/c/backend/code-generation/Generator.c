@@ -10,6 +10,7 @@ const char _indentationCharacter = ' ';
 const char _indentationSize = 4;
 static Logger * _logger = NULL;
 static FILE* _outputFile = NULL;
+static bool _atLineStart = true;
 
 void initializeGeneratorModule() {
 	_logger = createLogger("Generator");
@@ -68,8 +69,15 @@ static void _output(const unsigned int indentationLevel, const char * const form
 void generatorOutput(const unsigned int indentationLevel, const char * const format, ...) {
 	va_list arguments;
 	va_start(arguments, format);
-	char * indentation = _indentation(indentationLevel);
-	char * effectiveFormat = concatenate(2, indentation, format);
+	
+	char * effectiveFormat;
+	if (_atLineStart) {
+		char * indentation = _indentation(indentationLevel);
+		effectiveFormat = concatenate(2, indentation, format);
+		free(indentation);
+	} else {
+		effectiveFormat = concatenate(1, format);
+	}
 	
 	if (_outputFile != NULL) {
 		vfprintf(_outputFile, effectiveFormat, arguments);
@@ -79,8 +87,15 @@ void generatorOutput(const unsigned int indentationLevel, const char * const for
 		fflush(stdout);
 	}
 	
+	// Check if the format ends with a newline to track line starts
+	size_t formatLen = strlen(format);
+	if (formatLen > 0 && format[formatLen - 1] == '\n') {
+		_atLineStart = true;
+	} else {
+		_atLineStart = false;
+	}
+	
 	free(effectiveFormat);
-	free(indentation);
 	va_end(arguments);
 }
 
@@ -122,6 +137,7 @@ bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testNa
 		return false;
 	}
 
+	_atLineStart = true; // Reset line start flag for new file
 	logDebugging(_logger, "Writing generated output to file for test: %s", testName);
 	generateProgram(0, (Program*)compilerState->abstractSyntaxtTree);
 	
@@ -132,6 +148,7 @@ bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testNa
 
 void generate(CompilerState * compilerState) {
 	logDebugging(_logger, "Generating final output...");
+	_atLineStart = true; // Reset line start flag
 	generateProgram(0, (Program*)compilerState->abstractSyntaxtTree); //ESTE CASTEO ES DUDOSISIMO AYUDAME LOCO
 	logDebugging(_logger, "Generation is done.");
 }

@@ -147,16 +147,7 @@ void generateAssignmentOperation(const unsigned int indentationLevel, Assignment
         generatorOutput(indentationLevel, "%s ", operator);
         
         if (assignmentOperation->expression != NULL) {
-            if (assignmentOperation->expression->type == FACTOR) {
-                Factor* factor = assignmentOperation->expression->factor;
-                if (factor->type == CONSTANT) {
-                    generateConstant(0, factor->constant);
-                } else {
-                    generateExpression(0, assignmentOperation->expression);
-                }
-            } else {
-                generateExpression(0, assignmentOperation->expression);
-            }
+            generateExpression(indentationLevel, assignmentOperation->expression);
         }
         
         generatorOutput(indentationLevel, ";\n");
