@@ -1,5 +1,6 @@
 #include "StructureGenerator.h"
 #include "ExpressionGenerator.h"
+#include "VariableGenerator.h"
 #include "Generator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
@@ -9,7 +10,13 @@
 void generateInstruction(const unsigned int indentationLevel, Instruction* instruction) {
     switch (instruction->type) {
         case INSTRUCTION_EXPRESSION:
-            generateExpression(indentationLevel + 1, instruction->expression);
+            generateExpression(indentationLevel, instruction->expression);
+            break;
+        case INSTRUCTION_VARIABLE_DECLARATION:
+            generateVariableDeclaration(indentationLevel, instruction->variableDeclaration);
+            break;
+        case INSTRUCTION_ASSIGNMENT:
+            generateAssignmentOperation(indentationLevel, instruction->assignment);
             break;
 		default:
 			exit(140);
