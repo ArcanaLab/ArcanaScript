@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* PRIVATE FUNCTIONS */
 static char* _assignmentOperatorToString(const AssignmentOperatorType type);
 static char* _variableTypeToString(const VariableType type);
 static char* _privacyTypeToString(const PrivacyType type);
@@ -27,14 +26,14 @@ static char* _variableTypeToString(const VariableType type) {
         case V_INT: return "int";
         case V_CHAR: return "char";
         case V_BOOLEAN: return "boolean";
-        case V_STRING: return "string";
+        case V_STRING: return "String";
         case V_DOUBLE: return "double";
         case V_FLOAT: return "float";
         case V_LONG: return "long";
         case V_SHORT: return "short";
-        case OBJECT: return "object";
+        case OBJECT: return "Object";
         default:
-            return "unknown";
+            return "Object";
     }
 }
 
@@ -43,7 +42,7 @@ static char* _privacyTypeToString(const PrivacyType type) {
         case PRIVATE_A: return "private";
         case PUBLIC_A: return "public";
         case PROTECTED_A: return "protected";
-        case CONST_A: return "const";
+        case CONST_A: return "final";
         case STATIC_A: return "static";
         default:
             return "";
@@ -86,22 +85,18 @@ void generateVariableDeclaration(const unsigned int indentationLevel, VariableDe
         return;
     }
     
-    // Generate privacy modifiers if any
     if (variableDeclaration->privacyModifierList != NULL) {
         generatePrivacyModifiers(indentationLevel, variableDeclaration->privacyModifierList);
     }
     
-    // Generate variable name
-    generatorOutput(indentationLevel, "%s: ", variableDeclaration->name);
-    
-    // Generate variable type
     if (variableDeclaration->type == OBJECT && variableDeclaration->object != NULL) {
         generateObject(indentationLevel, variableDeclaration->object);
     } else {
         generateVariableType(indentationLevel, variableDeclaration->type);
     }
     
-    // Generate assignment if present
+    generatorOutput(indentationLevel, " %s", variableDeclaration->name);
+    
     if (variableDeclaration->expression != NULL) {
         generatorOutput(indentationLevel, " = ");
         generateExpression(indentationLevel, variableDeclaration->expression);
@@ -125,15 +120,13 @@ void generateVariableDeclarationList(const unsigned int indentationLevel, Variab
             generatorOutput(indentationLevel, ", ");
         }
         
-        // Generate variable name
-        generatorOutput(indentationLevel, "%s: ", variableDeclaration->name);
-        
-        // Generate variable type
         if (variableDeclaration->type == OBJECT && variableDeclaration->object != NULL) {
             generateObject(indentationLevel, variableDeclaration->object);
         } else {
             generateVariableType(indentationLevel, variableDeclaration->type);
         }
+        
+        generatorOutput(indentationLevel, " %s", variableDeclaration->name);
         
         first = false;
         currentVar = currentVar->next;
