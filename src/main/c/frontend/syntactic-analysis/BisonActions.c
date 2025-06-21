@@ -106,8 +106,20 @@ Factor * ExpressionFactorSemanticAction(Expression * expression) {
 	return factor;
 }
 
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object, PrivacyList * privacyModifierList) {
+VariableType VariableTypeSemanticAction(VariableType varType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
+	printf("DEBUG: VariableTypeSemanticAction - varType = %d\n", varType);
+	
+	// The varType parameter should already be the correct VariableType enum value
+	// set by TypeLexemeAction, so we just return it as is
+	return varType;
+}
+
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object, PrivacyList * privacyModifierList, int ruleNumber) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	printf("DEBUG: VariableDeclarationSemanticAction - RULE %d matched - name = %s, type = %d, expression = %p, object = %p, privacyList = %p\n", 
+	       ruleNumber, name, type, expression, object, privacyModifierList);
+	printf("DEBUG: VariableDeclarationSemanticAction - type value breakdown: %d (0x%x)\n", type, type);
 	
 	VariableDeclaration * variableDeclaration = calloc(1, sizeof(VariableDeclaration));
 	variableDeclaration->name = name;
@@ -115,6 +127,8 @@ VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableTyp
 	variableDeclaration->expression = expression;
 	variableDeclaration->privacyModifierList = privacyModifierList;
 	variableDeclaration->object = object;
+	
+	printf("DEBUG: VariableDeclarationSemanticAction - after setting: variableDeclaration->type = %d\n", variableDeclaration->type);
 	return variableDeclaration;
 }
 

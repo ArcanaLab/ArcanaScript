@@ -157,8 +157,15 @@ Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
 
 Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, VariableType varType) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->varType = varType;
+	printf("DEBUG: TypeLexemeAction - varType = %d\n", varType);
 	lexicalAnalyzerContext->semanticValue->token = TYPE;
+	lexicalAnalyzerContext->semanticValue->varType = varType;
+	printf("DEBUG: TypeLexemeAction - after setting varType = %d\n", lexicalAnalyzerContext->semanticValue->varType);
+	printf("DEBUG: TypeLexemeAction - semanticValue->token = %d\n", lexicalAnalyzerContext->semanticValue->token);
+	printf("DEBUG: TypeLexemeAction - semanticValue->c_integer = %d\n", lexicalAnalyzerContext->semanticValue->c_integer);
+	printf("DEBUG: TypeLexemeAction - semanticValue->name = %p\n", lexicalAnalyzerContext->semanticValue->name);
+	printf("DEBUG: TypeLexemeAction - returning token TYPE = %d (should be 259)\n", TYPE);
+	printf("DEBUG: TypeLexemeAction - NAME token value = %d\n", NAME);
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return TYPE;
 }

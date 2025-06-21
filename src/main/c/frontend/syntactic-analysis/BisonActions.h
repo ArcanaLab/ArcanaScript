@@ -153,9 +153,10 @@ Loop * LoopSemanticAction(Expression * expression, LoopType type, Block * block,
  * @param expression The initial value or expression assigned to the variable, or nullptr if not initialized.
  * @param object The object context in which the variable is declared, or nullptr if not applicable.
  * @param privacyModifierList The list of privacy modifiers applied to the variable, or nullptr if none.
+ * @param ruleNumber The rule number that was matched (for debugging).
  * @return A pointer to the VariableDeclaration object representing the declaration.
  */
-VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object, PrivacyList * privacyModifierList);
+VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object, PrivacyList * privacyModifierList, int ruleNumber);
 
 /**
  * Creates a variable declaration list with the specified list and declaration.
@@ -390,6 +391,17 @@ List * CreateListSemanticAction(void * data);
  * @return A pointer to the created list.
  */
 List * ListSemanticAction(List * list, void * data);
+#pragma endregion
+// ========================================================
+
+// ================== [ Variables ] =====================
+#pragma region Variables
+/**
+ * Creates a variable type from a VariableType enum value.
+ * @param varType The VariableType enum value.
+ * @return The VariableType value.
+ */
+VariableType VariableTypeSemanticAction(VariableType varType);
 #pragma endregion
 // ========================================================
 
