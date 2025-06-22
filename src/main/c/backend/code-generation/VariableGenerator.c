@@ -132,27 +132,3 @@ void generateVariableDeclarationList(const unsigned int indentationLevel, Variab
         currentVar = currentVar->next;
     }
 }
-
-void generateAssignmentOperation(const unsigned int indentationLevel, AssignmentOperation* assignmentOperation) {
-    if (assignmentOperation == NULL) {
-        return;
-    }
-    printf("Generating assignment operation for %s\n", assignmentOperation->name);
-    printf("Assignment operator type: %d\n", assignmentOperation->variableDeclaration);
-    if (assignmentOperation->variableDeclaration != NULL) {
-        printf("Generating variable declaration for %d\n", assignmentOperation->variableDeclaration->name);
-        generateVariableDeclaration(indentationLevel, assignmentOperation->variableDeclaration);
-    } else {
-        generatorOutput(indentationLevel, "%s ", assignmentOperation->name);
-        
-        char* operator = _assignmentOperatorToString(assignmentOperation->assignmentOperator);
-        printf("Using operator: %s\n", operator);
-        generatorOutput(indentationLevel, "%s ", operator);
-        
-        if (assignmentOperation->expression != NULL) {
-            generateExpression(indentationLevel, assignmentOperation->expression);
-        }
-        
-        generatorOutput(indentationLevel, ";\n");
-    }
-}

@@ -17,12 +17,6 @@ void generateVariableDeclaration(const unsigned int indentationLevel, VariableDe
  */
 void generateVariableDeclarationList(const unsigned int indentationLevel, VariableDeclarationList* variableDeclarationList);
 
-/**
- * Generates code for an assignment operation using direct output.
- * @param indentationLevel The current indentation level
- * @param assignmentOperation The assignment operation to generate code for
- */
-void generateAssignmentOperation(const unsigned int indentationLevel, AssignmentOperation* assignmentOperation);
 
 /**
  * Generates code for privacy modifiers using direct output.

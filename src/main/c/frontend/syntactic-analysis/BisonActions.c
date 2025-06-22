@@ -115,6 +115,59 @@ VariableType VariableTypeSemanticAction(VariableType varType) {
 
 VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object, PrivacyList * privacyModifierList) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
+	
+	// Debug prints for variable declaration verification
+	printf("=== BISON VARIABLE DECLARATION DEBUG ===\n");
+	printf("Function: %s\n", __FUNCTION__);
+	printf("Variable name: '%s'\n", name ? name : "NULL");
+	printf("Variable type: %d\n", type);
+	printf("Type name: ");
+	switch(type) {
+		case V_INT:
+			printf("V_INT\n");
+			break;
+		case V_CHAR:
+			printf("V_CHAR\n");
+			break;
+		case V_FLOAT:
+			printf("V_FLOAT\n");
+			break;
+		case V_DOUBLE:
+			printf("V_DOUBLE\n");
+			break;
+		case V_STRING:
+			printf("V_STRING\n");
+			break;
+		case V_BOOLEAN:
+			printf("V_BOOLEAN\n");
+			break;
+		case V_LONG:
+			printf("V_LONG\n");
+			break;
+		case V_SHORT:
+			printf("V_SHORT\n");
+			break;
+		case OBJECT:
+			printf("OBJECT\n");
+			break;
+		default:
+			printf("UNKNOWN\n");
+			break;
+	}
+	printf("Expression: %p\n", (void*)expression);
+	if (expression != NULL) {
+		printf("  - Expression type: %d\n", expression->type);
+	}
+	printf("Object: %p\n", (void*)object);
+	if (object != NULL) {
+		printf("  - Object name: '%s'\n", object->name ? object->name : "NULL");
+	}
+	printf("Privacy modifier list: %p\n", (void*)privacyModifierList);
+	if (privacyModifierList != NULL) {
+		printf("  - Privacy list size: %d\n", privacyModifierList->size);
+	}
+	printf("========================================\n");
+	
 	VariableDeclaration * variableDeclaration = calloc(1, sizeof(VariableDeclaration));
 	variableDeclaration->name = name;
 	variableDeclaration->type = type;
@@ -160,6 +213,23 @@ AssignmentOperation * AssignmentDeclarationSemanticAction(
 ) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
+	// Debug prints for assignment declaration verification
+	printf("=== BISON ASSIGNMENT DECLARATION DEBUG ===\n");
+	printf("Function: %s\n", __FUNCTION__);
+	printf("Variable Declaration: %p\n", (void*)variableDeclaration);
+	if (variableDeclaration != NULL) {
+		printf("  - Variable name: '%s'\n", variableDeclaration->name ? variableDeclaration->name : "NULL");
+		printf("  - Variable type: %d\n", variableDeclaration->type);
+		printf("  - Has expression: %s\n", variableDeclaration->expression ? "YES" : "NO");
+		printf("  - Has object: %s\n", variableDeclaration->object ? "YES" : "NO");
+		printf("  - Has privacy modifiers: %s\n", variableDeclaration->privacyModifierList ? "YES" : "NO");
+	}
+	printf("Expression: %p\n", (void*)expression);
+	if (expression != NULL) {
+		printf("  - Expression type: %d\n", expression->type);
+	}
+	printf("==========================================\n");
+	
 	AssignmentOperation * assignmentOperation = calloc(1, sizeof(AssignmentOperation));
 	assignmentOperation->variableDeclaration = variableDeclaration;
 	assignmentOperation->assignmentOperator = ASSIGN_TYPE;
@@ -174,6 +244,35 @@ AssignmentOperation * AssignmentOperatorSemanticAction(
 	AssignmentOperatorType assignmentOperatorType
 ) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
+	
+	// Debug prints for assignment operator verification
+	printf("=== BISON ASSIGNMENT OPERATOR DEBUG ===\n");
+	printf("Function: %s\n", __FUNCTION__);
+	printf("Variable name: '%s'\n", name ? name : "NULL");
+	printf("Expression: %p\n", (void*)expression);
+	if (expression != NULL) {
+		printf("  - Expression type: %d\n", expression->type);
+	}
+	printf("Assignment operator type: %d\n", assignmentOperatorType);
+	printf("Operator type: ");
+	switch(assignmentOperatorType) {
+		case ASSIGN_TYPE:
+			printf("ASSIGN_TYPE (=)\n");
+			break;
+		case ADD_ASSIGN_TYPE:
+			printf("ADD_ASSIGN_TYPE (+=)\n");
+			break;
+		case SUB_ASSIGN_TYPE:
+			printf("SUB_ASSIGN_TYPE (-=)\n");
+			break;
+		case MUL_ASSIGN_TYPE:
+			printf("MUL_ASSIGN_TYPE (*=)\n");
+			break;
+		default:
+			printf("UNKNOWN\n");
+			break;
+	}
+	printf("=====================================\n");
 	
 	AssignmentOperation * assignmentOperation = calloc(1, sizeof(AssignmentOperation));
 	assignmentOperation->name = name;
@@ -205,6 +304,75 @@ void ValidateContext(ContextStackType contextType, const char * errorMessage){
 
 Instruction * InstructionSemanticAction(void * value, InstructionType instructionType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
+	
+	// Debug prints for instruction verification
+	printf("=== BISON INSTRUCTION DEBUG ===\n");
+	printf("Function: %s\n", __FUNCTION__);
+	printf("Value pointer: %p\n", (void*)value);
+	printf("Instruction type: %d\n", instructionType);
+	printf("Instruction type name: ");
+	switch (instructionType) {
+		case INSTRUCTION_ASSIGNMENT:
+			printf("INSTRUCTION_ASSIGNMENT\n");
+			if (value != NULL) {
+				AssignmentOperation * assignment = (AssignmentOperation*)value;
+				printf("  - Assignment operation: %p\n", (void*)assignment);
+				if (assignment->name != NULL) {
+					printf("  - Variable name: '%s'\n", assignment->name);
+				}
+				printf("  - Assignment operator: %d\n", assignment->assignmentOperator);
+				printf("  - Has expression: %s\n", assignment->expression ? "YES" : "NO");
+			}
+			break;
+			
+		case INSTRUCTION_VARIABLE_DECLARATION:
+			printf("INSTRUCTION_VARIABLE_DECLARATION\n");
+			if (value != NULL) {
+				VariableDeclaration * varDecl = (VariableDeclaration*)value;
+				printf("  - Variable declaration: %p\n", (void*)varDecl);
+				if (varDecl->name != NULL) {
+					printf("  - Variable name: '%s'\n", varDecl->name);
+				}
+				printf("  - Variable type: %d\n", varDecl->type);
+			}
+			break;
+
+		case INSTRUCTION_EXPRESSION:
+			printf("INSTRUCTION_EXPRESSION\n");
+			break;
+
+		case INSTRUCTION_BLOCK:
+			printf("INSTRUCTION_BLOCK\n");
+			break;
+
+		case INSTRUCTION_LOOP:
+			printf("INSTRUCTION_LOOP\n");
+			break;
+
+		case INSTRUCTION_CONDITIONAL:
+			printf("INSTRUCTION_CONDITIONAL\n");
+			break;
+
+		case INSTRUCTION_CLASS:
+			printf("INSTRUCTION_CLASS\n");
+			break;
+
+		case INSTRUCTION_INTERFACE:
+			printf("INSTRUCTION_INTERFACE\n");
+			break;
+
+		case INSTRUCTION_RETURN:
+			printf("INSTRUCTION_RETURN\n");
+			ValidateContext(LAMBDA_CONTEXT, "Return statements are not allowed outside functions.");
+			break;
+
+		case INSTRUCTION_PASS:
+			printf("INSTRUCTION_PASS\n");
+			ValidateContext(LOOP_CONTEXT, "Pass statements are not allowed outside loops.");
+			break;
+	}
+	printf("==============================\n");
+	
 	Instruction * instruction = calloc(1, sizeof(Instruction));
 	instruction->type = instructionType;
 	

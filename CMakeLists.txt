@@ -55,6 +55,7 @@ endif ()
 # Defines the entry-point of the application, and the source-codes (*.c extension).
 # The header files (*.h extension), are automatically included from the source-codes.
 add_executable(Compiler
+	src/main/c/backend/code-generation/AssignmentGenerator.c
 	src/main/c/backend/code-generation/ExpressionGenerator.c
 	src/main/c/backend/code-generation/VariableGenerator.c
 	src/main/c/backend/code-generation/StructureGenerator.c

@@ -136,7 +136,18 @@ Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 
 Token NameLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->name = strdup(lexicalAnalyzerContext->lexeme);
+	
+	// Debug prints for variable name verification
+	printf("=== FLEX VARIABLE NAME DEBUG ===\n");
+	printf("Function: %s\n", __FUNCTION__);
+	printf("Lexeme: '%s'\n", lexicalAnalyzerContext->lexeme);
+	printf("Lexeme length: %zu\n", strlen(lexicalAnalyzerContext->lexeme));
+	printf("Semantic value name: %s\n", (lexicalAnalyzerContext->semanticValue && lexicalAnalyzerContext->semanticValue->name) ? lexicalAnalyzerContext->semanticValue->name : "NULL");
+	printf("===============================\n");
+	
+	if (lexicalAnalyzerContext->semanticValue) {
+		lexicalAnalyzerContext->semanticValue->name = strdup(lexicalAnalyzerContext->lexeme);
+	}
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return NAME;	
 }
@@ -168,6 +179,33 @@ Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Variable
  */
 Token AssignmentOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	
+	// Debug prints for assignment operation verification
+	printf("=== FLEX ASSIGNMENT OPERATOR DEBUG ===\n");
+	printf("Function: %s\n", __FUNCTION__);
+	printf("Lexeme: '%s'\n", lexicalAnalyzerContext->lexeme);
+	printf("Token: %d\n", token);
+	printf("Token type: ");
+	switch(token) {
+		case ASSIGN:
+			printf("ASSIGN (=)\n");
+			break;
+		case ADD_ASSIGN:
+			printf("ADD_ASSIGN (+=)\n");
+			break;
+		case SUB_ASSIGN:
+			printf("SUB_ASSIGN (-=)\n");
+			break;
+		case MUL_ASSIGN:
+			printf("MUL_ASSIGN (*=)\n");
+			break;
+		default:
+			printf("UNKNOWN\n");
+			break;
+	}
+	printf("Semantic value token: %d\n", lexicalAnalyzerContext->semanticValue ? lexicalAnalyzerContext->semanticValue->token : -1);
+	printf("=====================================\n");
+	
 	lexicalAnalyzerContext->semanticValue->token = token;
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
