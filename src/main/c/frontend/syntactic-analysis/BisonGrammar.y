@@ -370,7 +370,6 @@
 			| NAME[name] COLON variable_type[type] ASSIGN expression[exp] 												{ $$ = VariableDeclarationSemanticAction($name, $type, $exp, NULL, NULL); }
 			| privacy_list[priv] NAME[name] COLON variable_type[type] 													{ $$ = VariableDeclarationSemanticAction($name, $type, NULL, NULL, $priv); }
 			| privacy_list[priv] NAME[name] COLON variable_type[type] ASSIGN expression[exp] 							{ $$ = VariableDeclarationSemanticAction($name, $type, $exp, NULL, $priv); }
-			
 			| NAME[name] COLON object[obj] 																				{ $$ = VariableDeclarationSemanticAction($name, OBJECT, NULL, $obj, NULL); }
 			| NAME[name] COLON object[obj] ASSIGN expression[exp] 														{ $$ = VariableDeclarationSemanticAction($name, OBJECT, $exp, $obj, NULL); }
 			| privacy_list[priv] NAME[name] COLON object[obj] 															{ $$ = VariableDeclarationSemanticAction($name, OBJECT, NULL, $obj, $priv); }
