@@ -128,7 +128,7 @@ bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testNa
 		return false;
 	}
 
-	char* filename = concatenate(3, "test_results/", testName, ".out");
+	char* filename = concatenate(3, "test_results/", testName, ".java");
 	_outputFile = fopen(filename, "w");
 	free(filename);
 
