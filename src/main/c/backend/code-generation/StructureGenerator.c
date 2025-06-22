@@ -1,5 +1,7 @@
 #include "StructureGenerator.h"
 #include "ExpressionGenerator.h"
+#include "ComparisonGenerator.h"
+#include "ConditionalGenerator.h"
 #include "VariableGenerator.h"
 #include "AssignmentGenerator.h"
 #include "Generator.h"
@@ -23,6 +25,9 @@ void generateInstruction(const unsigned int indentationLevel, Instruction* instr
         case INSTRUCTION_BLOCK:
             generateBlock(indentationLevel + 1, instruction->block);
             break;
+        case INSTRUCTION_CONDITIONAL:
+            generateConditional(indentationLevel, instruction->conditional);
+            break;
 		default:
 			exit(140);
 			break;
@@ -43,6 +48,12 @@ void generateBlock(const unsigned int indentationLevel, Block* block) {
         generateInstruction(indentationLevel + 1, (Instruction*)currentInstruction->data);
         currentInstruction = currentInstruction->next;
     }
+}
+
+void generateScope(const unsigned int indentationLevel, Block* block) {
+    generatorOutput(indentationLevel, "{\n");
+    generateBlock(indentationLevel, block);
+    generatorOutput(indentationLevel, "}\n");
 }
 
 void generateProgram(const unsigned int indentationLevel, Program* program) {

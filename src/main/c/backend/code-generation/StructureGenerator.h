@@ -31,4 +31,11 @@ void generateBlock(const unsigned int indentationLevel, Block* block);
  */
 void generateInstruction(const unsigned int indentationLevel, Instruction* instruction);
 
+/**
+ * Generates code for a scope block (enclosed by curly braces).
+ * @param indentationLevel The current indentation level
+ * @param block The block to generate code for
+ */
+void generateScope(const unsigned int indentationLevel, Block* block);
+
 #endif 
