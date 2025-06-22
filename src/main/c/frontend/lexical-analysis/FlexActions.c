@@ -142,12 +142,10 @@ Token NameLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext){
 	printf("Function: %s\n", __FUNCTION__);
 	printf("Lexeme: '%s'\n", lexicalAnalyzerContext->lexeme);
 	printf("Lexeme length: %zu\n", strlen(lexicalAnalyzerContext->lexeme));
-	printf("Semantic value name: %s\n", (lexicalAnalyzerContext->semanticValue && lexicalAnalyzerContext->semanticValue->name) ? lexicalAnalyzerContext->semanticValue->name : "NULL");
 	printf("===============================\n");
 	
-	if (lexicalAnalyzerContext->semanticValue) {
-		lexicalAnalyzerContext->semanticValue->name = strdup(lexicalAnalyzerContext->lexeme);
-	}
+	lexicalAnalyzerContext->semanticValue->token = NAME;
+	lexicalAnalyzerContext->semanticValue->name = strdup(lexicalAnalyzerContext->lexeme);
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return NAME;	
 }

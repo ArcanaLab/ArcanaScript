@@ -295,6 +295,7 @@
 		import_statment:
 			IMPORT C_STRING 																						  	{ $$ = ImportSemanticAction($2); }
 			;
+		
 		instruction:
 			assignment_operation SEMICOLON																				{ $$ = InstructionSemanticAction($1, INSTRUCTION_ASSIGNMENT); }
 			| variable_declaration SEMICOLON																			{ $$ = InstructionSemanticAction($1, INSTRUCTION_VARIABLE_DECLARATION); }
