@@ -1,0 +1,36 @@
+# Test for complex for loop scenario
+class Student {
+    name:string;
+    grade:int;
+    
+    constructor(name:string, grade:int) {
+        this.name = name;
+        this.grade = grade;
+    }
+}
+
+students:List<Student> = [
+    Student("Alice", 95),
+    Student("Bob", 87),
+    Student("Charlie", 92),
+    Student("Diana", 78)
+];
+
+total:int = 0;
+count:int = 0;
+
+for(student : students) {
+    if (student.grade >= 90) {
+        print(student.name + " has an A grade");
+    } else if (student.grade >= 80) {
+        print(student.name + " has a B grade");
+    } else {
+        print(student.name + " needs improvement");
+    }
+    
+    total = total + student.grade;
+    count = count + 1;
+}
+
+average:float = total / count;
+print("Class average: " + average); 

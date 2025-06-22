@@ -1,0 +1,4 @@
+# Test for for loop missing block
+# numbers:List<int> = [1, 2, 3];
+
+for(item : numbers) 

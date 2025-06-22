@@ -1,0 +1,4 @@
+# Test for for loop missing collection
+for(item :) {
+    print(item);
+} 
