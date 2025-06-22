@@ -11,6 +11,7 @@ void generateInstruction(const unsigned int indentationLevel, Instruction* instr
     switch (instruction->type) {
         case INSTRUCTION_EXPRESSION:
             generateExpression(indentationLevel, instruction->expression);
+            generatorOutput(indentationLevel, ";\n");
             break;
         case INSTRUCTION_VARIABLE_DECLARATION:
             generateVariableDeclaration(indentationLevel, instruction->variableDeclaration);
