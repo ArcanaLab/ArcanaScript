@@ -132,6 +132,7 @@
 		%token <token> DIV
 		%token <token> MUL
 		%token <token> SUB
+		%token <token> MOD
 
 		/** ===== Unary Operations ===== */
 		%token <token> INCREMENT
@@ -267,7 +268,7 @@
  * @see https://www.gnu.org/software/bison/manual/html_node/Precedence.html
  */
 %left ADD SUB
-%left MUL DIV
+%left MUL DIV MOD
 
 %precedence ELSE
 %precedence IF
@@ -351,8 +352,9 @@
 	// ------------------ [ Control Structures ] -----------------
 		/** ===== Loops ===== */
 		loop:
-			WHILE OPEN_PARENTHESIS expression[exp] CLOSE_PARENTHESIS { pushContext(LOOP_CONTEXT); } scope[scope_block] 											{ $$ = LoopSemanticAction($exp, WHILE_LOOP, $scope_block, NULL, NULL); popContext(); }	
-			| FOR OPEN_PARENTHESIS NAME[item] COLON NAME[collection] CLOSE_PARENTHESIS { pushContext(LOOP_CONTEXT); } scope[scope_block]						{ $$ = LoopSemanticAction(NULL, FOR_LOOP, $scope_block, $item, $collection); popContext(); }
+			WHILE OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS { pushContext(LOOP_CONTEXT); } scope[scope_block] 											{ $$ = LoopSemanticAction($exp, WHILE_LOOP, $scope_block, NULL, NULL); popContext(); }	
+			| WHILE OPEN_PARENTHESIS expression[exp] CLOSE_PARENTHESIS { pushContext(LOOP_CONTEXT); } scope[scope_block] 											{ $$ = LoopSemanticAction($exp, WHILE_LOOP, $scope_block, NULL, NULL); popContext(); }
+			| FOR OPEN_PARENTHESIS NAME[item] COLON NAME[collection] CLOSE_PARENTHESIS { pushContext(LOOP_CONTEXT); } scope[scope_block]									{ $$ = LoopSemanticAction(NULL, FOR_LOOP, $scope_block, $item, $collection); popContext(); }
 			;
 
 		/** ===== Conditionals ===== */
@@ -438,6 +440,7 @@
 			| expression[left] DIV expression[right]																	{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
 			| expression[left] MUL expression[right]																	{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
 			| expression[left] SUB expression[right]																	{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
+			| expression[left] MOD expression[right]																	{ $$ = ArithmeticExpressionSemanticAction($left, $right, MODULE); }
 			| factor																									{ $$ = FactorExpressionSemanticAction($1); }
 			| function_call																								{ $$ = FunctionCallExpressionSemanticAction($1); }
 			| lambda																									{ $$ = LambdaExpressionSemanticAction($1); }

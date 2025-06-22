@@ -1,0 +1,6 @@
+# Test for for loop missing variable
+# numbers:List<int> = [1, 2, 3];
+
+for(: numbers) {
+    print("item");
+} 

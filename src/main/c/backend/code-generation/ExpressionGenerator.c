@@ -21,6 +21,7 @@ static char* _expressionTypeToOperator(const ExpressionType type) {
         case SUBTRACTION: return "-";
         case MULTIPLICATION: return "*";
         case DIVISION: return "/";
+        case MODULE: return "%";
         default:
             return NULL;
     }
@@ -78,7 +79,8 @@ void generateExpression(const unsigned int indentationLevel, Expression* express
         case ADDITION:
         case SUBTRACTION:
         case MULTIPLICATION:
-        case DIVISION: {
+        case DIVISION:
+        case MODULE: {
             char* operator = _expressionTypeToOperator(expression->type);
             if (operator) {
                 generatorOutput(indentationLevel, "(");

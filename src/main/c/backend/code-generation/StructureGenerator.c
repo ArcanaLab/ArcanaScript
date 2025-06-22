@@ -4,6 +4,7 @@
 #include "ConditionalGenerator.h"
 #include "VariableGenerator.h"
 #include "AssignmentGenerator.h"
+#include "LoopGenerator.h"
 #include "Generator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
@@ -27,6 +28,9 @@ void generateInstruction(const unsigned int indentationLevel, Instruction* instr
             break;
         case INSTRUCTION_CONDITIONAL:
             generateConditional(indentationLevel, instruction->conditional);
+            break;
+        case INSTRUCTION_LOOP:
+            generateLoop(indentationLevel, instruction->loop);
             break;
 		default:
 			exit(140);

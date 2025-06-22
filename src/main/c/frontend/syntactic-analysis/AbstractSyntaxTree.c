@@ -32,6 +32,7 @@ void releaseExpression(Expression * expression) {
 		case DIVISION:
 		case MULTIPLICATION:
 		case SUBTRACTION:
+		case MODULE:
 			releaseExpression(expression->leftExpression);
 			releaseExpression(expression->rightExpression);
 			break;
