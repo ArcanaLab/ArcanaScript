@@ -132,6 +132,7 @@
 		%token <token> DIV
 		%token <token> MUL
 		%token <token> SUB
+		%token <token> MOD
 
 		/** ===== Unary Operations ===== */
 		%token <token> INCREMENT
@@ -267,7 +268,7 @@
  * @see https://www.gnu.org/software/bison/manual/html_node/Precedence.html
  */
 %left ADD SUB
-%left MUL DIV
+%left MUL DIV MOD
 
 %precedence ELSE
 %precedence IF
@@ -438,6 +439,7 @@
 			| expression[left] DIV expression[right]																	{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
 			| expression[left] MUL expression[right]																	{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
 			| expression[left] SUB expression[right]																	{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
+			| expression[left] MOD expression[right]																	{ $$ = ArithmeticExpressionSemanticAction($left, $right, MODULE); }
 			| factor																									{ $$ = FactorExpressionSemanticAction($1); }
 			| function_call																								{ $$ = FunctionCallExpressionSemanticAction($1); }
 			| lambda																									{ $$ = LambdaExpressionSemanticAction($1); }
