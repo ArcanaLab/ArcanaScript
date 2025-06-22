@@ -59,6 +59,9 @@ void generateFactor(const unsigned int indentationLevel, Factor* factor) {
         case EXPRESSION:
             generateExpression(indentationLevel, factor->expression);
             break;
+        case VARIABLE_TYPE:
+            generatorOutput(indentationLevel, "%s", factor->variable);
+            break;
         default:
             break;
     }
