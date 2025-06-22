@@ -4,13 +4,14 @@
 #include "VariableGenerator.h"
 #include "../../shared/Logger.h"
 #include <stdio.h>
+#include <string.h>
 
-void generateFunction(const unsigned int indentationLevel, VariableDeclaration* functionDeclaration) {
-    if (functionDeclaration == NULL || functionDeclaration->expression == NULL || functionDeclaration->expression->type != LAMBDA) {
+void generateLambda(const unsigned int indentationLevel, VariableDeclaration* lambdaDeclaration) {
+    if (lambdaDeclaration == NULL || lambdaDeclaration->expression == NULL || lambdaDeclaration->expression->type != LAMBDA) {
         return;
     }
 
-    Lambda* lambda = functionDeclaration->expression->lambda;
+    Lambda* lambda = lambdaDeclaration->expression->lambda;
 
     // Generate lambda parameters
     generatorOutput(indentationLevel, "(");
@@ -25,4 +26,48 @@ void generateFunction(const unsigned int indentationLevel, VariableDeclaration* 
     } else {
         generatorOutput(indentationLevel, "{}");
     }
+}
+
+void generateFunction(const unsigned int indentationLevel, VariableDeclaration* functionDeclaration) {
+    if (functionDeclaration == NULL || functionDeclaration->expression == NULL || functionDeclaration->expression->type != LAMBDA) {
+        return;
+    }
+
+    Lambda* lambda = functionDeclaration->expression->lambda;
+
+    // Determine return type from Function<T> object
+    char* returnType = "void"; // default
+    if (functionDeclaration->object != NULL && functionDeclaration->object->name != NULL) {
+        if (strcmp(functionDeclaration->object->name, "Function") == 0 && 
+            functionDeclaration->object->genericList != NULL) {
+            // Extract the generic type (e.g., Integer from Function<Integer>)
+            GenericListNode* genericNode = functionDeclaration->object->genericList->first;
+            if (genericNode != NULL) {
+                Generic* generic = (Generic*)genericNode->data;
+                if (generic != NULL && generic->object != NULL && generic->object->name != NULL) {
+                    returnType = generic->object->name;
+                }
+            }
+        }
+    }
+
+    // Generate method signature
+    generatorOutput(indentationLevel, "public static %s %s(", returnType, functionDeclaration->name);
+    
+    // Generate method parameters
+    if (lambda->variableDeclarationList != NULL) {
+        generateVariableDeclarationList(0, lambda->variableDeclarationList);
+    }
+    
+    generatorOutput(0, ")");
+
+    // Generate method body
+    if (lambda->block != NULL) {
+        generateScope(indentationLevel, lambda->block);
+    } else {
+        generatorOutput(indentationLevel, " {\n");
+        generatorOutput(indentationLevel, "}\n");
+    }
+    
+    generatorOutput(0, "\n");
 } 

@@ -88,7 +88,14 @@ void generateVariableDeclaration(const unsigned int indentationLevel, VariableDe
     
     // Check if it is a function declaration (variable assigned a lambda)
     if (variableDeclaration->expression != NULL && variableDeclaration->expression->type == LAMBDA) {
-        generateFunction(indentationLevel, variableDeclaration);
+        // Check if this is a function with explicit return type (has object type)
+        if (variableDeclaration->type == OBJECT && variableDeclaration->object != NULL) {
+            // This is a function declaration with return type
+            generateFunction(indentationLevel, variableDeclaration);
+        } else {
+            // This is a lambda assignment
+            generateLambda(indentationLevel, variableDeclaration);
+        }
         return;
     }
 
