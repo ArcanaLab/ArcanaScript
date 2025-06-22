@@ -3,8 +3,10 @@
 
 for(num : numbers) {
     if (num % 2 == 0) {
-        print("Even: " + num);
+     #   print("Even: " + num);
+     result:int = num * 2;
     } else {
-        print("Odd: " + num);
+     #   print("Odd: " + num);
+     result:int = num * (3);
     }
 } 
