@@ -1,6 +1,7 @@
 #include "VariableGenerator.h"
 #include "Generator.h"
 #include "ExpressionGenerator.h"
+#include "FunctionGenerator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
 #include <stdio.h>
@@ -85,6 +86,12 @@ void generateVariableDeclaration(const unsigned int indentationLevel, VariableDe
         return;
     }
     
+    // Check if it is a function declaration (variable assigned a lambda)
+    if (variableDeclaration->expression != NULL && variableDeclaration->expression->type == LAMBDA) {
+        generateFunction(indentationLevel, variableDeclaration);
+        return;
+    }
+
     if (variableDeclaration->privacyModifierList != NULL) {
         generatePrivacyModifiers(indentationLevel, variableDeclaration->privacyModifierList);
     }

@@ -1,6 +1,7 @@
 #include "AssignmentGenerator.h"
 #include "Generator.h"
 #include "ExpressionGenerator.h"
+#include "FunctionGenerator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
 #include <stdio.h>
@@ -31,6 +32,20 @@ void generateSimpleAssignment(const unsigned int indentationLevel, AssignmentOpe
     
     // Handle the case where we have a variable name (not a variable declaration)
     if (assignmentOperation->name != NULL) {
+        // Check if the right-hand side is a lambda expression
+        if (assignmentOperation->expression != NULL && assignmentOperation->expression->type == LAMBDA) {
+            // Create a temporary VariableDeclaration to pass to generateFunction
+            VariableDeclaration tempFunction;
+            tempFunction.name = assignmentOperation->name;
+            tempFunction.type = V_INT; // Default type, could be improved
+            tempFunction.expression = assignmentOperation->expression;
+            tempFunction.object = NULL;
+            tempFunction.privacyModifierList = NULL;
+            
+            generateFunction(indentationLevel, &tempFunction);
+            return;
+        }
+        
         // Generate variable name
         generatorOutput(indentationLevel, "%s", assignmentOperation->name);
         
