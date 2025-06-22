@@ -82,7 +82,6 @@ single_line_comment   "#"[^!].*
 "while"                             { return LoopLexemeAction(createLexicalAnalyzerContext(), WHILE); }
 "for"                               { return LoopLexemeAction(createLexicalAnalyzerContext(), FOR); }
 
-"!="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
 "="                                 { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), ASSIGN); }
 "+="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), ADD_ASSIGN); }
 "-="                                { return AssignmentOperatorLexemeAction(createLexicalAnalyzerContext(), SUB_ASSIGN); }
@@ -102,6 +101,7 @@ single_line_comment   "#"[^!].*
 "=="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
 "<="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
 ">="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
+"!="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
 
 "if"                                { return ConditionalStructureLexemeAction(createLexicalAnalyzerContext(), IF); }
 "else"                              { return ConditionalStructureLexemeAction(createLexicalAnalyzerContext(), ELSE); }
