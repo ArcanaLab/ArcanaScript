@@ -35,6 +35,14 @@ void generateFunction(const unsigned int indentationLevel, VariableDeclaration* 
 
     Lambda* lambda = functionDeclaration->expression->lambda;
 
+    // Generate privacy modifiers if present
+    if (functionDeclaration->privacyModifierList != NULL) {
+        generatePrivacyModifiers(indentationLevel, functionDeclaration->privacyModifierList);
+    } else {
+        // Default to public if no privacy modifier is specified
+        generatorOutput(indentationLevel, "public ");
+    }
+
     // Determine return type from Function<T> object
     char* returnType = "void"; // default
     if (functionDeclaration->object != NULL && functionDeclaration->object->name != NULL) {
@@ -52,7 +60,7 @@ void generateFunction(const unsigned int indentationLevel, VariableDeclaration* 
     }
 
     // Generate method signature
-    generatorOutput(indentationLevel, "public static %s %s(", returnType, functionDeclaration->name);
+    generatorOutput(0, "static %s %s(", returnType, functionDeclaration->name);
     
     // Generate method parameters
     if (lambda->variableDeclarationList != NULL) {
