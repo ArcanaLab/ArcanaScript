@@ -56,6 +56,8 @@ endif ()
 # The header files (*.h extension), are automatically included from the source-codes.
 add_executable(Compiler
 	src/main/c/backend/code-generation/AssignmentGenerator.c
+	src/main/c/backend/code-generation/ComparisonGenerator.c
+	src/main/c/backend/code-generation/ConditionalGenerator.c
 	src/main/c/backend/code-generation/ExpressionGenerator.c
 	src/main/c/backend/code-generation/VariableGenerator.c
 	src/main/c/backend/code-generation/StructureGenerator.c

@@ -2,7 +2,7 @@ if (4==6)
 {
     vara:int=0;
 }
-else if (41 ==2)
+else if (41 == 2)
 {
     varb:int=0;
 }

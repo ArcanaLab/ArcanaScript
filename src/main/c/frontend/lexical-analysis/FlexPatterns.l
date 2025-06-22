@@ -101,6 +101,7 @@ single_line_comment   "#"[^!].*
 "=="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
 "<="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
 ">="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
+"!="                                { return ComparatorLexemeAction(createLexicalAnalyzerContext()); }
 
 "if"                                { return ConditionalStructureLexemeAction(createLexicalAnalyzerContext(), IF); }
 "else"                              { return ConditionalStructureLexemeAction(createLexicalAnalyzerContext(), ELSE); }
