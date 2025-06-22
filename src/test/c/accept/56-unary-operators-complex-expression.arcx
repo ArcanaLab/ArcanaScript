@@ -1,0 +1,4 @@
+a: int = 5;
+b: int = 3;
+c: int = 2;
+result: int = (a++ * b--) + (c++ - a--); 
