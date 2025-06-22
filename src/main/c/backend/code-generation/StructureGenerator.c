@@ -13,7 +13,10 @@
 void generateReturn(const unsigned int indentationLevel, Instruction* instruction) {
 	generatorOutput(indentationLevel, "return ");
 	if (instruction != NULL && instruction->returnInstruction != NULL) {
+        generatorOutput(0, " ");
         generateInstruction(0, instruction->returnInstruction);
+	} else {
+        generatorOutput(0, ";\n");
 	}
 }
 
