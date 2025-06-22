@@ -265,11 +265,13 @@ Token ComparatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 		case '=':
 			if(lexicalAnalyzerContext->lexeme[1] == '='){
 				token = EQUAL_EQUAL;
-			};
+			}
+			break;
 		case '!':
 			if(lexicalAnalyzerContext->lexeme[1] == '='){
 				token = NOT_EQUAL;
-			} break;
+			} 
+			break;
 	}
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;

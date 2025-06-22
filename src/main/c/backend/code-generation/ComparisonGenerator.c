@@ -39,11 +39,9 @@ void generateComparisonExpression(const unsigned int indentationLevel, Expressio
         case NOT_EQUAL_TYPE: {
             char* operator = _comparisonTypeToOperator(expression->type);
             if (operator) {
-                generatorOutput(indentationLevel, "(");
-                generateFactor(indentationLevel + 1, expression->leftFactor);
-                generatorOutput(indentationLevel + 1, " %s ", operator);
-                generateFactor(indentationLevel + 1, expression->rightFactor);
-                generatorOutput(indentationLevel, ")");
+                generateFactor(indentationLevel, expression->leftFactor);
+                generatorOutput(indentationLevel, " %s ", operator);
+                generateFactor(indentationLevel, expression->rightFactor);
             }
             break;
         }

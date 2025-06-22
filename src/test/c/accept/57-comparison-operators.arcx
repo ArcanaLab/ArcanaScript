@@ -1,0 +1,53 @@
+
+vara:int = 5;
+varb:int = 10;
+varc:int = 5;
+
+
+if (vara == varc)
+{
+    result1:boolean = true;
+}
+
+if (vara != varb)
+{
+    result2:boolean = true;
+}
+
+
+if (vara < varb)
+{
+    result3:boolean = true;
+}
+
+if (vara <= varc)
+{
+    result4:boolean = true;
+}
+
+if (varb > vara)
+{
+    result5:boolean = true;
+}
+
+if (varc >= vara)
+{
+    result6:boolean = true;
+}
+
+#!
+if (3 != 5)
+{
+    result7:boolean = true;
+}
+!#
+
+if (10 >= 5)
+{
+    result8:boolean = true;
+}
+
+if (2 <= 2)
+{
+    result9:boolean = true;
+} 
