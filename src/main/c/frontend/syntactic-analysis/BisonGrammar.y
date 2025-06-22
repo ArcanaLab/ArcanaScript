@@ -353,7 +353,8 @@
 		/** ===== Loops ===== */
 		loop:
 			WHILE OPEN_PARENTHESIS comparator_expression[exp] CLOSE_PARENTHESIS { pushContext(LOOP_CONTEXT); } scope[scope_block] 											{ $$ = LoopSemanticAction($exp, WHILE_LOOP, $scope_block, NULL, NULL); popContext(); }	
-			| FOR OPEN_PARENTHESIS NAME[item] COLON NAME[collection] CLOSE_PARENTHESIS { pushContext(LOOP_CONTEXT); } scope[scope_block]						{ $$ = LoopSemanticAction(NULL, FOR_LOOP, $scope_block, $item, $collection); popContext(); }
+			| WHILE OPEN_PARENTHESIS expression[exp] CLOSE_PARENTHESIS { pushContext(LOOP_CONTEXT); } scope[scope_block] 											{ $$ = LoopSemanticAction($exp, WHILE_LOOP, $scope_block, NULL, NULL); popContext(); }
+			| FOR OPEN_PARENTHESIS NAME[item] COLON NAME[collection] CLOSE_PARENTHESIS { pushContext(LOOP_CONTEXT); } scope[scope_block]									{ $$ = LoopSemanticAction(NULL, FOR_LOOP, $scope_block, $item, $collection); popContext(); }
 			;
 
 		/** ===== Conditionals ===== */
