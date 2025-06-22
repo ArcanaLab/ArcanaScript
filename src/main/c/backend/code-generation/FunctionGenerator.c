@@ -12,26 +12,17 @@ void generateFunction(const unsigned int indentationLevel, VariableDeclaration* 
 
     Lambda* lambda = functionDeclaration->expression->lambda;
 
-    // Generate return type - for now, use void since ArcanaScript lambdas don't have explicit return types
-    generatorOutput(indentationLevel, "void");
-
-    // Generate function name
-    generatorOutput(0, " %s(", functionDeclaration->name);
-
-    // Generate function parameters
+    // Generate lambda parameters
+    generatorOutput(indentationLevel, "(");
     if (lambda->variableDeclarationList != NULL) {
         generateVariableDeclarationList(0, lambda->variableDeclarationList);
     }
+    generatorOutput(0, ") -> ");
 
-    generatorOutput(0, ")");
-
-    // Generate function body
+    // Generate lambda body
     if (lambda->block != NULL) {
         generateScope(indentationLevel, lambda->block);
     } else {
-        generatorOutput(indentationLevel, " {\n");
-        generatorOutput(indentationLevel, "}\n");
+        generatorOutput(indentationLevel, "{}");
     }
-    
-    generatorOutput(0, "\n");
 } 

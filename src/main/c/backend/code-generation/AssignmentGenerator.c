@@ -2,6 +2,8 @@
 #include "Generator.h"
 #include "ExpressionGenerator.h"
 #include "FunctionGenerator.h"
+#include "VariableGenerator.h"
+#include "StructureGenerator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
 #include <stdio.h>
@@ -32,33 +34,38 @@ void generateSimpleAssignment(const unsigned int indentationLevel, AssignmentOpe
     
     // Handle the case where we have a variable name (not a variable declaration)
     if (assignmentOperation->name != NULL) {
-        // Check if the right-hand side is a lambda expression
-        if (assignmentOperation->expression != NULL && assignmentOperation->expression->type == LAMBDA) {
-            // Create a temporary VariableDeclaration to pass to generateFunction
-            VariableDeclaration tempFunction;
-            tempFunction.name = assignmentOperation->name;
-            tempFunction.type = V_INT; // Default type, could be improved
-            tempFunction.expression = assignmentOperation->expression;
-            tempFunction.object = NULL;
-            tempFunction.privacyModifierList = NULL;
-            
-            generateFunction(indentationLevel, &tempFunction);
-            return;
-        }
-        
         // Generate variable name
         generatorOutput(indentationLevel, "%s", assignmentOperation->name);
         
         // Generate assignment operator
         _generateAssignmentOperator(indentationLevel, assignmentOperation->assignmentOperator);
         
-        // Generate the expression (which should be a constant in our simple case) 
-        if (assignmentOperation->expression != NULL) {
-            generateExpression(indentationLevel, assignmentOperation->expression);
+        // Check if the right-hand side is a lambda expression
+        if (assignmentOperation->expression != NULL && assignmentOperation->expression->type == LAMBDA) {
+            // Generate lambda expression
+            Lambda* lambda = assignmentOperation->expression->lambda;
+            
+            // Generate lambda parameters
+            generatorOutput(0, "(");
+            if (lambda->variableDeclarationList != NULL) {
+                generateVariableDeclarationList(0, lambda->variableDeclarationList);
+            }
+            generatorOutput(0, ") -> ");
+            
+            // Generate lambda body
+            if (lambda->block != NULL) {
+                generateScope(0, lambda->block);
+            } else {
+                generatorOutput(0, "{}");
+            }
+        } else {
+            // Generate the expression (which should be a constant in our simple case) 
+            if (assignmentOperation->expression != NULL) {
+                generateExpression(indentationLevel, assignmentOperation->expression);
+            }
         }
         
         // End with semicolon and newline
         generatorOutput(indentationLevel, ";\n");
     }
-
 } 

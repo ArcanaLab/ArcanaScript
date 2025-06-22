@@ -24,4 +24,11 @@ void generateFactor(const unsigned int indentationLevel, Factor* factor);
  */
 void generateConstant(const unsigned int indentationLevel, Constant* constant);
 
+/**
+ * Generates code for a function call using direct output.
+ * @param indentationLevel The current indentation level
+ * @param functionCall The function call to generate code for
+ */
+void generateFunctionCall(const unsigned int indentationLevel, FunctionCall* functionCall);
+
 #endif 
