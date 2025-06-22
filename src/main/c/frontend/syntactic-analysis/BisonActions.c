@@ -495,7 +495,7 @@ PrivacyModifier * PrivacyModifierSemanticAction(PrivacyType privacyType) {
 	return privacyModifier;
 }
 
-Factor * UnaryExpressionSemanticAction(char * name,  ExpressionType type){
+Factor * UnaryExpressionSemanticAction(char * name,  FactorType type){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Factor * factor = calloc(1, sizeof(Factor));
 	factor->variable = name;

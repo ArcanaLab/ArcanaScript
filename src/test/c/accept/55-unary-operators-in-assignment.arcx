@@ -1,0 +1,5 @@
+counter: int = 0;
+counter++;
+counter--;
+counter += 5;
+counter--; 

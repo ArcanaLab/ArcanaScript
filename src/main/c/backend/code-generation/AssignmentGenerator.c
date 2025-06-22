@@ -32,7 +32,7 @@ void generateSimpleAssignment(const unsigned int indentationLevel, AssignmentOpe
     // Handle the case where we have a variable name (not a variable declaration)
     if (assignmentOperation->name != NULL) {
         // Generate variable name
-        generatorOutput(indentationLevel, " %s", assignmentOperation->name);
+        generatorOutput(indentationLevel, "%s", assignmentOperation->name);
         
         // Generate assignment operator
         _generateAssignmentOperator(indentationLevel, assignmentOperation->assignmentOperator);

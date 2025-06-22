@@ -105,7 +105,7 @@ Factor * VariableExpressionSemanticAction(char * variable);
  * @param type The type of the expression.
  * @return A pointer to the created unary expression.
  */
-Factor * UnaryExpressionSemanticAction(char * name,  ExpressionType type);
+Factor * UnaryExpressionSemanticAction(char * name,  FactorType type);
 
 /**
  * Creates a factor from an expression.
