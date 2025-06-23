@@ -1,6 +1,9 @@
 #include "AssignmentGenerator.h"
 #include "Generator.h"
 #include "ExpressionGenerator.h"
+#include "FunctionGenerator.h"
+#include "VariableGenerator.h"
+#include "StructureGenerator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
 #include <stdio.h>
@@ -37,13 +40,32 @@ void generateSimpleAssignment(const unsigned int indentationLevel, AssignmentOpe
         // Generate assignment operator
         _generateAssignmentOperator(indentationLevel, assignmentOperation->assignmentOperator);
         
-        // Generate the expression (which should be a constant in our simple case) 
-        if (assignmentOperation->expression != NULL) {
-            generateExpression(indentationLevel, assignmentOperation->expression);
+        // Check if the right-hand side is a lambda expression
+        if (assignmentOperation->expression != NULL && assignmentOperation->expression->type == LAMBDA) {
+            // Generate lambda expression
+            Lambda* lambda = assignmentOperation->expression->lambda;
+            
+            // Generate lambda parameters
+            generatorOutput(0, "(");
+            if (lambda->variableDeclarationList != NULL) {
+                generateVariableDeclarationList(0, lambda->variableDeclarationList);
+            }
+            generatorOutput(0, ") -> ");
+            
+            // Generate lambda body
+            if (lambda->block != NULL) {
+                generateScope(0, lambda->block);
+            } else {
+                generatorOutput(0, "{}");
+            }
+        } else {
+            // Generate the expression (which should be a constant in our simple case) 
+            if (assignmentOperation->expression != NULL) {
+                generateExpression(indentationLevel, assignmentOperation->expression);
+            }
         }
         
         // End with semicolon and newline
         generatorOutput(indentationLevel, ";\n");
     }
-
 } 

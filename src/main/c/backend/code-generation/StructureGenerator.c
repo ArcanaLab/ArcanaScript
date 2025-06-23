@@ -11,6 +11,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void generateReturn(const unsigned int indentationLevel, Instruction* instruction) {
+	generatorOutput(indentationLevel, "return ");
+	if (instruction != NULL && instruction->returnInstruction != NULL) {
+        generatorOutput(0, " ");
+        generateInstruction(0, instruction->returnInstruction);
+	} else {
+        generatorOutput(0, ";\n");
+	}
+}
+
 void generateInstruction(const unsigned int indentationLevel, Instruction* instruction) {
     switch (instruction->type) {
         case INSTRUCTION_EXPRESSION:
@@ -32,6 +42,9 @@ void generateInstruction(const unsigned int indentationLevel, Instruction* instr
         case INSTRUCTION_LOOP:
             generateLoop(indentationLevel, instruction->loop);
             break;
+		case INSTRUCTION_RETURN:
+			generateReturn(indentationLevel, instruction);
+			break;
 		default:
 			exit(140);
 			break;
@@ -63,3 +76,4 @@ void generateScope(const unsigned int indentationLevel, Block* block) {
 void generateProgram(const unsigned int indentationLevel, Program* program) {
     generateMainBlock(indentationLevel, program->block);
 } 
+

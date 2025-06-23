@@ -1,0 +1,37 @@
+@exposed fun1: Function<void> = () {};
+
+@hidden fun2: Function<Integer> = (a: int) { return a; };
+
+@shielded fun3: Function<String> = (s: String) { return s; };
+
+@eternal fun4: Function<Double> = (x: double) { return x * 2.0; };
+
+@immutable fun5: Function<Boolean> = (b: boolean) { return b; };
+
+@exposed @eternal fun6: Function<void> = () {};
+
+@hidden @immutable fun7: Function<Integer> = (x: int) { return x + 1; };
+
+@shielded @eternal @immutable fun8: Function<String> = (s: String) { return s + "!"; };
+
+@exposed @hidden fun9: Function<void> = () {};
+
+@exposed fun10: Function<Integer> = (a: int, b: int) { 
+    return a + b; 
+};
+
+@hidden @eternal fun11: Function<String> = (name: String, age: int) { 
+    return name + " is " + age + " years old"; 
+};
+
+fun1();
+fun2(5);
+fun3("hello");
+fun4(3.14);
+fun5(true);
+fun6();
+fun7(10);
+fun8("test");
+fun9();
+fun10(1, 2);
+fun11("Alice", 25); 

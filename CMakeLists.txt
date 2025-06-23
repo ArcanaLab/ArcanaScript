@@ -60,6 +60,7 @@ add_executable(Compiler
 	src/main/c/backend/code-generation/ConditionalGenerator.c
 	src/main/c/backend/code-generation/ExpressionGenerator.c
 	src/main/c/backend/code-generation/LoopGenerator.c
+	src/main/c/backend/code-generation/FunctionGenerator.c
 	src/main/c/backend/code-generation/VariableGenerator.c
 	src/main/c/backend/code-generation/StructureGenerator.c
 	src/main/c/backend/code-generation/Generator.c

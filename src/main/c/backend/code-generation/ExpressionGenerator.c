@@ -94,7 +94,40 @@ void generateExpression(const unsigned int indentationLevel, Expression* express
         case FACTOR:
             generateFactor(indentationLevel, expression->factor);
             break;
+        case FUNCTION_CALL:
+            generateFunctionCall(indentationLevel, expression->functionCall);
+            break;
         default:
             break;
     }
+}
+
+void generateFunctionCall(const unsigned int indentationLevel, FunctionCall* functionCall) {
+    if (functionCall == NULL) {
+        return;
+    }
+    
+    // Generate function name
+    generatorOutput(indentationLevel, "%s(", functionCall->name);
+    
+    // Generate function arguments
+    if (functionCall->expressionList != NULL) {
+        ExpressionNode* currentExpr = functionCall->expressionList->first;
+        bool first = true;
+        
+        while (currentExpr != NULL) {
+            Expression* expression = (Expression*)currentExpr->data;
+            
+            if (!first) {
+                generatorOutput(0, ", ");
+            }
+            
+            generateExpression(0, expression);
+            
+            first = false;
+            currentExpr = currentExpr->next;
+        }
+    }
+    
+    generatorOutput(0, ")");
 } 
