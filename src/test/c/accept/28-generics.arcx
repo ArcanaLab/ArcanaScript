@@ -1,4 +1,6 @@
+
 class GenericsTest {
     fun: Function;
     fun: Function<Integer> = () { 1; };
 }
+

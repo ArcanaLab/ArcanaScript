@@ -17,7 +17,6 @@ void generateVariableDeclaration(const unsigned int indentationLevel, VariableDe
  */
 void generateVariableDeclarationList(const unsigned int indentationLevel, VariableDeclarationList* variableDeclarationList);
 
-
 /**
  * Generates code for privacy modifiers using direct output.
  * @param indentationLevel The current indentation level

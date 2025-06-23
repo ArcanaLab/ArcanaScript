@@ -1,12 +1,56 @@
 #include "ClassGenerator.h"
 #include "Generator.h"
-#include "VariableGenerator.h"
 #include "StructureGenerator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+static void generateGeneric(const unsigned int indentationLevel, Generic* generic);
+static void generateGenericList(const unsigned int indentationLevel, GenericList* genericList);
+
+void generateObject(const unsigned int indentationLevel, Object* object) {
+    if (object == NULL) {
+        return;
+    }
+    
+    generatorOutput(0, "%s", object->name);
+    
+    if (object->genericList != NULL) {
+        generateGenericList(indentationLevel, object->genericList);
+    }
+}
+
+static void generateGenericList(const unsigned int indentationLevel, GenericList* genericList) {
+    if (genericList == NULL) {
+        return;
+    }
+
+    generatorOutput(0, "<");
+    Node* current = genericList->first;
+    bool first = true;
+    while (current != NULL) {
+        if (!first) {
+            generatorOutput(0, ", ");
+        }
+        generateGeneric(0, (Generic*)current->data);
+        first = false;
+        current = current->next;
+    }
+    generatorOutput(0, ">");
+}
+
+static void generateGeneric(const unsigned int indentationLevel, Generic* generic) {
+    if (generic == NULL) {
+        return;
+    }
+    generateObject(indentationLevel, generic->object);
+    if (generic->isObject != NULL) {
+        generatorOutput(0, " extends ");
+        generateObject(0, generic->isObject);
+    }
+}
 
 void generateImplementationList(const unsigned int indentationLevel, ImplementationList* implementationList) {
     if (implementationList == NULL) {
@@ -21,7 +65,7 @@ void generateImplementationList(const unsigned int indentationLevel, Implementat
         Object* object = (Object*)current->data;
         
         if (!first) {
-            generatorOutput(indentationLevel, ", ");
+            generatorOutput(0, ", ");
         }
         
         if (object != NULL) {

@@ -2,6 +2,7 @@
 #include "Generator.h"
 #include "ExpressionGenerator.h"
 #include "FunctionGenerator.h"
+#include "ClassGenerator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
 #include <stdio.h>
