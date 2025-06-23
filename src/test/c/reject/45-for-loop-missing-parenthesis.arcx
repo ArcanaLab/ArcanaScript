@@ -1,6 +1,6 @@
 class ForLoopMissingParenthesisTest {
     # Test for for loop missing parenthesis
-    numbers:List<int> = [1, 2, 3];
+    numbers:int[] = [1, 2, 3];
     
     for num : numbers {
         print(num);

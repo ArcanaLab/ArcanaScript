@@ -1,6 +1,6 @@
 class ForLoopMissingColonTest {
     # Test for for loop missing colon
-    numbers:List<int> = [1, 2, 3];
+    numbers:int[] = [1, 2, 3];
     
     for(num numbers) {
         print(num);

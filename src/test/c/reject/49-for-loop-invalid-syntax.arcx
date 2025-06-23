@@ -1,6 +1,6 @@
 class ForLoopInvalidSyntaxTest {
     # Test for for loop with invalid syntax
-    # numbers:List<int> = [1, 2, 3];
+    numbers:int[] = [1, 2, 3];
     
     for(item in numbers) {
         print(item);
