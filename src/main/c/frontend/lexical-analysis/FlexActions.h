@@ -167,6 +167,19 @@ Token SemicolonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
  * @return Token representing the colon lexeme.
  */
 Token ColonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+/**
+ * @brief Handles the lexeme action for bracket tokens during lexical analysis.
+ *
+ * This function processes a token identified as a bracket (either opening or closing)
+ * within the lexical analyzer context. It may update the context or modify the token as needed
+ * for further parsing stages.
+ *
+ * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
+ * @param token The token representing a bracket to be processed.
+ * @return Token The processed token after applying the bracket lexeme action.
+ */
+Token BracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 #pragma endregion
 
 #pragma region String Handling

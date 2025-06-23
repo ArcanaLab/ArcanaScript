@@ -402,6 +402,37 @@ List * ListSemanticAction(List * list, void * data);
  * @return The VariableType value.
  */
 VariableType VariableTypeSemanticAction(VariableType varType);
+
+/**
+ * Creates a variable type for an array.
+ * @param baseType The base type of the array.
+ * @return The VariableType value for the array.
+ */
+VariableType ArrayVariableTypeSemanticAction(VariableType baseType);
+
+/**
+ * Creates a factor for an array literal.
+ * @param elements The list of elements in the array.
+ * @return A pointer to the created factor.
+ */
+Factor * ArrayLiteralFactorSemanticAction(ExpressionList * elements);
+
+/**
+ * Creates a factor for accessing an array element.
+ * @param arrayName The name of the array.
+ * @param index The index expression.
+ * @return A pointer to the created factor.
+ */
+Factor * ArrayAccessFactorSemanticAction(char * arrayName, Expression * index);
+
+/**
+ * Creates an assignment operation for an array.
+ * @param arrayName The name of the array.
+ * @param index The index expression.
+ * @param value The value to assign.
+ * @return A pointer to the created assignment operation.
+ */
+AssignmentOperation * ArrayAssignmentOperatorSemanticAction(char * arrayName, Expression * index, Expression * value);
 #pragma endregion
 // ========================================================
 

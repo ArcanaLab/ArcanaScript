@@ -106,6 +106,8 @@ enum FactorType {
 	DECREMENT_TYPE,
 	CONSTANT,
 	EXPRESSION,
+	ARRAY_ACCESS,
+	ARRAY_LITERAL,
 };
 
 enum PrivacyType {
@@ -125,7 +127,16 @@ enum VariableType {
 	V_FLOAT,
 	V_LONG,
 	V_SHORT,
-	OBJECT
+	OBJECT,
+	V_INT_ARRAY,
+	V_CHAR_ARRAY,
+	V_BOOLEAN_ARRAY,
+	V_STRING_ARRAY,
+	V_DOUBLE_ARRAY,
+	V_FLOAT_ARRAY,
+	V_LONG_ARRAY,
+	V_SHORT_ARRAY,
+	V_OBJECT_ARRAY,
 };
 
 enum ConstantType {
@@ -182,6 +193,8 @@ struct Factor {
 		Constant * constant;
 		Expression * expression;
 		char * variable;
+		struct { ExpressionList *elements; } arrayLiteral;
+        struct { char *arrayName; Expression *index; } arrayAccess;
 	};
 	FactorType type;
 };
@@ -222,6 +235,7 @@ struct AssignmentOperation {
 	};
 	Expression * expression;
 	AssignmentOperatorType assignmentOperator;
+	Expression * index;
 };
 
 struct Loop {

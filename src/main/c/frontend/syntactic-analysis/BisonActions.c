@@ -113,6 +113,22 @@ VariableType VariableTypeSemanticAction(VariableType varType) {
 	return varType;
 }
 
+VariableType ArrayVariableTypeSemanticAction(VariableType baseType) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	switch (baseType) {
+		case V_INT: return V_INT_ARRAY;
+		case V_CHAR: return V_CHAR_ARRAY;
+		case V_BOOLEAN: return V_BOOLEAN_ARRAY;
+		case V_STRING: return V_STRING_ARRAY;
+		case V_DOUBLE: return V_DOUBLE_ARRAY;
+		case V_FLOAT: return V_FLOAT_ARRAY;
+		case V_LONG: return V_LONG_ARRAY;
+		case V_SHORT: return V_SHORT_ARRAY;
+		case OBJECT: return V_OBJECT_ARRAY;
+		default: return baseType;
+	}
+}
+
 VariableDeclaration * VariableDeclarationSemanticAction(char * name, VariableType type, Expression * expression, Object * object, PrivacyList * privacyModifierList) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
@@ -280,6 +296,16 @@ AssignmentOperation * AssignmentOperatorSemanticAction(
 	assignmentOperation->expression = expression;
 
 	return assignmentOperation;
+}
+
+AssignmentOperation * ArrayAssignmentOperatorSemanticAction(char * arrayName, Expression * index, Expression * value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	AssignmentOperation * op = calloc(1, sizeof(AssignmentOperation));
+	op->name = arrayName;
+	op->index = index;
+	op->expression = value;
+	op->assignmentOperator = ASSIGN_TYPE;
+	return op;
 }
 
 Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType,Block * block) {
@@ -623,4 +649,21 @@ ImportList * ImportListSemanticAction(ImportList * importList, Import * importSt
 {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	return ListSemanticAction(importList,importStatement);
+}
+
+Factor * ArrayLiteralFactorSemanticAction(ExpressionList * elements) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Factor * factor = calloc(1, sizeof(Factor));
+	factor->arrayLiteral.elements = elements;
+	factor->type = ARRAY_LITERAL;
+	return factor;
+}
+
+Factor * ArrayAccessFactorSemanticAction(char * arrayName, Expression * index) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Factor * factor = calloc(1, sizeof(Factor));
+	factor->arrayAccess.arrayName = arrayName;
+	factor->arrayAccess.index = index;
+	factor->type = ARRAY_ACCESS;
+	return factor;
 }
