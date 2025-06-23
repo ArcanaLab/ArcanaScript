@@ -36,13 +36,11 @@ class ComparisonOperatorsTest {
         result6:boolean = true;
     }
     
-    #!
     if (3 != 5)
     {
         result7:boolean = true;
     }
-    !#
-    
+
     if (10 >= 5)
     {
         result8:boolean = true;

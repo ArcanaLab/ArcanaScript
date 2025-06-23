@@ -107,27 +107,40 @@ void generateFunctionCall(const unsigned int indentationLevel, FunctionCall* fun
         return;
     }
     
-    // Generate function name
-    generatorOutput(indentationLevel, "%s(", functionCall->name);
-    
-    // Generate function arguments
-    if (functionCall->expressionList != NULL) {
-        ExpressionNode* currentExpr = functionCall->expressionList->first;
-        bool first = true;
-        
-        while (currentExpr != NULL) {
-            Expression* expression = (Expression*)currentExpr->data;
-            
-            if (!first) {
-                generatorOutput(0, ", ");
+    // Special handling for 'print' function
+    if (functionCall->name != NULL && strcmp(functionCall->name, "print") == 0) {
+        generatorOutput(indentationLevel, "System.out.println(");
+        if (functionCall->expressionList != NULL) {
+            ExpressionNode* currentExpr = functionCall->expressionList->first;
+            bool first = true;
+            while (currentExpr != NULL) {
+                Expression* expression = (Expression*)currentExpr->data;
+                if (!first) {
+                    generatorOutput(0, ", ");
+                }
+                generateExpression(0, expression);
+                first = false;
+                currentExpr = currentExpr->next;
             }
-            
-            generateExpression(0, expression);
-            
-            first = false;
-            currentExpr = currentExpr->next;
         }
+        generatorOutput(0, ")");
+    } else {
+        // Generate function name
+        generatorOutput(indentationLevel, "%s(", functionCall->name);
+        // Generate function arguments
+        if (functionCall->expressionList != NULL) {
+            ExpressionNode* currentExpr = functionCall->expressionList->first;
+            bool first = true;
+            while (currentExpr != NULL) {
+                Expression* expression = (Expression*)currentExpr->data;
+                if (!first) {
+                    generatorOutput(0, ", ");
+                }
+                generateExpression(0, expression);
+                first = false;
+                currentExpr = currentExpr->next;
+            }
+        }
+        generatorOutput(0, ")");
     }
-    
-    generatorOutput(0, ")");
 } 
