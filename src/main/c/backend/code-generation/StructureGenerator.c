@@ -81,6 +81,19 @@ void generateScope(const unsigned int indentationLevel, Block* block) {
 }
 
 void generateProgram(const unsigned int indentationLevel, Program* program) {
+    // Generar imports en sintaxis Java si existen
+    if (program != NULL && program->importList != NULL) {
+        Node* current = program->importList->first;
+        while (current != NULL) {
+            Import* importStatement = (Import*)current->data;
+            if (importStatement != NULL && importStatement->PathToFile != NULL) {
+                // Imprimir el import en formato: import "ruta/original.arcx.java";
+                generatorOutput(0, "import \"%s.arcx.java\";\n", importStatement->PathToFile);
+            }
+            current = current->next;
+        }
+    }
+    // Luego el bloque principal
     generateMainBlock(indentationLevel, program->block);
 } 
 
