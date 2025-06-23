@@ -1,0 +1,7 @@
+@exposed numbers: int[] = [1, 2, 3, 4, 5];
+
+if (numbers[0] > 0) {
+    numbers[0] = 10;
+} else {
+    numbers[0] = -10;
+}; 

@@ -1,0 +1,4 @@
+@exposed numbers: int[] = [1, 2, 3, 4, 5];
+@exposed sum: int = numbers[0] + numbers[1] + numbers[2];
+@exposed product: int = numbers[1] * numbers[3];
+@exposed result: int = (numbers[0] + numbers[4]) * 2; 

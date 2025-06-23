@@ -1,0 +1,3 @@
+@exposed empty_numbers: int[] = [];
+@exposed empty_strings: string[] = [];
+@exposed empty_floats: float[] = []; 

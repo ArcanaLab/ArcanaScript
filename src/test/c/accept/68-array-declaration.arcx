@@ -1,0 +1,3 @@
+@exposed numbers: int[];
+@exposed names: string[];
+@exposed values: float[]; 
