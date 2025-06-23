@@ -5,6 +5,7 @@
 #include "VariableGenerator.h"
 #include "AssignmentGenerator.h"
 #include "LoopGenerator.h"
+#include "ClassGenerator.h"
 #include "Generator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
@@ -44,6 +45,12 @@ void generateInstruction(const unsigned int indentationLevel, Instruction* instr
             break;
 		case INSTRUCTION_RETURN:
 			generateReturn(indentationLevel, instruction);
+			break;
+		case INSTRUCTION_CLASS:
+			generateClass(indentationLevel, instruction->class);
+			break;
+		case INSTRUCTION_INTERFACE:
+			generateInterface(indentationLevel, instruction->interface);
 			break;
 		default:
 			exit(140);
