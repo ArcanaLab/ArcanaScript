@@ -1,4 +1,7 @@
 class CompoundAssignmentMultiplyTest {
-    x: int = 6;
-    x *= 2; 
+    result : Function<Integer> = () {
+        x: int = 6;
+        x *= 2;
+        return x;
+    };
 }

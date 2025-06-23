@@ -1,10 +1,12 @@
 class GreaterThanOperatorTest {
     # Test for > (greater than) operator
-    vara:int = 10;
-    varb:int = 3;
-    
-    if (vara > varb)
-    {
-        result:boolean = true;
-    } 
+    GreaterThanOperator : Function<void> = () {
+        vara:int = 10;
+        varb:int = 3;
+        if (vara > varb)
+        {
+            result:boolean = true;
+        }
+        return;
+    };
 }

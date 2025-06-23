@@ -1,14 +1,12 @@
 class IfConditionalTest {
-    if (4==6)
-    {
-        vara:int=0;
-    }
-    else if (41 == 2)
-    {
-        varb:int=0;
-    }
-    else
-    {
-        varc:int=0;
-    }
+
+    FunctionTest : Function<Integer> = (a:int) {
+        if (a >= 10){
+            return a + 10;
+        } else if (a >= 5) {
+            return a + 5;
+        } else {
+            return a;
+        }
+    };
 }

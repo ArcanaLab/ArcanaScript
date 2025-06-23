@@ -1,4 +1,7 @@
 class UnaryDecrementSimpleTest {
-    y: int = 10;
-    y--; 
+    result : Function<Boolean> = () {
+        y: int = 10;
+        y--;
+        return true;
+    };
 }

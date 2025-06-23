@@ -1,10 +1,12 @@
 class NotEqualOperatorTest {
     # Test for != (not equal) operator
-    vara:int = 5;
-    varb:int = 10;
-    
-    if (vara != varb)
-    {
-        result:boolean = true;
-    } 
+    NotEqualOperator : Function<void> = () {
+        vara:int = 5;
+        varb:int = 10;
+        if (vara != varb)
+        {
+            result:boolean = true;
+        }
+        return;
+    };
 }

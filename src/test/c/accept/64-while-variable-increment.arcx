@@ -1,6 +1,8 @@
 class WhileVariableIncrementTest {
-    i: int = 0;
-    while(i < 3) {
-        i = i + 1;
-    } 
+    result : Function<void> = () {
+        i: int = 0;
+        while(i < 3) {
+            i = i + 1;
+        }
+    };
 }

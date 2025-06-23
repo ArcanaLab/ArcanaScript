@@ -1,4 +1,7 @@
 class CompoundAssignmentAddTest {
-    x: int = 5;
-    x += 3; 
+    result : Function<Integer> = () {
+        x: int = 5;
+        x += 3;
+        return x;
+    };
 }

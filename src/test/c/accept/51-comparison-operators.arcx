@@ -1,53 +1,86 @@
 class ComparisonOperatorsTest {
     
-    vara:int = 5;
-    varb:int = 10;
-    varc:int = 5;
-    
-    
-    if (vara == varc)
-    {
-        result1:boolean = true;
-    }
-    
-    if (vara != varb)
-    {
-        result2:boolean = true;
-    }
-    
-    
-    if (vara < varb)
-    {
-        result3:boolean = true;
-    }
-    
-    if (vara <= varc)
-    {
-        result4:boolean = true;
-    }
-    
-    if (varb > vara)
-    {
-        result5:boolean = true;
-    }
-    
-    if (varc >= vara)
-    {
-        result6:boolean = true;
-    }
-    
-    if (3 != 5)
-    {
-        result7:boolean = true;
-    }
+    EqualOperatorTest : Function<void> = () {
+        vara:int = 5;
+        varc:int = 5;
+        if (vara == varc)
+        {
+            result1:boolean = true;
+        }
+        return;
+    };
 
-    if (10 >= 5)
-    {
-        result8:boolean = true;
-    }
-    
-    if (2 <= 2)
-    {
-        result9:boolean = true;
-    } 
+    NotEqualOperatorTest : Function<void> = () {
+        vara:int = 5;
+        varb:int = 10;
+        if (vara != varb)
+        {
+            result2:boolean = true;
+        }
+        return;
+    };
+
+    LessThanOperatorTest : Function<void> = () {
+        vara:int = 5;
+        varb:int = 10;
+        if (vara < varb)
+        {
+            result3:boolean = true;
+        }
+        return;
+    };
+
+    LessEqualOperatorTest : Function<void> = () {
+        vara:int = 5;
+        varc:int = 5;
+        if (vara <= varc)
+        {
+            result4:boolean = true;
+        }
+        return;
+    };
+
+    GreaterThanOperatorTest : Function<void> = () {
+        varb:int = 10;
+        vara:int = 5;
+        if (varb > vara)
+        {
+            result5:boolean = true;
+        }
+        return;
+    };
+
+    GreaterEqualOperatorTest : Function<void> = () {
+        varc:int = 5;
+        vara:int = 5;
+        if (varc >= vara)
+        {
+            result6:boolean = true;
+        }
+        return;
+    };
+
+    NotEqualLiteralTest : Function<void> = () {
+        if (3 != 5)
+        {
+            result7:boolean = true;
+        }
+        return;
+    };
+
+    GreaterEqualLiteralTest : Function<void> = () {
+        if (10 >= 5)
+        {
+            result8:boolean = true;
+        }
+        return;
+    };
+
+    LessEqualLiteralTest : Function<void> = () {
+        if (2 <= 2)
+        {
+            result9:boolean = true;
+        }
+        return;
+    };
 }

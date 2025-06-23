@@ -1,5 +1,8 @@
 class UnaryOperatorsInExpressionTest {
-    a: int = 5;
-    b: int = 3;
-    result: int = a++ + b--; 
+    result : Function<Boolean> = () {
+        a: int = 5;
+        b: int = 3;
+        result: int = a++ + b--;
+        return true;
+    };
 }

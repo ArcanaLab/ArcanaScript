@@ -1,4 +1,7 @@
 class UnaryIncrementSimpleTest {
-    x: int = 5;
-    x++; 
+    result : Function<Boolean> = () {
+        x: int = 5;
+        x++;
+        return true;
+    };
 }

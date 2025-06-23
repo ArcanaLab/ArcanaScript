@@ -154,6 +154,6 @@ bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testNa
 void generate(CompilerState * compilerState) {
 	logDebugging(_logger, "Generating final output...");
 	_atLineStart = true; // Reset line start flag
-	generateProgram(0, (Program*)compilerState->abstractSyntaxtTree); //ESTE CASTEO ES DUDOSISIMO AYUDAME LOCO
+	generateProgram(0, (Program*)compilerState->abstractSyntaxtTree); //ESTE CASTEO ES DUDOSISIMO AYUDAME LOCO..no
 	logDebugging(_logger, "Generation is done.");
 }

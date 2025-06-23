@@ -1,7 +1,10 @@
 class CompoundAssignmentMixedTest {
-    x: int = 10;
-    y: int = 5;
-    x += 3;
-    y -= 2;
-    x *= y; 
+    result : Function<Integer> = () {
+        x: int = 10;
+        y: int = 5;
+        x += 3;
+        y -= 2;
+        x *= y;
+        return x;
+    };
 }

@@ -1,5 +1,7 @@
 class WhileConstantTest {
-    while(true) {
-        1;
-    } 
+    result : Function<void> = () {
+        while(true) {
+            1;
+        }
+    };
 }

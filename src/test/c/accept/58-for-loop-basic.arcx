@@ -2,7 +2,10 @@ class ForLoopBasicTest {
     # Test for basic for loop
     #numbers:List<int> = [1, 2, 3, 4, 5];
     
-    for(num : numbers) {
-        print(num);
-    } 
+    result : Function<void> = () {
+        numbers: List<int> = [1, 2, 3, 4, 5];
+        for(num : numbers) {
+            print(num);
+        }
+    };
 }

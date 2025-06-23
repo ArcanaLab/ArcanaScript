@@ -1,7 +1,0 @@
-class NestedBlocksTest {
-    {
-        {
-            a:int=1;
-        }
-    } 
-}

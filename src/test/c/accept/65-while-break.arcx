@@ -1,9 +1,11 @@
 class WhileBreakTest {
-    i: int = 0;
-    while(true) {
-        if(i == 2) {
-            break;
+    result : Function<void> = () {
+        i: int = 0;
+        while(true) {
+            if(i == 2) {
+                break;
+            }
+            i = i + 1;
         }
-        i = i + 1;
-    } 
+    };
 }

@@ -1,7 +1,10 @@
 class UnaryOperatorsInAssignmentTest {
-    counter: int = 0;
-    counter++;
-    counter--;
-    counter += 5;
-    counter--; 
+    result : Function<Boolean> = () {
+        counter: int = 0;
+        counter++;
+        counter--;
+        counter += 5;
+        counter--;
+        return true;
+    };
 }

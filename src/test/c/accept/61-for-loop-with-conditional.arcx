@@ -1,13 +1,16 @@
 @exposed
 class ForLoopWithConditionalTest {
-    for(num : numbers) {
-        if ((num % 2) == 0) {
-         print("Even: " + num);
-         result:int = (num * 2);
-        } else {
-         print("Odd: " + num);
-         result:int = (num * 3);
+    result : Function<void> = () {
+        numbers: List<int> = [1, 2, 3, 4, 5];
+        result: int = 0;
+        for(num : numbers) {
+            if ((num % 2) == 0) {
+                print("Even: ");
+                result = (num * 2);
+            } else {
+                print("Odd: ");
+                result = (num * 3);
+            }
         }
-    }
-    result:int = 0;
+    };
 }

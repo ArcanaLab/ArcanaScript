@@ -1,10 +1,12 @@
 class WhileNestedTest {
-    i: int = 0;
-    while(i < 2) {
-        j: int = 0;
-        while(j < 2) {
-            j = j + 1;
+    result : Function<void> = () {
+        i: int = 0;
+        while(i < 2) {
+            j: int = 0;
+            while(j < 2) {
+                j = j + 1;
+            }
+            i = i + 1;
         }
-        i = i + 1;
-    } 
+    };
 }

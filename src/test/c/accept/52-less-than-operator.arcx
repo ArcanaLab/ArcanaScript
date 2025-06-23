@@ -1,10 +1,12 @@
 class LessThanOperatorTest {
     # Test for < (less than) operator
-    vara:int = 3;
-    varb:int = 7;
-    
-    if (vara < varb)
-    {
-        result:boolean = true;
-    } 
+    LessThanOperator : Function<void> = () {
+        vara:int = 3;
+        varb:int = 7;
+        if (vara < varb)
+        {
+            result:boolean = true;
+        }
+        return;
+    };
 }
