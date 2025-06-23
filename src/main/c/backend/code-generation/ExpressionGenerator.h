@@ -33,6 +33,7 @@ void generateFunctionCall(const unsigned int indentationLevel, FunctionCall* fun
 
 // Array helpers
 void generateArrayLiteral(const unsigned int indentationLevel, const typeof(((Factor*)0)->arrayLiteral)* arrayLiteral);
+void generateArrayLiteralWithType(const unsigned int indentationLevel, const typeof(((Factor*)0)->arrayLiteral)* arrayLiteral, VariableType arrayType);
 void generateArrayAccess(const unsigned int indentationLevel, const typeof(((Factor*)0)->arrayAccess)* arrayAccess);
 
 #endif 

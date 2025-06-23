@@ -1,5 +1,8 @@
 #include "ExpressionGenerator.h"
 #include "Generator.h"
+#include "VariableGenerator.h"
+#include "FunctionGenerator.h"
+#include "ClassGenerator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
 #include <stdio.h>
@@ -156,6 +159,23 @@ void generateArrayLiteral(const unsigned int indentationLevel, const typeof(((Fa
     // TODO: Type inference for array type (for now, use int[] as default)
     // In a real implementation, you would pass the type down or infer from context
     generatorOutput(indentationLevel, "new int[] {");
+    if (arrayLiteral && arrayLiteral->elements) {
+        ExpressionNode* current = arrayLiteral->elements->first;
+        bool first = true;
+        while (current) {
+            if (!first) generatorOutput(0, ", ");
+            generateExpression(0, (Expression*)current->data);
+            first = false;
+            current = current->next;
+        }
+    }
+    generatorOutput(0, "}");
+}
+
+// Helper: Generate array literal with specific type
+void generateArrayLiteralWithType(const unsigned int indentationLevel, const typeof(((Factor*)0)->arrayLiteral)* arrayLiteral, VariableType arrayType) {
+    char* typeString = VariableTypeToString(arrayType);
+    generatorOutput(indentationLevel, "new %s {", typeString);
     if (arrayLiteral && arrayLiteral->elements) {
         ExpressionNode* current = arrayLiteral->elements->first;
         bool first = true;

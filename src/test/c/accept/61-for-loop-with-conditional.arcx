@@ -1,7 +1,7 @@
-@exposed
 class ForLoopWithConditionalTest {
+    @exposed numbers: int[] = [1, 2, 3, 4, 5];
     for(num : numbers) {
-        if ((num % 2) == 0) {
+        if ((num / 2) == 0) {
          print("Even: " + num);
          result:int = (num * 2);
         } else {
