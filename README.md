@@ -2,9 +2,9 @@
 
 [![✗](https://github.com/agustin-golmar/Flex-Bison-Compiler/actions/workflows/pipeline.yaml/badge.svg?branch=production)](https://github.com/agustin-golmar/Flex-Bison-Compiler/actions/workflows/pipeline.yaml)
 
-# Flex-Bison-Compiler
+# ArcanaScript
 
-A base compiler example, developed with Flex and Bison.
+ArcanaScript is a scripting language compiler built with Flex and Bison.
 
 * [Environment](#environment)
 * [CI/CD](#cicd)
