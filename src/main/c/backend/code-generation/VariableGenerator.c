@@ -2,6 +2,7 @@
 #include "Generator.h"
 #include "ExpressionGenerator.h"
 #include "FunctionGenerator.h"
+#include "ClassGenerator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
 #include <stdio.h>
@@ -69,16 +70,6 @@ void generatePrivacyModifiers(const unsigned int indentationLevel, PrivacyList* 
 void generateVariableType(const unsigned int indentationLevel, VariableType variableType) {
     char* typeString = _variableTypeToString(variableType);
     generatorOutput(indentationLevel, "%s", typeString);
-}
-
-void generateObject(const unsigned int indentationLevel, Object* object) {
-    if (object == NULL) {
-        return;
-    }
-    
-    generatorOutput(indentationLevel, "%s", object->name);
-    
-    // TODO: Hacer bien esta funcion cuando lleguemos al tema Objets.
 }
 
 void generateVariableDeclaration(const unsigned int indentationLevel, VariableDeclaration* variableDeclaration) {

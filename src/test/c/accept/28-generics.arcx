@@ -1,2 +1,2 @@
-fun: Function;
-fun: Function<Integer> = () { 1; };
+fun: Function<Integer> = () { return 1; };
+fun();

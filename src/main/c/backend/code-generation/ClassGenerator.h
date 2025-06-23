@@ -45,4 +45,11 @@ void generateImplementations(const unsigned int indentationLevel, Implementation
  */
 void generateImplementationList(const unsigned int indentationLevel, ImplementationList* implementationList);
 
+/**
+ * Generates code for an object, including its name and generic parameters.
+ * @param indentationLevel The current indentation level
+ * @param object The object to generate code for
+ */
+void generateObject(const unsigned int indentationLevel, Object* object);
+
 #endif 
