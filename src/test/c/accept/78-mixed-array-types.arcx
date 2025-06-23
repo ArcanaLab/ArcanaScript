@@ -1,5 +1,5 @@
 class MixedArrayTypesTest {
-    @exposed mixed: int[] = [1, 2, 3;
+    @exposed mixed: int[] = [1, 2, 3];
     @exposed strings: string[] = ["hello", "world"];
     @exposed booleans: boolean[] = [true, false, true];
     @exposed chars: char[] = ['a', 'b', 'c']; 

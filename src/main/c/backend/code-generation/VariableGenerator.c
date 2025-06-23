@@ -33,6 +33,15 @@ char* VariableTypeToString(const VariableType type) {
         case V_FLOAT: return "float";
         case V_LONG: return "long";
         case V_SHORT: return "short";
+        case V_INT_ARRAY: return "int[]";
+        case V_CHAR_ARRAY: return "char[]";
+        case V_BOOLEAN_ARRAY: return "boolean[]";
+        case V_STRING_ARRAY: return "String[]";
+        case V_DOUBLE_ARRAY: return "double[]";
+        case V_FLOAT_ARRAY: return "float[]";
+        case V_LONG_ARRAY: return "long[]";
+        case V_SHORT_ARRAY: return "short[]";
+        case V_OBJECT_ARRAY: return "Object[]";
         case OBJECT: return "Object";
         default:
             return "Object";
@@ -72,7 +81,7 @@ void generateVariableType(const unsigned int indentationLevel, VariableType vari
     generatorOutput(indentationLevel, "%s", typeString);
 }
 
-void generateObject(const unsigned int indentationLevel, Object* object) {
+static void generateObject(const unsigned int indentationLevel, Object* object) {
     if (object == NULL) {
         return;
     }

@@ -31,4 +31,8 @@ void generateConstant(const unsigned int indentationLevel, Constant* constant);
  */
 void generateFunctionCall(const unsigned int indentationLevel, FunctionCall* functionCall);
 
+// Array helpers
+void generateArrayLiteral(const unsigned int indentationLevel, const typeof(((Factor*)0)->arrayLiteral)* arrayLiteral);
+void generateArrayAccess(const unsigned int indentationLevel, const typeof(((Factor*)0)->arrayAccess)* arrayAccess);
+
 #endif 

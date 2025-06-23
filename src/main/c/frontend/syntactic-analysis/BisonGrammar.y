@@ -153,6 +153,10 @@
 		%token <token> OPEN_BRACE
 		%token <token> CLOSE_BRACE
 
+		/** ===== Brackets ===== */
+		%token <token> OPEN_BRACKET
+		%token <token> CLOSE_BRACKET
+
 		/** ===== Comma ===== */
 		%token <token> COMMA
 
@@ -210,6 +214,7 @@
 		%type <expression> expression
 		%type <expression> comparator_expression
 		%type <expressionList> expression_list
+		%type <expressionList> array_elements
 
 	// ------------------ [ Control ] ------------------
 		/** ===== Conditionals ===== */
@@ -262,6 +267,7 @@
 		/** ===== Inheritance ===== */
 			%type <object> inheritance_class
 			%type <implementationList> inheritance_interface
+
 /**
  * Precedence and associativity.
  *
@@ -391,7 +397,8 @@
 			;
 			
 		variable_type:
-			TYPE {$$ = VariableTypeSemanticAction($1); }
+			TYPE { $$ = VariableTypeSemanticAction($1); }
+			| TYPE OPEN_BRACKET CLOSE_BRACKET { $$ = ArrayVariableTypeSemanticAction($1); }
 			;
 
 		/** ===== Constant ===== */
@@ -424,6 +431,7 @@
 			| NAME ADD_ASSIGN expression																				{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
 			| NAME SUB_ASSIGN expression																				{ $$ = AssignmentOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
 			| NAME MUL_ASSIGN expression																				{ $$ = AssignmentOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
+			| NAME OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression { $$ = ArrayAssignmentOperatorSemanticAction($1, $3, $6); }
 			;
 	// ------------------ [ Comparasions ] -----------------------
 		comparator_expression: 	factor[left] GREATER factor[right]														{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_TYPE); }
@@ -452,6 +460,13 @@
 			| NAME INCREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, INCREMENT_TYPE); }
 			| NAME DECREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, DECREMENT_TYPE); }
 			| constant																									{ $$ = ConstantFactorSemanticAction($1); }
+			| OPEN_BRACKET array_elements CLOSE_BRACKET { $$ = ArrayLiteralFactorSemanticAction($2); }
+			| NAME OPEN_BRACKET expression CLOSE_BRACKET { $$ = ArrayAccessFactorSemanticAction($1, $3); }
+			;
+
+		array_elements:
+			/* empty */ { $$ = NULL; }
+			| expression_list { $$ = $1; }
 			;
 
 	// ------------------ [ Miscellaneous ] ----------------------

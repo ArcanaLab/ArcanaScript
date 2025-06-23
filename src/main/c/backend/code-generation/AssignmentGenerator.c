@@ -32,6 +32,16 @@ void generateSimpleAssignment(const unsigned int indentationLevel, AssignmentOpe
         return;
     }
     
+    // Handle array assignment: if name and index are present (arrayAccess)
+    if (assignmentOperation->name != NULL && assignmentOperation->expression != NULL && assignmentOperation->assignmentOperator == ASSIGN_TYPE && assignmentOperation->index != NULL) {
+        // Generate array assignment: name[index] = value;
+        generatorOutput(indentationLevel, "%s[", assignmentOperation->name);
+        generateExpression(0, assignmentOperation->index);
+        generatorOutput(0, "] = ");
+        generateExpression(0, assignmentOperation->expression);
+        generatorOutput(0, ";\n");
+        return;
+    }
     // Handle the case where we have a variable name (not a variable declaration)
     if (assignmentOperation->name != NULL) {
         // Generate variable name

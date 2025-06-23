@@ -10,7 +10,7 @@
 static void generateGeneric(const unsigned int indentationLevel, Generic* generic);
 static void generateGenericList(const unsigned int indentationLevel, GenericList* genericList);
 
-void generateObject(const unsigned int indentationLevel, Object* object) {
+static void generateObject(const unsigned int indentationLevel, Object* object) {
     if (object == NULL) {
         return;
     }

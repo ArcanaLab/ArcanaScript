@@ -69,6 +69,12 @@ void generateFactor(const unsigned int indentationLevel, Factor* factor) {
         case DECREMENT_TYPE:
             generatorOutput(indentationLevel, "%s--", factor->variable);
             break;
+        case ARRAY_LITERAL:
+            generateArrayLiteral(indentationLevel, &factor->arrayLiteral);
+            break;
+        case ARRAY_ACCESS:
+            generateArrayAccess(indentationLevel, &factor->arrayAccess);
+            break;
         default:
             break;
     }
@@ -142,5 +148,32 @@ void generateFunctionCall(const unsigned int indentationLevel, FunctionCall* fun
             }
         }
         generatorOutput(0, ")");
+    }
+}
+
+// Helper: Generate array literal as new Type[] { ... }
+void generateArrayLiteral(const unsigned int indentationLevel, const typeof(((Factor*)0)->arrayLiteral)* arrayLiteral) {
+    // TODO: Type inference for array type (for now, use int[] as default)
+    // In a real implementation, you would pass the type down or infer from context
+    generatorOutput(indentationLevel, "new int[] {");
+    if (arrayLiteral && arrayLiteral->elements) {
+        ExpressionNode* current = arrayLiteral->elements->first;
+        bool first = true;
+        while (current) {
+            if (!first) generatorOutput(0, ", ");
+            generateExpression(0, (Expression*)current->data);
+            first = false;
+            current = current->next;
+        }
+    }
+    generatorOutput(0, "}");
+}
+
+// Helper: Generate array access as name[index]
+void generateArrayAccess(const unsigned int indentationLevel, const typeof(((Factor*)0)->arrayAccess)* arrayAccess) {
+    if (arrayAccess && arrayAccess->arrayName && arrayAccess->index) {
+        generatorOutput(indentationLevel, "%s[", arrayAccess->arrayName);
+        generateExpression(0, arrayAccess->index);
+        generatorOutput(0, "]");
     }
 } 

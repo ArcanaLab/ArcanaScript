@@ -75,6 +75,13 @@ void releaseFactor(Factor * factor) {
 			case DECREMENT_TYPE:
 				releaseName(factor->variable);
 				break;
+            case ARRAY_LITERAL:
+                releaseExpressionList(factor->arrayLiteral.elements);
+                break;
+            case ARRAY_ACCESS:
+                releaseName(factor->arrayAccess.arrayName);
+                releaseExpression(factor->arrayAccess.index);
+                break;
 		}
 		free(factor);
 	}
@@ -121,6 +128,7 @@ void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
 
 	releaseName(assignmentOperation->name);
 	releaseExpression(assignmentOperation->expression);
+	releaseExpression(assignmentOperation->index);
 	free(assignmentOperation);
 }
 
