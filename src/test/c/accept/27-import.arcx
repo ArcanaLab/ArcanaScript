@@ -1,2 +1,5 @@
 import "this/is/a/test.arcx"
-class ClassName { }
+class ImportTest {
+   
+    class ClassName { }
+}

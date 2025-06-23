@@ -1,21 +1,23 @@
-// Invalid comparison operators test
-vara:int = 5;
-varb:int = 10;
-
-// Invalid: missing right operand
-if (vara ==)
-{
-    result:boolean = true;
+class InvalidComparisonTest {
+    // Invalid comparison operators test
+    vara:int = 5;
+    varb:int = 10;
+    
+    // Invalid: missing right operand
+    if (vara ==)
+    {
+        result:boolean = true;
+    }
+    
+    // Invalid: missing left operand
+    if (== varb)
+    {
+        result2:boolean = true;
+    }
+    
+    // Invalid: malformed comparison
+    if (vara =!= varb)
+    {
+        result3:boolean = true;
+    } 
 }
-
-// Invalid: missing left operand
-if (== varb)
-{
-    result2:boolean = true;
-}
-
-// Invalid: malformed comparison
-if (vara =!= varb)
-{
-    result3:boolean = true;
-} 

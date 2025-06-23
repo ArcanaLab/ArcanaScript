@@ -1,3 +1,5 @@
-@exposed numbers: int[];
-@exposed names: string[];
-@exposed values: float[]; 
+class ArrayDeclarationTest {
+    @exposed numbers: int[];
+    @exposed names: string[];
+    @exposed values: float[]; 
+}

@@ -1,2 +1,4 @@
-x: int = 10;
-x -= 4; 
+class CompoundAssignmentSubtractTest {
+    x: int = 10;
+    x -= 4; 
+}

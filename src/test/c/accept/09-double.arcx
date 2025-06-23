@@ -1,1 +1,3 @@
-preciso:double = 10.0;
+class DoubleTest {
+    preciso:double = 10.0;
+}

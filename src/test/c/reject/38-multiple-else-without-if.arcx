@@ -1,5 +1,7 @@
-else {
-    x:int=1;
-} else {
-    y:int=2;
-} 
+class MultipleElseWithoutIfTest {
+    else {
+        x:int=1;
+    } else {
+        y:int=2;
+    } 
+}

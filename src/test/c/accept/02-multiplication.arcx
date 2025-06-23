@@ -1,1 +1,3 @@
-producto:int = 7 * 5;
+class MultiplicationTest {
+    producto:int = 7 * 5;
+}

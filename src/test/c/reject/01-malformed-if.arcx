@@ -1,1 +1,3 @@
-if { 3 + 4; }
+class MalformedIfTest {
+    if { 3 + 4; }
+}

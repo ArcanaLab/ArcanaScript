@@ -1,4 +1,6 @@
-@exposed numbers: int[] = [1, 2, 3, 4, 5];
-@exposed first: int = numbers[0];
-@exposed last: int = numbers[4];
-@exposed middle: int = numbers[2]; 
+class ArrayAccessTest {
+    @exposed numbers: int[] = [1, 2, 3, 4, 5];
+    @exposed first: int = numbers[0];
+    @exposed last: int = numbers[4];
+    @exposed middle: int = numbers[2]; 
+}

@@ -1,10 +1,13 @@
-for(num : numbers) {
-    if ((num % 2) == 0) {
-     #   print("Even: " + num);
-     result:int = (num * 2);
-    } else {
-     #   print("Odd: " + num);
-     result:int = (num * 3);
+@exposed
+class ForLoopWithConditionalTest {
+    for(num : numbers) {
+        if ((num % 2) == 0) {
+         print("Even: " + num);
+         result:int = (num * 2);
+        } else {
+         print("Odd: " + num);
+         result:int = (num * 3);
+        }
     }
+    result:int = 0;
 }
-result:int = 0;

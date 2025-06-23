@@ -1,6 +1,8 @@
-@exposed numbers: int[] = [1, 2, 3, 4, 5];
-@exposed sum: int = 0;
-
-for (i: int = 0; i < 5; i++) {
-    sum = sum + numbers[i];
-}; 
+class ArrayInLoopTest {
+    @exposed numbers: int[] = [1, 2, 3, 4, 5];
+    @exposed sum: int = 0;
+    
+    for (i: int = 0; i < 5; i++) {
+        sum = sum + numbers[i];
+    }; 
+}

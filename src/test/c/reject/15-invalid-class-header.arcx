@@ -1,3 +1,5 @@
-class { 
-    abc: int = 1;
-} 
+class InvalidClassHeaderTest {
+    class { 
+        abc: int = 1;
+    } 
+}

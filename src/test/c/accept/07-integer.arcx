@@ -1,1 +1,3 @@
-numero:int = 1234;
+class IntegerTest {
+    numero:int = 1234;
+}

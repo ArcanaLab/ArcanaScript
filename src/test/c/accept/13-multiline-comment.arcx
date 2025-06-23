@@ -1,4 +1,6 @@
-#!
-	A multiline comment.
-!#
-var:int;
+class MultilineCommentTest {
+    #!
+    	A multiline comment.
+    !#
+    var:int;
+}

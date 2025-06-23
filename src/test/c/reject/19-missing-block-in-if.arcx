@@ -1,6 +1,8 @@
-if (a == b)
-    a:int=0;
-else
-{
-    b:int=0;
-} 
+class MissingBlockInIfTest {
+    if (a == b)
+        a:int=0;
+    else
+    {
+        b:int=0;
+    } 
+}

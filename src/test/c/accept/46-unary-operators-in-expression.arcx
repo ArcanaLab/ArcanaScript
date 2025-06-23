@@ -1,3 +1,5 @@
-a: int = 5;
-b: int = 3;
-result: int = a++ + b--; 
+class UnaryOperatorsInExpressionTest {
+    a: int = 5;
+    b: int = 3;
+    result: int = a++ + b--; 
+}

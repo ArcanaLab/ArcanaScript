@@ -1,1 +1,3 @@
-a: = 5; 
+class MissingTypeInDeclarationTest {
+    a: = 5; 
+}

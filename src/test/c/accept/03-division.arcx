@@ -1,1 +1,3 @@
-cociente:int = 16 / 4;
+class DivisionTest {
+    cociente:int = 16 / 4;
+}

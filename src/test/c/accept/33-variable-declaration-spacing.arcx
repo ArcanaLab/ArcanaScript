@@ -1,3 +1,5 @@
-x: int = 5;
-y: string = "hello";
-z: boolean = true; 
+class VariableDeclarationSpacingTest {
+    x: int = 5;
+    y: string = "hello";
+    z: boolean = true; 
+}

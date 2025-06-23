@@ -1,1 +1,3 @@
-caracter:char = 'a';
+class CharTest {
+    caracter:char = 'a';
+}

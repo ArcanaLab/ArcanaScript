@@ -1,3 +1,5 @@
-for(frodo : FellowshipOfTheRing){
-    1234;
+class ForLoopTest {
+    for(frodo : FellowshipOfTheRing){
+        1234;
+    }
 }

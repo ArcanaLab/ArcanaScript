@@ -1,1 +1,3 @@
-@exposed @eternal variable: int = 5; 
+class MultiplePrivacyTest {
+    @exposed @eternal variable: int = 5; 
+}

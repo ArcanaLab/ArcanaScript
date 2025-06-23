@@ -1,1 +1,3 @@
-valor:bool = false;
+class BooleanTest {
+    valor:bool = false;
+}

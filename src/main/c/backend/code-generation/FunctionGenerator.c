@@ -14,20 +14,48 @@ void generateLambda(const unsigned int indentationLevel, VariableDeclaration* la
     Lambda* lambda = lambdaDeclaration->expression->lambda;
 
     // Generate lambda parameters
-    generatorOutput(indentationLevel, "(");
+    generatorOutput(indentationLevel, "(args) ->{");
     if (lambda->variableDeclarationList != NULL) {
         generateVariableDeclarationList(0, lambda->variableDeclarationList);
     }
-    generatorOutput(0, ") -> ");
+    //generatorOutput(0, ") -> ");
 
     // Generate lambda body
     if (lambda->block != NULL) {
         generateScope(indentationLevel, lambda->block);
-    } else {
-        generatorOutput(indentationLevel, "{}");
+    } 
+    generatorOutput(indentationLevel, "}");
+
+    
+}
+void generateArgumentList(const unsigned int indentationLevel, VariableDeclarationList* argumentList) {
+    if (argumentList == NULL || argumentList->size == 0) {
+        return;
+    }
+
+    Node* currentNode = argumentList->first;
+    int currentIndex = 0;
+    while (currentNode != NULL) {
+        
+        VariableDeclaration* argument = (VariableDeclaration*)currentNode->data;
+        if (argument != NULL) {
+            char * typeName = VariableTypeToString(argument->type);
+            if (argument->type == OBJECT && argument->object != NULL) {
+                typeName = argument->object->name;
+            }
+            generateVariableDeclaration(indentationLevel, argument);
+            generatorOutput(0, "(%s)args[%d]", typeName, currentIndex);
+
+            currentNode = currentNode->next;
+            if (currentNode != NULL) {
+                generatorOutput(0, "; ");
+            }
+        } else {
+            currentNode = currentNode->next;
+        }
+        currentIndex++;
     }
 }
-
 void generateFunction(const unsigned int indentationLevel, VariableDeclaration* functionDeclaration) {
     if (functionDeclaration == NULL || functionDeclaration->expression == NULL || functionDeclaration->expression->type != LAMBDA) {
         return;

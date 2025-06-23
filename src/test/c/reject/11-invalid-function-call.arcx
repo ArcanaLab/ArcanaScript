@@ -1,1 +1,3 @@
-funA(; 
+class InvalidFunctionCallTest {
+    funA(; 
+}

@@ -1,3 +1,4 @@
+
 class Hijo is Padre {
     valor: int = 10;
 } 

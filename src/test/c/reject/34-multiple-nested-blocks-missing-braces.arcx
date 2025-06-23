@@ -1,8 +1,10 @@
-{
-    if (a == b) {
-        while (x < 10) {
-            for(i : List) {
-                y:int=2;
+class MultipleNestedBlocksMissingBracesTest {
+    {
+        if (a == b) {
+            while (x < 10) {
+                for(i : List) {
+                    y:int=2;
+            }
         }
-    }
-} 
+    } 
+}

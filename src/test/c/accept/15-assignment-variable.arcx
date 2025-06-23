@@ -1,2 +1,8 @@
-var1 :int;
-var1 = 1;
+class AssignmentVariableTest {
+    fun : Function = () 
+    {
+        var1 :int;
+        var1 = 1;
+        print(var1);
+    };
+}

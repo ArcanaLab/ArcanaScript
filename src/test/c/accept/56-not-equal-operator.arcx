@@ -1,8 +1,10 @@
-# Test for != (not equal) operator
-vara:int = 5;
-varb:int = 10;
-
-if (vara != varb)
-{
-    result:boolean = true;
-} 
+class NotEqualOperatorTest {
+    # Test for != (not equal) operator
+    vara:int = 5;
+    varb:int = 10;
+    
+    if (vara != varb)
+    {
+        result:boolean = true;
+    } 
+}

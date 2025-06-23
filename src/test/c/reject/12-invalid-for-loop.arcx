@@ -1,3 +1,5 @@
-for(frodo FellowshipOfTheRing){
-    1234;
-} 
+class InvalidForLoopTest {
+    for(frodo FellowshipOfTheRing){
+        1234;
+    } 
+}

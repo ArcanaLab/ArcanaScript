@@ -1,1 +1,3 @@
-@exposed variable:int;
+class VariableDeclarationTest {
+    @exposed variable:int;
+}

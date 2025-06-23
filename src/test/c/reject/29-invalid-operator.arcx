@@ -1,2 +1,4 @@
-a:int = 5;
-b:int = a $ 2; 
+class InvalidOperatorTest {
+    a:int = 5;
+    b:int = a $ 2; 
+}

@@ -1,1 +1,3 @@
-else { 5; }
+class NoElseIfTest {
+    else { 5; }
+}

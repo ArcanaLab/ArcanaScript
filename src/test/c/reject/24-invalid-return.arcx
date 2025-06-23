@@ -1,1 +1,3 @@
-return 5; 
+class InvalidReturnTest {
+    return 5; 
+}

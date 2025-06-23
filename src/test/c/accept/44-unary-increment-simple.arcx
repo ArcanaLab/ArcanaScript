@@ -1,2 +1,4 @@
-x: int = 5;
-x++; 
+class UnaryIncrementSimpleTest {
+    x: int = 5;
+    x++; 
+}

@@ -1,7 +1,9 @@
-# Test for for loop with assignment inside
-#sum:int = 0;
-#numbers:List<int> = [1, 2, 3, 4, 5];
-
-for(num : numbers) {
-    sum = sum + num;
-} 
+class ForLoopWithAssignmentTest {
+    # Test for for loop with assignment inside
+    #sum:int = 0;
+    #numbers:List<int> = [1, 2, 3, 4, 5];
+    
+    for(num : numbers) {
+        sum = sum + num;
+    } 
+}

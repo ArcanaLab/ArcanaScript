@@ -1,1 +1,3 @@
-@exposeded variable:int; 
+class InvalidPrivacyTest {
+    @exposeded variable:int; 
+}

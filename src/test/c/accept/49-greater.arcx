@@ -1,8 +1,10 @@
-if (4>=6)
-{
-    vara:int=0;
-}
-if(6>4)
-{
-    vara +=1;
+class GreaterTest {
+    if (4>=6)
+    {
+        vara:int=0;
+    }
+    if(6>4)
+    {
+        vara +=1;
+    }
 }

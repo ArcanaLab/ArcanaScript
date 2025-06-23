@@ -1,2 +1,4 @@
-y: int = 10;
-y--; 
+class UnaryDecrementSimpleTest {
+    y: int = 10;
+    y--; 
+}

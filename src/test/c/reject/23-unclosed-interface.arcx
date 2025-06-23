@@ -1,2 +1,4 @@
-interface MyInterface {
-    foo: int;
+class UnclosedInterfaceTest {
+    interface MyInterface {
+        foo: int;
+}

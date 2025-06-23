@@ -31,4 +31,20 @@ void generatePrivacyModifiers(const unsigned int indentationLevel, PrivacyList* 
  */
 void generateVariableType(const unsigned int indentationLevel, VariableType variableType);
 
+/**
+ * Generates code for an object (class/interface type) using direct output.
+ * @param indentationLevel The current indentation level
+ * @param object The object to generate code for
+ */
+void generateObject(const unsigned int indentationLevel, Object* object);
+
+/**
+ * Converts a VariableType enum value to its corresponding string representation.
+ *
+ * @param type The VariableType enum value to convert.
+ * @return A pointer to a string representing the name of the variable type.
+ *         The returned string should not be modified or freed by the caller.
+ */
+char* VariableTypeToString(const VariableType type);
+
 #endif

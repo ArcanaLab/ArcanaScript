@@ -1,1 +1,3 @@
-@exposed @unknown @eternal variable: int = 5; 
+class MixedDecoratorsErrorTest {
+    @exposed @unknown @eternal variable: int = 5; 
+}

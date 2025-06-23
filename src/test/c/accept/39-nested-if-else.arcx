@@ -1,7 +1,9 @@
-if (a == b) {
-    if (c == d) {
-        x:int=1;
-    } else {
-        y:int=2;
-    }
-} 
+class NestedIfElseTest {
+    if (a == b) {
+        if (c == d) {
+            x:int=1;
+        } else {
+            y:int=2;
+        }
+    } 
+}
