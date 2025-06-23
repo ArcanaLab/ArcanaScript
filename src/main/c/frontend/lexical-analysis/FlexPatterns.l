@@ -48,6 +48,7 @@ single_line_comment   "#"[^!].*
 "{"									{ return BraceLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACE); }
 "}"									{ return BraceLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACE); }
 
+
 ","									{ return CommaLexemeAction(createLexicalAnalyzerContext()); }
 
 "'"                                 { BEGIN(CHAR_CONSTANT); ApostropheLexemeAction(createLexicalAnalyzerContext()); }
@@ -78,7 +79,9 @@ single_line_comment   "#"[^!].*
 "string"                            { return TypeLexemeAction(createLexicalAnalyzerContext(), V_STRING); } 
 "long"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), V_LONG); } 
 "short"                             { return TypeLexemeAction(createLexicalAnalyzerContext(), V_SHORT); } 
-"boolean"                           { return TypeLexemeAction(createLexicalAnalyzerContext(), V_BOOLEAN); } 
+"boolean"                           { return TypeLexemeAction(createLexicalAnalyzerContext(), V_BOOLEAN); }
+
+
 
 "while"                             { return LoopLexemeAction(createLexicalAnalyzerContext(), WHILE); }
 "for"                               { return LoopLexemeAction(createLexicalAnalyzerContext(), FOR); }
