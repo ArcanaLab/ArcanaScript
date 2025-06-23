@@ -1,2 +1,4 @@
-# A single line comment.
-var:int;
+class CommentTest {
+    # A single line comment.
+    var:int;
+}

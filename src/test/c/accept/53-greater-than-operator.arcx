@@ -1,8 +1,10 @@
-# Test for > (greater than) operator
-vara:int = 10;
-varb:int = 3;
-
-if (vara > varb)
-{
-    result:boolean = true;
-} 
+class GreaterThanOperatorTest {
+    # Test for > (greater than) operator
+    vara:int = 10;
+    varb:int = 3;
+    
+    if (vara > varb)
+    {
+        result:boolean = true;
+    } 
+}

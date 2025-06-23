@@ -1,4 +1,6 @@
-# Test for for loop missing collection
-for(item :) {
-    print(item);
-} 
+class ForLoopMissingCollectionTest {
+    # Test for for loop missing collection
+    for(item :) {
+        print(item);
+    } 
+}

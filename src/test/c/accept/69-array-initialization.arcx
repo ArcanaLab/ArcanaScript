@@ -1,3 +1,5 @@
-@exposed numbers: int[] = [1, 2, 3, 4, 5];
-@exposed names: string[] = ["Alice", "Bob", "Charlie"];
-@exposed values: float[] = [1.5, 2.7, 3.14]; 
+class ArrayInitializationTest {
+    @exposed numbers: int[] = [1, 2, 3, 4, 5];
+    @exposed names: string[] = ["Alice", "Bob", "Charlie"];
+    @exposed values: float[] = [1.5, 2.7, 3.14]; 
+}

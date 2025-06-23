@@ -1,3 +1,4 @@
+
 class Hijo is Padre using MiInterfaz, OtraInterfaz {
     foo: int = 1;
 } 

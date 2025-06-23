@@ -1,1 +1,3 @@
-@public variable: int; 
+class InvalidDecoratorTest {
+    @public variable: int; 
+}

@@ -1,1 +1,3 @@
-diferencia:int = 3 - 2;
+class SubtractionTest {
+    diferencia:int = 3 - 2;
+}

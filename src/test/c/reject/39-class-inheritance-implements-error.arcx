@@ -1,3 +1,5 @@
-class Hijo is Padre using {
-    foo: int = 1;
-} 
+class ClassInheritanceImplementsErrorTest {
+    class Hijo is Padre using {
+        foo: int = 1;
+    } 
+}

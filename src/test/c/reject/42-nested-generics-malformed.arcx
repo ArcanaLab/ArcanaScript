@@ -1,1 +1,3 @@
-class Map<K, V<,>> { } 
+class NestedGenericsMalformedTest {
+    class Map<K, V<,>> { } 
+}

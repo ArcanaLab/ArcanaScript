@@ -1,3 +1,5 @@
-f = (a: int, b: float) {
-    return;
-}; 
+class LambdaArgsTest {
+    f = (a: int, b: float) {
+        return;
+    }; 
+}

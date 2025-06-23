@@ -39,4 +39,13 @@ void generateVariableType(const unsigned int indentationLevel, VariableType vari
  */
 void generateObject(const unsigned int indentationLevel, Object* object);
 
+/**
+ * Converts a VariableType enum value to its corresponding string representation.
+ *
+ * @param type The VariableType enum value to convert.
+ * @return A pointer to a string representing the name of the variable type.
+ *         The returned string should not be modified or freed by the caller.
+ */
+char* VariableTypeToString(const VariableType type);
+
 #endif

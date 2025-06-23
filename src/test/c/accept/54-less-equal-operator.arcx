@@ -1,8 +1,10 @@
-# Test for <= (less than or equal) operator
-vara:int = 5;
-varb:int = 5;
-
-if (vara <= varb)
-{
-    result:boolean = true;
-} 
+class LessEqualOperatorTest {
+    # Test for <= (less than or equal) operator
+    vara:int = 5;
+    varb:int = 5;
+    
+    if (vara <= varb)
+    {
+        result:boolean = true;
+    } 
+}

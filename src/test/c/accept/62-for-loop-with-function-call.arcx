@@ -1,6 +1,8 @@
-# Test for for loop with function call
-# names:List<string> = ["Alice", "Bob", "Charlie", "Diana"];
-
-for(name : names) {
-    greet(name);
-} 
+class ForLoopWithFunctionCallTest {
+    # Test for for loop with function call
+    # names:List<string> = ["Alice", "Bob", "Charlie", "Diana"];
+    
+    for(name : names) {
+        greet(name);
+    } 
+}

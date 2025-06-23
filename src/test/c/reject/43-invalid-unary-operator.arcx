@@ -1,2 +1,4 @@
-x: int = 5;
-x+++; 
+class InvalidUnaryOperatorTest {
+    x: int = 5;
+    x+++; 
+}

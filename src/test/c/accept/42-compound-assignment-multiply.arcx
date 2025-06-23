@@ -1,2 +1,4 @@
-x: int = 6;
-x *= 2; 
+class CompoundAssignmentMultiplyTest {
+    x: int = 6;
+    x *= 2; 
+}

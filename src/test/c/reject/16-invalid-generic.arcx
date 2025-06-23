@@ -1,1 +1,3 @@
-class ClassName<int,> { } 
+class InvalidGenericTest {
+    class ClassName<int,> { } 
+}

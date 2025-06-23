@@ -1,1 +1,3 @@
-a:string = "hola; 
+class UnclosedStringTest {
+    a:string = "hola; 
+}

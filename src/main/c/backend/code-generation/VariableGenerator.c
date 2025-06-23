@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 static char* _assignmentOperatorToString(const AssignmentOperatorType type);
-static char* _variableTypeToString(const VariableType type);
+char* VariableTypeToString(const VariableType type);
 static char* _privacyTypeToString(const PrivacyType type);
 
 static char* _assignmentOperatorToString(const AssignmentOperatorType type) {
@@ -22,7 +22,7 @@ static char* _assignmentOperatorToString(const AssignmentOperatorType type) {
     }
 }
 
-static char* _variableTypeToString(const VariableType type) {
+char* VariableTypeToString(const VariableType type) {
     switch (type) {
         case V_INT: return "int";
         case V_CHAR: return "char";
@@ -67,7 +67,7 @@ void generatePrivacyModifiers(const unsigned int indentationLevel, PrivacyList* 
 }
 
 void generateVariableType(const unsigned int indentationLevel, VariableType variableType) {
-    char* typeString = _variableTypeToString(variableType);
+    char* typeString = VariableTypeToString(variableType);
     generatorOutput(indentationLevel, "%s", typeString);
 }
 
@@ -75,9 +75,11 @@ void generateObject(const unsigned int indentationLevel, Object* object) {
     if (object == NULL) {
         return;
     }
-    
-    generatorOutput(indentationLevel, "%s", object->name);
-    
+    if (object->name != NULL && strcmp(object->name, "bool") == 0) {
+        generatorOutput(indentationLevel, "boolean");
+    } else {
+        generatorOutput(indentationLevel, "%s", object->name);
+    }
     // TODO: Hacer bien esta funcion cuando lleguemos al tema Objets.
 }
 

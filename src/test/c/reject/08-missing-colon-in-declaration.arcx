@@ -1,1 +1,3 @@
-variable int; 
+class MissingColonInDeclarationTest {
+    variable int; 
+}

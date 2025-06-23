@@ -3,6 +3,7 @@
 #include "StructureGenerator.h"
 #include <stdbool.h>
 #include <sys/stat.h>
+#include "JavaFileUtils.h"
 
 /* MODULE INTERNAL STATE */
 
@@ -128,17 +129,21 @@ bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testNa
 		return false;
 	}
 
-	char* filename = concatenate(3, "test_results/", testName, ".java");
+	// Buscar el nombre de la clase principal
+	char* className = getMainClassName((Program*)compilerState->abstractSyntaxtTree);
+	const char* fileBaseName = className ? className : testName;
+
+	char* filename = concatenate(3, "test_results/", fileBaseName, ".java");
 	_outputFile = fopen(filename, "w");
 	free(filename);
 
 	if (_outputFile == NULL) {
-		logError(_logger, "Failed to open output file for test: %s", testName);
+		logError(_logger, "Failed to open output file for test: %s", fileBaseName);
 		return false;
 	}
 
 	_atLineStart = true; // Reset line start flag for new file
-	logDebugging(_logger, "Writing generated output to file for test: %s", testName);
+	logDebugging(_logger, "Writing generated output to file for test: %s", fileBaseName);
 	generateProgram(0, (Program*)compilerState->abstractSyntaxtTree);
 	
 	fclose(_outputFile);

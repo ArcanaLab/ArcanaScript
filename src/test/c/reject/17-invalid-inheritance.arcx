@@ -1,1 +1,3 @@
-class ClassName is { } 
+class InvalidInheritanceTest {
+    class ClassName is { } 
+}

@@ -1,2 +1,4 @@
-fun: Function;
-fun: Function<Integer> = () { 1; };
+class GenericsTest {
+    fun: Function;
+    fun: Function<Integer> = () { 1; };
+}

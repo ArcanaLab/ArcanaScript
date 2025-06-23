@@ -1,1 +1,3 @@
-resultado:int = (87);
+class ParenthesisTest {
+    resultado:int = (87);
+}

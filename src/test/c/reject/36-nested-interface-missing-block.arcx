@@ -1,5 +1,7 @@
-interface A {
-    interface B
-        foo: int;
-    }
-} 
+class NestedInterfaceMissingBlockTest {
+    interface A {
+        interface B
+            foo: int;
+        }
+    } 
+}

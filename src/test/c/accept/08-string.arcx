@@ -1,1 +1,3 @@
-texto:string = "abc123";
+class StringTest {
+    texto:string = "abc123";
+}

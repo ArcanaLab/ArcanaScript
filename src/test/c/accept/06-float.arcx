@@ -1,1 +1,3 @@
-decimal:float = 10.0f;
+class FloatTest {
+    decimal:float = 10.0f;
+}

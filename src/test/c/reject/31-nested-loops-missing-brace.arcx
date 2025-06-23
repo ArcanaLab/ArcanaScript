@@ -1,7 +1,9 @@
-while (a == b) {
-    for(i in list) {
-        while (x < 10) {
-            a:int = 1;
-        
-    }
-} 
+class NestedLoopsMissingBraceTest {
+    while (a == b) {
+        for(i in list) {
+            while (x < 10) {
+                a:int = 1;
+            
+        }
+    } 
+}

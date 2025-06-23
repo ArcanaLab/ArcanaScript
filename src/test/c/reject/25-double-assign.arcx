@@ -1,1 +1,3 @@
-a:int = = 5; 
+class DoubleAssignTest {
+    a:int = = 5; 
+}

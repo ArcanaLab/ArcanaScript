@@ -1,3 +1,5 @@
-while a == b {
-    a:int=0;
-} 
+class InvalidWhileConditionTest {
+    while a == b {
+        a:int=0;
+    } 
+}

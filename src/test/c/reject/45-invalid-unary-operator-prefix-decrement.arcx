@@ -1,2 +1,4 @@
-x: int = 5;
---x; 
+class InvalidUnaryOperatorPrefixDecrementTest {
+    x: int = 5;
+    --x; 
+}

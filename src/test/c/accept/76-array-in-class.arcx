@@ -1,9 +1,11 @@
-class ArrayClass {
-    @exposed data: int[] = [1, 2, 3, 4, 5];
-    @exposed names: string[] = ["Alice", "Bob"];
-    
-    fun = () {
-        data[0] = 10;
-        names[1] = "Charlie";
-    };
-} 
+class ArrayInClassTest {
+    class ArrayClass {
+        @exposed data: int[] = [1, 2, 3, 4, 5];
+        @exposed names: string[] = ["Alice", "Bob"];
+        
+        fun = () {
+            data[0] = 10;
+            names[1] = "Charlie";
+        };
+    } 
+}

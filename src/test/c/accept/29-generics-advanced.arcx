@@ -1,1 +1,3 @@
-class Map<K is Key, V> { } 
+class GenericsAdvancedTest {
+    class Map<K is Key, V> { } 
+}
