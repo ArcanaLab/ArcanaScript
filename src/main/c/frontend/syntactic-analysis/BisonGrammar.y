@@ -52,6 +52,7 @@
 
 	Class * class;
 	Interface * inter;
+	Constructor * constructor;
 
 	FunctionCall * functionCall;
 	ExpressionList * expressionList;
@@ -61,6 +62,7 @@
 	GenericList * genericList;
 
 	ImplementationList * implementationList;
+
 }
 
 /**
@@ -203,6 +205,10 @@
 	// ------------------ [ Functions ] -------------------
 		/** ===== Return ===== */
 		%token <token> RETURN
+		/** ===== Super ===== */
+		%token <token> SUPER
+		/** ===== Constructor ===== */
+		%token <token> CONSTRUCTOR
 	// ------------------ [ Unknown ] ---------------------
 		%token <token> UNKNOWN
 
@@ -256,6 +262,10 @@
 			%type <varList> var_list
 		/** ===== Function Call ===== */
 			%type <functionCall> function_call
+		/** ===== Super Call ===== */
+			%type <functionCall> super_call
+		/** ===== Constructor ===== */
+			%type <lambda> constructor
 	// ------------------ [ OOP ] ------------------
 		/** ===== Object ===== */
 			%type <object> object
@@ -267,6 +277,9 @@
 			%type <genericList> generic_list
 		/** ===== Interfaces ===== */
 			%type <inter> interface
+			
+		/** ===== Constructor ===== */
+			%type <constructor> constructor
 
 		/** ===== Implementactions ===== */
 			%type <implementationList> implementation
@@ -319,6 +332,7 @@
 			| if																										{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONDITIONAL); }
 			| class																										{ $$ = InstructionSemanticAction($1, INSTRUCTION_CLASS); }
 			| interface																									{ $$ = InstructionSemanticAction($1, INSTRUCTION_INTERFACE); }
+			| constructor																								{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONSTRUCTOR); }
 			| RETURN instruction[ret]																					{ $$ = InstructionSemanticAction($ret, INSTRUCTION_RETURN); HAS_CRITICAL_ABORT }
 			| RETURN SEMICOLON																							{ $$ = InstructionSemanticAction(NULL, INSTRUCTION_RETURN); HAS_CRITICAL_ABORT }
 			| PASS SEMICOLON																							{ $$ = InstructionSemanticAction(NULL, INSTRUCTION_PASS); HAS_CRITICAL_ABORT }
@@ -333,10 +347,14 @@
 		/** ===== DECLARATION ===== */
 
 			class: 
-				CLASS object[obj] { pushContext(CLASS_CONTEXT); } scope[scope_block]																	{ $$ = ClassSemanticAction($obj, NULL, NULL, $scope_block); popContext(); }
-				| CLASS object[obj] inheritance_class[inherit] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, $inherit, NULL, $scope_block); popContext(); }
-				| CLASS object[obj] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, NULL, $implement, $scope_block); popContext(); }
-				| CLASS object[obj] inheritance_class[inherit] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]				{ $$ = ClassSemanticAction($obj, $inherit, $implement, $scope_block); popContext(); }
+				CLASS object[obj] { pushContext(CLASS_CONTEXT); } scope[scope_block]																	{ $$ = ClassSemanticAction($obj, NULL, NULL, NULL, $scope_block); popContext(); }
+				| CLASS object[obj] inheritance_class[inherit] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, $inherit, NULL, NULL, $scope_block); popContext(); }
+				| CLASS object[obj] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, NULL, $implement, NULL, $scope_block); popContext(); }
+				| CLASS object[obj] inheritance_class[inherit] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]				{ $$ = ClassSemanticAction($obj, $inherit, $implement, NULL, $scope_block); popContext(); }
+				| privacy_list[priv] CLASS object[obj] { pushContext(CLASS_CONTEXT); } scope[scope_block]																	{ $$ = ClassSemanticAction($obj, NULL, NULL, $priv, $scope_block); popContext(); }
+				| privacy_list[priv] CLASS object[obj] inheritance_class[inherit] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, $inherit, NULL, $priv, $scope_block); popContext(); }
+				| privacy_list[priv] CLASS object[obj] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, NULL, $implement, $priv, $scope_block); popContext(); }
+				| privacy_list[priv] CLASS object[obj] inheritance_class[inherit] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]				{ $$ = ClassSemanticAction($obj, $inherit, $implement, $priv, $scope_block); popContext(); }
 				;
 
 			interface:
@@ -361,6 +379,11 @@
 				object																										{ $$ = ImplementationListSemanticAction(NULL, $1); }
 				| implementation_list COMMA object																			{ $$ = ImplementationListSemanticAction($1, $3); }
 				;
+		/** ===== Constructor ===== */
+		constructor:
+			CONSTRUCTOR OPEN_PARENTHESIS CLOSE_PARENTHESIS { pushContext(CONSTRUCTOR_CONTEXT); } scope[scope_block]						{ popContext(); $$ = ConstructorSemanticAction(NULL, $scope_block); }
+			| CONSTRUCTOR OPEN_PARENTHESIS var_list[args] CLOSE_PARENTHESIS { pushContext(CONSTRUCTOR_CONTEXT); } scope[scope_block]	{ popContext(); $$ = ConstructorSemanticAction($args, $scope_block); }
+			;
 
 	// ------------------ [ Control Structures ] -----------------
 		/** ===== Loops ===== */
@@ -459,6 +482,7 @@
 			| expression[left] MOD expression[right]																	{ $$ = ArithmeticExpressionSemanticAction($left, $right, MODULE); }
 			| factor																									{ $$ = FactorExpressionSemanticAction($1); }
 			| function_call																								{ $$ = FunctionCallExpressionSemanticAction($1); }
+			| super_call																								{ $$ = FunctionCallExpressionSemanticAction($1); }
 			| lambda																									{ $$ = LambdaExpressionSemanticAction($1); }
 			| this_expression																							{ $$ = $1; }
 			;
@@ -502,6 +526,18 @@
 		function_call:
 			NAME OPEN_PARENTHESIS CLOSE_PARENTHESIS																		{ $$ = FunctionCallSemanticAction($1, NULL); }
 			| NAME OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS													{ $$ = FunctionCallSemanticAction($1, $3); }
+			;
+
+		/** ===== Super Call ===== */
+		super_call:
+			SUPER OPEN_PARENTHESIS CLOSE_PARENTHESIS																	{ $$ = SuperCallSemanticAction(NULL); }
+			| SUPER OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS													{ $$ = SuperCallSemanticAction($3); }
+			;
+
+		/** ===== Constructor ===== */
+		constructor:
+			CONSTRUCTOR OPEN_PARENTHESIS CLOSE_PARENTHESIS { pushContext(CONSTRUCTOR_CONTEXT); } scope[scope_block]		{ $$ = ConstructorSemanticAction(NULL, $scope_block); popContext(); }
+			| CONSTRUCTOR OPEN_PARENTHESIS var_list[args] CLOSE_PARENTHESIS { pushContext(CONSTRUCTOR_CONTEXT); } scope[scope_block]	{ $$ = ConstructorSemanticAction($args, $scope_block); popContext(); }
 			;
 
 		/** ===== Argument List (Function Call) ===== */

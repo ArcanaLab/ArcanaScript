@@ -230,7 +230,7 @@ Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Variable
 
 /**
  * @brief Processes a class lexeme during lexical analysis.
- *
+ *ThisDotExpressionSemanticAction
  * This function is called when a class-related lexeme is recognized by the lexical analyzer.
  * It performs the necessary actions to create and return a Token representing the class lexeme.
  *
@@ -259,6 +259,22 @@ Token InterfaceLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
  */
 Token DecoratorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
+
+/**
+ * Processes a super lexeme during lexical analysis.
+ *
+ * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
+ * @return A Token representing the result of the super lexeme action.
+ */
+Token SuperLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+/**
+ * Processes a constructor lexeme during lexical analysis.
+ *
+ * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
+ * @return A Token representing the result of the constructor lexeme action.
+ */
+Token ConstructorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 #pragma endregion
 

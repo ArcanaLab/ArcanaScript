@@ -1,6 +1,7 @@
 #include "ClassGenerator.h"
 #include "Generator.h"
 #include "StructureGenerator.h"
+#include "VariableGenerator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
 #include <stdio.h>
@@ -109,8 +110,16 @@ void generateClass(const unsigned int indentationLevel, Class* class) {
         return;
     }
     
+    // Generate privacy modifiers if present
+    if (class->privacyModifierList != NULL) {
+        generatePrivacyModifiers(indentationLevel, class->privacyModifierList);
+    } else {
+        // Default to public if no privacy modifier is specified
+        generatorOutput(indentationLevel, "public ");
+    }
+    
     // Generate class declaration
-    generatorOutput(indentationLevel, "public class ");
+    generatorOutput(indentationLevel, "class ");
     
     // Generate class name and generics
     if (class->object != NULL) {
@@ -129,7 +138,9 @@ void generateClass(const unsigned int indentationLevel, Class* class) {
     
     // Generate class body
     if (class->block != NULL) {
-        generateScope(indentationLevel, class->block);
+        generatorOutput(indentationLevel, " {\n");
+        generateClassBody(indentationLevel, class->block, class->object);
+        generatorOutput(indentationLevel, "}\n");
     } else {
         generatorOutput(indentationLevel, " {\n");
         generatorOutput(indentationLevel, "}\n");
@@ -165,4 +176,28 @@ void generateInterface(const unsigned int indentationLevel, Interface* interface
     }
     
     generatorOutput(indentationLevel, "\n");
+}
+
+void generateClassBody(const unsigned int indentationLevel, Block* block, Object* classObject) {
+    if (block == NULL) {
+        return;
+    }
+    
+    InstructionNode* currentInstruction = block->first;
+    while (currentInstruction != NULL) {
+        Instruction* instruction = (Instruction*)currentInstruction->data;
+        
+        if (instruction->type == INSTRUCTION_CONSTRUCTOR) {
+            // Handle constructor specially - add class name without public modifier
+            if (classObject != NULL) {
+                generatorOutput(indentationLevel + 1, "%s", classObject->name);
+            }
+            generateConstructor(indentationLevel + 1, instruction->constructor);
+        } else {
+            // Handle other instructions normally
+            generateInstruction(indentationLevel + 1, instruction);
+        }
+        
+        currentInstruction = currentInstruction->next;
+    }
 } 

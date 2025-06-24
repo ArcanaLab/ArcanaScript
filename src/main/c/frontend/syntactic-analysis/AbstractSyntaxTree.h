@@ -36,6 +36,8 @@ typedef struct Instruction Instruction;
 typedef struct Lambda Lambda;
 typedef struct Class Class;
 typedef struct Interface Interface;
+typedef struct Constructor Constructor;
+
 typedef struct Import Import;
 
 typedef struct FunctionCall FunctionCall;
@@ -169,6 +171,7 @@ enum InstructionType {
 	INSTRUCTION_LOOP,
 	INSTRUCTION_CLASS,
 	INSTRUCTION_INTERFACE,
+	INSTRUCTION_CONSTRUCTOR,
 	INSTRUCTION_RETURN,
 	INSTRUCTION_PASS,
 };
@@ -278,6 +281,8 @@ struct Instruction {
 		Conditional * conditional;
 		Class * class;
 		Interface * interface;
+		Constructor * constructor;
+		Lambda * constructor;
 		Instruction * returnInstruction;
 	};
 
@@ -298,11 +303,17 @@ struct Class {
 	Object * inherits;
 	ImplementationList * implementationList;
 	Block * block;
+	PrivacyList * privacyModifierList;
 };
 
 struct Interface {
 	Object * object;
 	ImplementationList * extends;
+	Block * block;
+};
+
+struct Constructor {
+	VariableDeclarationList * variableDeclarationList;
 	Block * block;
 };
 
@@ -483,6 +494,12 @@ void releaseImplementationList(ImplementationList * implementationList);
  * @param interface Pointer to the interface to be released.
  */
 void releaseInterface(Interface * interface);
+
+/**
+ * Releases the memory used by a constructor and its components.
+ * @param constructor Pointer to the constructor to be released.
+ */
+void releaseConstructor(Constructor * constructor);
 
 /**
  * @brief Releases all resources associated with the given ImportList.
