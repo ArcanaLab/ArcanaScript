@@ -89,4 +89,5 @@ char* getMainClassName(struct Program* program) {
         current = current->next;
     }
     return NULL;
-} 
+}
+
