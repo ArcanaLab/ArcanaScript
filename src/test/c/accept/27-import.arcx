@@ -1,4 +1,4 @@
-import "this/is/a/test.arcx"
+import "path/to/pack/test.arcx"
 class ImportTest {
    
     class ClassName { }

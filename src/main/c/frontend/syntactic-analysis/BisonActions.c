@@ -593,15 +593,6 @@ Interface * InterfaceSemanticAction(Object * object, ImplementationList * extend
 	return interface;
 }
 
-Constructor * ConstructorSemanticAction(VariableDeclarationList * variableDeclarationList, Block * block){
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-
-	Constructor * constructor = calloc(1, sizeof(Constructor));
-	constructor->variableDeclarationList = variableDeclarationList;
-	constructor->block = block;
-	return constructor;
-}
-
 // ===== Imports =====
 Import * ImportSemanticAction(char * path)
 {

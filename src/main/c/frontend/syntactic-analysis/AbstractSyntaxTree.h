@@ -281,7 +281,6 @@ struct Instruction {
 		Conditional * conditional;
 		Class * class;
 		Interface * interface;
-		Constructor * constructor;
 		Lambda * constructor;
 		Instruction * returnInstruction;
 	};
@@ -309,11 +308,6 @@ struct Class {
 struct Interface {
 	Object * object;
 	ImplementationList * extends;
-	Block * block;
-};
-
-struct Constructor {
-	VariableDeclarationList * variableDeclarationList;
 	Block * block;
 };
 
@@ -494,12 +488,6 @@ void releaseImplementationList(ImplementationList * implementationList);
  * @param interface Pointer to the interface to be released.
  */
 void releaseInterface(Interface * interface);
-
-/**
- * Releases the memory used by a constructor and its components.
- * @param constructor Pointer to the constructor to be released.
- */
-void releaseConstructor(Constructor * constructor);
 
 /**
  * @brief Releases all resources associated with the given ImportList.
