@@ -1,4 +1,4 @@
-@exposed class AIPlayer is ArcanaPlayer {
+class AIPlayer is ArcanaPlayer {
 	
     @override
     play: Function<void> = () {
@@ -6,6 +6,6 @@
 
 		const card = this.hand.pickRandom();
 		this.playCard(card);
-    }
+    };
 	
 }

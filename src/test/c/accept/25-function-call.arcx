@@ -12,26 +12,4 @@ class FunctionCallTest {
     };
     funC(funA(), funB(1, 2));
     
-    #!
-        ==== FUNCTION CALL OPT 1 ====
-            name()
-    
-        ==== FUNCTION CALL OPT 2 ====
-            name(expression_list)
-    
-            function_call:
-                NAME OPEN_PARENTHESIS CLOSE_PARENTHESIS
-                | NAME OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS
-            
-            expression_list:
-                expression
-                | expression_list COMMA expression
-    
-            // Para Expression List tenemos que hacer lo mismo que hicimos para var_list
-    
-    
-            EXPRESIONES:
-                a, a + b, a - b, a * b, a / b , etc.
-                y lambdas
-    !#
 }
