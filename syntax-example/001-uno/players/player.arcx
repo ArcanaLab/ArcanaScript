@@ -1,4 +1,4 @@
-@export class Player is ArcanaPlayer {
+@exposed class Player is ArcanaPlayer {
 	
     hand: List<UnoCard>;
 

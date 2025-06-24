@@ -1,10 +1,14 @@
 class GreaterTest {
-    if (4>=6)
-    {
-        vara:int=0;
-    }
-    if(6>4)
-    {
-        vara +=1;
-    }
+    testGreaterFunction: Function<Integer> = (x:int) {
+        vara:int = 0;
+        if (x>=6)
+        {
+            vara=1;
+        }
+        if(x < 6)
+        {
+            vara =2;
+        }
+        return vara;
+    };
 }

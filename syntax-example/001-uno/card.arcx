@@ -1,4 +1,4 @@
-@export class UnoCard is ArcanaCard {
+@exposed class UnoCard is ArcanaCard {
 	constructor(
 		art: Texture, 
 		borderTexture: Texture, 

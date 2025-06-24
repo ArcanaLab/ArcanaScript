@@ -4,7 +4,7 @@ class SimpleCardGame is ArcanaGame {
 
     constructor(
         @hidden
-        players: List<Player>,
+        players: Player[] = []
     ) {
         super();
     }
@@ -14,7 +14,7 @@ class SimpleCardGame is ArcanaGame {
         // Generar todas las cartas
         @eternal
         allCards: List<SimpleCard> = [
-            ...this._generateNumberCards(),
+           _generateNumberCards(),
         ];
         
         this.cards = SimpleDeck(allCards);
@@ -24,15 +24,15 @@ class SimpleCardGame is ArcanaGame {
     @hidden
     _generateNumberCards(): List<SimpleCard> {
         @eternal
-        colors: List<String> = ["red", "blue"];
+        colors: string[] = ["red", "blue"];
         
         @eternal
-        cards: List<SimpleCard> = [];
+        cards: SimpleCard[] = [];
         
         for (color: String in colors) {
             // Una carta de cada número (1-3) por color
             for (num: int in 1..3) {
-                cards.add(SimpleCard(`${color}_${num}`, null, color, num, PlayCardAction()));
+                cards.add(SimpleCard("${color}_${num}", null, color, num, PlayCardAction()));
             }
         }
         

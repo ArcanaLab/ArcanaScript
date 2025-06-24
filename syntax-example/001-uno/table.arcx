@@ -1,4 +1,4 @@
-@export class UnoTable is ArcanaTable {
+@exposed class UnoTable is ArcanaTable {
 
 	players: ArrayList<Player>;
 	currentPlayer: int;

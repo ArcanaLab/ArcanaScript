@@ -32,7 +32,7 @@ if [ -d "build" ]; then
     rm -rf build
     echo -e "${GREEN}  ✓ Build directory removed${NC}"
 else
-    echo -e "${CYAN}  :information_source:  Build directory doesn't exist, skipping...${NC}"
+    echo -e "${CYAN}  ℹ️  Build directory doesn't exist, skipping...${NC}"
 fi
 
 # Clean generated files
@@ -48,7 +48,7 @@ for file in "${FILES_TO_REMOVE[@]}"; do
         rm -f "$file"
         echo -e "${GREEN}  ✓ $(basename "$file") removed${NC}"
     else
-        echo -e "${CYAN}  :information_source:  $(basename "$file") doesn't exist, skipping...${NC}"
+        echo -e "${CYAN}  ℹ️  $(basename "$file") doesn't exist, skipping...${NC}"
     fi
 done
 
