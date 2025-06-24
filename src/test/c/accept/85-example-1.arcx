@@ -9,7 +9,7 @@ class SimpleCardGame is ArcanaGame {
     @override
     init: Function<void> = () {
         @eternal
-        allCards: Cards[] = ["Cartita1", "Cartita2"];
+        allCards: string[] = ["Cartita1", "Cartita2"];
         
         this.cards = SimpleDeck(allCards);
         this.table = SimpleTable(this.cards, this.players);
@@ -21,7 +21,7 @@ class SimpleCardGame is ArcanaGame {
         colors: string[] = ["red", "blue"];
         
         @eternal
-        cards: Cards[] = [];
+        cards: int[] = [];
         MAX_CARDS: int = 6;
         for (color: colors) {
             # Una carta de cada número (1-3) por color
