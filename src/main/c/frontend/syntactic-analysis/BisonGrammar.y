@@ -161,8 +161,6 @@
 		/** ===== Comma ===== */
 		%token <token> COMMA
 
-		/** ===== Dot ===== */
-		%token <token> DOT
 
 		/** ===== Assignation ===== */
 		%token <token> ASSIGN
@@ -196,7 +194,6 @@
 		/** ===== Inheritance ===== */
 		%token <token> IS
 		%token <token> USING
-		%token <token> THIS
 
 
 	// ------------------ [ Functions ] -------------------
@@ -463,7 +460,6 @@
 		/** ===== Factor ===== */
 		factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS															{ $$ = ExpressionFactorSemanticAction($2); }
 			| NAME																										{ $$ = VariableExpressionSemanticAction($1); }	
-			| THIS																										{ $$ = ThisExpressionSemanticAction(); }
 			| NAME INCREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, INCREMENT_TYPE); }
 			| NAME DECREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, DECREMENT_TYPE); }
 			| constant																									{ $$ = ConstantFactorSemanticAction($1); }
@@ -492,8 +488,6 @@
 		function_call:
 			NAME OPEN_PARENTHESIS CLOSE_PARENTHESIS																		{ $$ = FunctionCallSemanticAction($1, NULL); }
 			| NAME OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS													{ $$ = FunctionCallSemanticAction($1, $3); }
-			| THIS DOT NAME OPEN_PARENTHESIS CLOSE_PARENTHESIS															{ $$ = ThisFunctionCallSemanticAction($3, NULL); }
-			| THIS DOT NAME OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS											{ $$ = ThisFunctionCallSemanticAction($3, $5); }
 			;
 
 		/** ===== Argument List (Function Call) ===== */

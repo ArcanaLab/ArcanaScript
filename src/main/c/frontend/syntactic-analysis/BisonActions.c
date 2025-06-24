@@ -498,17 +498,7 @@ FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressi
 	return functionCall;
 }
 
-FunctionCall * ThisFunctionCallSemanticAction(char * methodName, ExpressionList * expressionList) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
-	// Create the full method name as "this.methodName"
-	char * fullName = malloc(strlen("this.") + strlen(methodName) + 1);
-	strcpy(fullName, "this.");
-	strcat(fullName, methodName);
-	functionCall->name = fullName;
-	functionCall->expressionList = expressionList;
-	return functionCall;
-}
+
 
 Expression * FunctionCallExpressionSemanticAction(FunctionCall * functionCall) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -526,13 +516,6 @@ Factor * VariableExpressionSemanticAction(char * variable){
 	return factor;
 }
 
-Factor * ThisExpressionSemanticAction() {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Factor * factor = calloc(1, sizeof(Factor));
-	factor->variable = strdup("this");
-	factor->type = VARIABLE_TYPE;
-	return factor;
-}
 
 PrivacyModifier * PrivacyModifierSemanticAction(PrivacyType privacyType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
