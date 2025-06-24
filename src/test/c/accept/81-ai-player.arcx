@@ -4,8 +4,8 @@ class AIPlayer is ArcanaPlayer {
     play: Function<void> = () {
         #! Picks a random card from the player's hand and plays it !#
 
-		const card = this.hand.pickRandom();
-		this.playCard(card);
+		#card = this.hand.pickRandom();
+		#this.playCard(card);
     };
 	
 }

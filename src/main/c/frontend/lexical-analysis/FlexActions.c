@@ -113,6 +113,13 @@ Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	return COMMA;
 }
 
+Token DotLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = DOT;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return DOT;
+}
+
 void ApostropheLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	if (_logIgnoredLexemes) {
 		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
@@ -242,6 +249,13 @@ Token DecoratorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext,Toke
 	lexicalAnalyzerContext->semanticValue->token = token;
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
+}
+
+Token ThisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = THIS;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return THIS;
 }
 
 Token ComparatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {

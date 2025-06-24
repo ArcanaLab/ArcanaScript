@@ -1,0 +1,18 @@
+class BaseClass {
+    @exposed
+    baseMethod: Function<void> = () {
+        // Base implementation
+    };
+}
+
+class DerivedClass is BaseClass {
+    @override
+    baseMethod: Function<void> = () {
+        // Override implementation
+    };
+    
+    @override @exposed
+    anotherMethod: Function<Integer> = (x: int) {
+        return x * 2;
+    };
+} 

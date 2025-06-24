@@ -51,6 +51,8 @@ single_line_comment   "#"[^!].*
 
 ","									{ return CommaLexemeAction(createLexicalAnalyzerContext()); }
 
+"."									{ return DotLexemeAction(createLexicalAnalyzerContext()); }
+
 "'"                                 { BEGIN(CHAR_CONSTANT); ApostropheLexemeAction(createLexicalAnalyzerContext()); }
 <CHAR_CONSTANT>[^(\n|')]             { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_CHARACTER); }
 <CHAR_CONSTANT>"'"                  { ApostropheLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
@@ -68,6 +70,7 @@ single_line_comment   "#"[^!].*
 "@eternal"                          { return DecoratorLexemeAction(createLexicalAnalyzerContext(), C_ETERNAL); }
 "@shielded"                         { return DecoratorLexemeAction(createLexicalAnalyzerContext(), C_SHIELDED); }
 "@immutable"                        { return DecoratorLexemeAction(createLexicalAnalyzerContext(), C_IMMUTABLE); }
+"@override"                        	{ return DecoratorLexemeAction(createLexicalAnalyzerContext(), C_OVERRIDE); }
 
 "class"                             { return ClassLexemeAction(createLexicalAnalyzerContext()); }
 "interface"                         { return InterfaceLexemeAction(createLexicalAnalyzerContext()); }
@@ -112,6 +115,7 @@ single_line_comment   "#"[^!].*
 
 "is"                                { return ExtensionLexemeAction(createLexicalAnalyzerContext(), IS); }
 "using"                             { return ExtensionLexemeAction(createLexicalAnalyzerContext(), USING); }
+"this"                              { return ThisLexemeAction(createLexicalAnalyzerContext()); }
 
 "return"                            { return ReturnLexemeAction(createLexicalAnalyzerContext()); }
 "pass"                              { return PassLexemeAction(createLexicalAnalyzerContext()); }

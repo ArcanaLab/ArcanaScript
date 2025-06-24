@@ -140,7 +140,7 @@
         },
         {
           "name": "storage.modifier.arcana",
-          "match": "@(exposed|hidden|shielded|fixed|overrides|import|export)"
+          "match": "@(exposed|hidden|shielded|eternal|immutable|override|import|export)"
         }
       ]
     },

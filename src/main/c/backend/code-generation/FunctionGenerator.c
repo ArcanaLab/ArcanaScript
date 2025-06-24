@@ -63,12 +63,36 @@ void generateFunction(const unsigned int indentationLevel, VariableDeclaration* 
 
     Lambda* lambda = functionDeclaration->expression->lambda;
 
+    // Check if this function has @override annotation
+    bool hasOverride = false;
+    bool hasStatic = false;
+    
+    if (functionDeclaration->privacyModifierList != NULL) {
+        PrivacyNode* currentPrivacy = functionDeclaration->privacyModifierList->first;
+        while (currentPrivacy != NULL) {
+            PrivacyModifier* privacy = (PrivacyModifier*)currentPrivacy->data;
+            if (privacy != NULL) {
+                if (privacy->type == OVERRIDE_A) {
+                    hasOverride = true;
+                } else if (privacy->type == STATIC_A) {
+                    hasStatic = true;
+                }
+            }
+            currentPrivacy = currentPrivacy->next;
+        }
+    }
+
     // Generate privacy modifiers if present
     if (functionDeclaration->privacyModifierList != NULL) {
         generatePrivacyModifiers(indentationLevel, functionDeclaration->privacyModifierList);
     } else {
         // Default to public if no privacy modifier is specified
         generatorOutput(indentationLevel, "public ");
+    }
+
+    // Add @Override annotation if present
+    if (hasOverride) {
+        generatorOutput(indentationLevel, "@Override\n");
     }
 
     // Determine return type from Function<T> object
@@ -87,8 +111,12 @@ void generateFunction(const unsigned int indentationLevel, VariableDeclaration* 
         }
     }
 
-    // Generate method signature
-    generatorOutput(0, "static %s %s(", returnType, functionDeclaration->name);
+    // Generate method signature - only add static if explicitly specified and not @override
+    if (hasStatic && !hasOverride) {
+        generatorOutput(0, "static %s %s(", returnType, functionDeclaration->name);
+    } else {
+        generatorOutput(0, "%s %s(", returnType, functionDeclaration->name);
+    }
     
     // Generate method parameters
     if (lambda->variableDeclarationList != NULL) {
