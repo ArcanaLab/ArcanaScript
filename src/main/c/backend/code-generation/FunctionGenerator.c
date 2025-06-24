@@ -12,15 +12,10 @@ void generateLambda(const unsigned int indentationLevel, VariableDeclaration* la
     }
 
     Lambda* lambda = lambdaDeclaration->expression->lambda;
-
-    // Generate lambda parameters
     generatorOutput(indentationLevel, "(args) ->{");
     if (lambda->variableDeclarationList != NULL) {
         generateVariableDeclarationList(0, lambda->variableDeclarationList);
     }
-    //generatorOutput(0, ") -> ");
-
-    // Generate lambda body
     if (lambda->block != NULL) {
         generateScope(indentationLevel, lambda->block);
     } 
@@ -62,8 +57,6 @@ void generateFunction(const unsigned int indentationLevel, VariableDeclaration* 
     }
 
     Lambda* lambda = functionDeclaration->expression->lambda;
-
-    // Check if this function has @override annotation
     bool hasOverride = false;
     bool hasStatic = false;
     
@@ -82,25 +75,18 @@ void generateFunction(const unsigned int indentationLevel, VariableDeclaration* 
         }
     }
 
-    // Generate privacy modifiers if present
     if (functionDeclaration->privacyModifierList != NULL) {
         generatePrivacyModifiers(indentationLevel, functionDeclaration->privacyModifierList);
     } else {
-        // Default to public if no privacy modifier is specified
         generatorOutput(indentationLevel, "public ");
     }
-
-    // Add @Override annotation if present
     if (hasOverride) {
         generatorOutput(indentationLevel, "@Override\n");
     }
-
-    // Determine return type from Function<T> object
-    char* returnType = "void"; // default
+    char* returnType = "void"; 
     if (functionDeclaration->object != NULL && functionDeclaration->object->name != NULL) {
         if (strcmp(functionDeclaration->object->name, "Function") == 0 && 
             functionDeclaration->object->genericList != NULL) {
-            // Extract the generic type (e.g., Integer from Function<Integer>)
             GenericListNode* genericNode = functionDeclaration->object->genericList->first;
             if (genericNode != NULL) {
                 Generic* generic = (Generic*)genericNode->data;
@@ -111,21 +97,18 @@ void generateFunction(const unsigned int indentationLevel, VariableDeclaration* 
         }
     }
 
-    // Generate method signature - only add static if explicitly specified and not @override
     if (hasStatic && !hasOverride) {
         generatorOutput(0, "static %s %s(", returnType, functionDeclaration->name);
     } else {
         generatorOutput(0, "%s %s(", returnType, functionDeclaration->name);
     }
-    
-    // Generate method parameters
+
     if (lambda->variableDeclarationList != NULL) {
         generateVariableDeclarationList(0, lambda->variableDeclarationList);
     }
-    
-    generatorOutput(0, ")");
 
-    // Generate method body
+    generatorOutput(0, ")");
+    
     if (lambda->block != NULL) {
         generateScope(indentationLevel, lambda->block);
     } else {

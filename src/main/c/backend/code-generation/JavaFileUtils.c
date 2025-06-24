@@ -1,7 +1,5 @@
 #include <stddef.h>
 
-// Definiciones mínimas para manipular el AST sin incluir headers de frontend
-
 typedef struct Object {
     char* name;
     void* genericList;
@@ -68,7 +66,6 @@ typedef struct Program {
 char* getMainClassName(struct Program* program) {
     if (program == NULL || program->block == NULL) return NULL;
     Node* current = program->block->first;
-    // Buscar primero una clase
     while (current != NULL) {
         Instruction* instr = (Instruction*)current->data;
         if (instr != NULL && instr->type == INSTRUCTION_CLASS && instr->class != NULL && instr->class->object != NULL && instr->class->object->name != NULL) {
@@ -76,7 +73,6 @@ char* getMainClassName(struct Program* program) {
         }
         current = current->next;
     }
-    // Si no hay clase, buscar una interface
     current = program->block->first;
     while (current != NULL) {
         Instruction* instr = (Instruction*)current->data;

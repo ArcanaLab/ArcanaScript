@@ -27,7 +27,6 @@ void generateConstructor(const unsigned int indentationLevel, Lambda* constructo
 		return;
 	}
 	
-	// Generate constructor parameters
 	generatorOutput(indentationLevel, "(");
 	if (constructor->variableDeclarationList != NULL) {
 		VariableDeclarationNode* current = constructor->variableDeclarationList->first;
@@ -37,7 +36,6 @@ void generateConstructor(const unsigned int indentationLevel, Lambda* constructo
 			if (!first) {
 				generatorOutput(0, ", ");
 			}
-			// Generate parameter type and name
 			if (param->type == OBJECT && param->object != NULL) {
 				generatorOutput(0, "%s %s", param->object->name, param->name);
 			} else {
@@ -50,7 +48,6 @@ void generateConstructor(const unsigned int indentationLevel, Lambda* constructo
 	}
 	generatorOutput(0, ") ");
 	
-	// Generate constructor body
 	if (constructor->block != NULL) {
 		generateScope(indentationLevel, constructor->block);
 	} else {
@@ -121,17 +118,14 @@ void generateScope(const unsigned int indentationLevel, Block* block) {
 }
 
 char* generatePath(char* path) {
-    // Copiamos la ruta para no modificar el original
     char* str = strdup(path);
     if (!str) return NULL;
     
-    // Buscamos el último '/'
     char* last_slash = strrchr(str, '/');
     if (last_slash) {
-        *last_slash = '\0'; // Cortamos el string en el último '/'
+        *last_slash = '\0';
     }
     
-    // Reemplazamos los '/' por '.'
     for (char* p = str; *p; ++p) {
         if (*p == '/') {
             *p = '.';
@@ -141,15 +135,11 @@ char* generatePath(char* path) {
 }
 
 void generateProgram(const unsigned int indentationLevel, Program* program) {
-    // Generar imports en sintaxis Java si existen
     if (program != NULL && program->importList != NULL) {
         Node* current = program->importList->first;
         while (current != NULL) {
             Import* importStatement = (Import*)current->data;
             if (importStatement != NULL && importStatement->PathToFile != NULL) {
-                // Imprimir el import en formato: import "ruta/original.arcx.java";
-                // Le quitamos el final (Nombre del archivo)
-                // Le cambiamos el / por .
                 char* path = generatePath(importStatement->PathToFile);
                 generatorOutput(0, "import %s;\n", path);
                 free(path);
@@ -157,7 +147,6 @@ void generateProgram(const unsigned int indentationLevel, Program* program) {
             current = current->next;
         }
     }
-    // Luego el bloque principal
     generateMainBlock(indentationLevel, program->block);
 } 
 

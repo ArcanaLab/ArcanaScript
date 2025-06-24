@@ -9,8 +9,6 @@
 #include "SyntacticAnalyzer.h"
 #include <stdlib.h>
 #include <string.h>
-
-/** HAS ABORTED DUE TO CRITICAL ERROR */
 int hasAborted(void);
 
 // ================== [ Initialization ] ==================

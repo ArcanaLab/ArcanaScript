@@ -57,8 +57,6 @@ void generateImplementationList(const unsigned int indentationLevel, Implementat
     if (implementationList == NULL) {
         return;
     }
-    
-    // ImplementationList is a List of Objects
     Node* current = implementationList->first;
     bool first = true;
     
@@ -109,34 +107,26 @@ void generateClass(const unsigned int indentationLevel, Class* class) {
     if (class == NULL) {
         return;
     }
-    
-    // Generate privacy modifiers if present
     if (class->privacyModifierList != NULL) {
         generatePrivacyModifiers(indentationLevel, class->privacyModifierList);
     } else {
-        // Default to public if no privacy modifier is specified
         generatorOutput(indentationLevel, "public ");
     }
     
-    // Generate class declaration
     generatorOutput(indentationLevel, "class ");
     
-    // Generate class name and generics
     if (class->object != NULL) {
         generateObject(indentationLevel, class->object);
     }
     
-    // Generate inheritance (extends)
     if (class->inherits != NULL) {
         generateInheritance(indentationLevel, class->inherits);
     }
     
-    // Generate implementations (implements)
     if (class->implementationList != NULL) {
         generateImplementations(indentationLevel, class->implementationList);
     }
     
-    // Generate class body
     if (class->block != NULL) {
         generatorOutput(indentationLevel, " {\n");
         generateClassBody(indentationLevel, class->block, class->object);
@@ -154,20 +144,16 @@ void generateInterface(const unsigned int indentationLevel, Interface* interface
         return;
     }
     
-    // Generate interface declaration
     generatorOutput(indentationLevel, "public interface ");
     
-    // Generate interface name and generics
     if (interface->object != NULL) {
         generateObject(indentationLevel, interface->object);
     }
     
-    // Generate interface inheritance (extends)
     if (interface->extends != NULL) {
         generateInterfaceInheritance(indentationLevel, interface->extends);
     }
     
-    // Generate interface body
     if (interface->block != NULL) {
         generateScope(indentationLevel, interface->block);
     } else {
@@ -188,13 +174,11 @@ void generateClassBody(const unsigned int indentationLevel, Block* block, Object
         Instruction* instruction = (Instruction*)currentInstruction->data;
         
         if (instruction->type == INSTRUCTION_CONSTRUCTOR) {
-            // Handle constructor specially - add class name without public modifier
             if (classObject != NULL) {
                 generatorOutput(indentationLevel + 1, "%s", classObject->name);
             }
             generateConstructor(indentationLevel + 1, instruction->constructor);
         } else {
-            // Handle other instructions normally
             generateInstruction(indentationLevel + 1, instruction);
         }
         

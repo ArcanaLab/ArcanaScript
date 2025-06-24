@@ -1,7 +1,5 @@
 #include "AbstractSyntaxTree.h"
 
-/* MODULE INTERNAL STATE */
-
 static Logger * _logger = NULL;
 
 void initializeAbstractSyntaxTreeModule() {
@@ -270,23 +268,11 @@ void releaseInterface(Interface * interface) {
 	free(interface);
 }
 
-/** 
- * 
- * How to release Nodes List in General.
- */
-
-
 /**
  * ============== LISTS ==============
  */
 // ======= General purpose ======= //
 
-/**
- * Function is used to release a List.
- * 
- * @param list The List to release the memory.
- * @param release_fun The given function to release the data inside of a Node.
- */
 void releaseList(List * list, releaseDataFn release_fun) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(list == NULL) return;
@@ -342,6 +328,3 @@ void releaseBlock(Block * block){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	return releaseList(block, (releaseDataFn) releaseInstruction);
 }
-
-
-// And that's all. We now can do it multiple times, with multiple uses, and keep it simple.
