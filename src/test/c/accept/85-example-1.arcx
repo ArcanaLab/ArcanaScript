@@ -8,11 +8,10 @@ class SimpleCardGame is ArcanaGame {
 
     @override
     init: Function<void> = () {
-        // Generar todas las cartas
-        @eternal
-        allCards: SimpleCard[] = [
-           _generateNumberCards(),
-        ];
+    #    @eternal
+    #    allCards: SimpleCard[] = [
+    #       _generateNumberCards(),
+    #    ];
         
         this.cards = SimpleDeck(allCards);
         this.table = SimpleTable(this.cards, this.players);
