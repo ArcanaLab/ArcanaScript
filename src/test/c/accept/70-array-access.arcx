@@ -3,4 +3,5 @@ class ArrayAccessTest {
     @exposed first: int = numbers[0];
     @exposed last: int = numbers[4];
     @exposed middle: int = numbers[2]; 
+    @exposed heroes: Hobbits = ["Frodo", "Aragorn"];
 }

@@ -117,6 +117,8 @@ void generateVariableDeclaration(const unsigned int indentationLevel, VariableDe
     
     if (variableDeclaration->type == OBJECT && variableDeclaration->object != NULL) {
         generateObject(indentationLevel, variableDeclaration->object);
+    } else if (variableDeclaration->type == V_OBJECT_ARRAY && variableDeclaration->object != NULL) {
+        generatorOutput(indentationLevel, "%s[]", variableDeclaration->object->name);
     } else {
         generateVariableType(indentationLevel, variableDeclaration->type);
     }
@@ -136,7 +138,8 @@ void generateVariableDeclaration(const unsigned int indentationLevel, VariableDe
              variableDeclaration->type == V_CHAR_ARRAY || 
              variableDeclaration->type == V_DOUBLE_ARRAY || 
              variableDeclaration->type == V_LONG_ARRAY || 
-             variableDeclaration->type == V_SHORT_ARRAY)) {
+             variableDeclaration->type == V_SHORT_ARRAY ||
+             variableDeclaration->type == V_OBJECT_ARRAY)) {
             // Use typed array literal generation
             generateArrayLiteralWithType(indentationLevel, &variableDeclaration->expression->factor->arrayLiteral, variableDeclaration->type);
         } else {
@@ -165,6 +168,8 @@ void generateVariableDeclarationList(const unsigned int indentationLevel, Variab
         
         if (variableDeclaration->type == OBJECT && variableDeclaration->object != NULL) {
             generateObject(indentationLevel, variableDeclaration->object);
+        } else if (variableDeclaration->type == V_OBJECT_ARRAY && variableDeclaration->object != NULL) {
+            generatorOutput(indentationLevel, "%s[]", variableDeclaration->object->name);
         } else {
             generateVariableType(indentationLevel, variableDeclaration->type);
         }
