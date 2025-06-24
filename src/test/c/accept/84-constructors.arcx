@@ -1,5 +1,6 @@
 class ThisTest {
-    constructor(){
+    constructor(test: int, test2: int){
         #! Test constructor functionality !#
+        test = test2;
     }
 } 

@@ -325,6 +325,7 @@
 			| if																										{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONDITIONAL); }
 			| class																										{ $$ = InstructionSemanticAction($1, INSTRUCTION_CLASS); }
 			| interface																									{ $$ = InstructionSemanticAction($1, INSTRUCTION_INTERFACE); }
+			| constructor																								{ $$ = InstructionSemanticAction($1, INSTRUCTION_CONSTRUCTOR); }
 			| RETURN instruction[ret]																					{ $$ = InstructionSemanticAction($ret, INSTRUCTION_RETURN); HAS_CRITICAL_ABORT }
 			| RETURN SEMICOLON																							{ $$ = InstructionSemanticAction(NULL, INSTRUCTION_RETURN); HAS_CRITICAL_ABORT }
 			| PASS SEMICOLON																							{ $$ = InstructionSemanticAction(NULL, INSTRUCTION_PASS); HAS_CRITICAL_ABORT }

@@ -75,4 +75,9 @@ boolean inContext(ContextStackType type) {
     
     return false;
 }
+
+boolean inmediateContext(ContextStackType type) {
+    if (isContextStackEmpty()) return type == GLOBAL_CONTEXT;
+    return _contextStack->top->type == type;
+}
 #pragma endregion

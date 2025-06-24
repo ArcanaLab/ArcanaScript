@@ -395,6 +395,10 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 			printf("INSTRUCTION_INTERFACE\n");
 			break;
 
+		case INSTRUCTION_CONSTRUCTOR:
+			printf("INSTRUCTION_CONSTRUCTOR\n");
+			break;
+
 		case INSTRUCTION_RETURN:
 			printf("INSTRUCTION_RETURN\n");
 			ValidateContext(LAMBDA_CONTEXT, "Return statements are not allowed outside functions.");
@@ -441,6 +445,12 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 
 		case INSTRUCTION_INTERFACE:
 			instruction->interface = value;
+			break;
+
+		case INSTRUCTION_CONSTRUCTOR:
+			instruction->constructor = value;
+			ValidateContext(CLASS_CONTEXT, "Constructors are not allowed outside classes.");
+			ValidateImmediateContext(CLASS_CONTEXT, "Constructors must be declared in the class body.");
 			break;
 
 		case INSTRUCTION_RETURN:
@@ -587,8 +597,6 @@ Interface * InterfaceSemanticAction(Object * object, ImplementationList * extend
 
 Constructor * ConstructorSemanticAction(VariableDeclarationList * variableDeclarationList, Block * block){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	ValidateContext(CLASS_CONTEXT, "Constructors are not allowed outside classes.");
-	ValidateImmediateContext(CLASS_CONTEXT, "Constructors must be declared in the class body.");
 
 	Constructor * constructor = calloc(1, sizeof(Constructor));
 	constructor->variableDeclarationList = variableDeclarationList;
