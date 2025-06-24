@@ -199,10 +199,25 @@ find_arcx_files() {
     fi
 }
 
+find_package_name() {
+    local output_dir="$1"
+
+    # Le quitamos el BASE_PATH
+    local package_name=$(echo "$output_dir" | sed "s|$BASE_PATH||")
+    # Le reemplazamos los / por . y quitamos el primer . si lo tiene
+    package_name=$(echo "$package_name" | sed 's|/|.|g' | sed 's|^\.||')
+
+    echo "$package_name"
+}
+
 # Function to convert a single file
 convert_single_file() {
     local input_file="$1"
     local output_dir="$2"
+
+    local package_name=$(find_package_name "$output_dir")
+    echo "package_name: $package_name"
+
     local filename=$(basename "$input_file" .arcx)
     local output_file="$output_dir/${filename}.java"
     local success=false
@@ -253,9 +268,16 @@ convert_single_file() {
         # Clean the output to remove debug information
         local java_content=""
         java_content=$(clean_java_output "$temp_file" 2>/dev/null || echo "")
-        
+        package_name=$(find_package_name "$output_dir")
+
+        # Agregamos el package name al inicio del archivo
+        java_content="package $package_name;
+
+$java_content"
+
         # Write the clean Java code to output file
         if [ -n "$java_content" ] && [ "$java_content" != $'\n' ]; then
+
             echo "$java_content" > "$output_file"
             echo -e "${GREEN}[SUCCESS]${NC} Converted to: $(basename "$output_file")"
             success=true
@@ -379,6 +401,7 @@ main() {
     
     local input_path="$1"
     local output_path="$2"
+    BASE_PATH="$2"
     
     # Convert to absolute paths for display but keep relative paths for processing
     local abs_input_path=$(realpath "$input_path")
@@ -430,4 +453,4 @@ main() {
 }
 
 # Run the main function with all arguments
-main "$@"
+main "$@

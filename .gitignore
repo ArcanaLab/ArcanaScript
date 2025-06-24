@@ -9,6 +9,7 @@
 /log/
 /node_modules/
 /obj/
+/scripts/
 /logs/
 /test_results/
 # Files.
