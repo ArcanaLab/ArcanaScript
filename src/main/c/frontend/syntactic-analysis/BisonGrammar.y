@@ -277,9 +277,7 @@
 			%type <genericList> generic_list
 		/** ===== Interfaces ===== */
 			%type <inter> interface
-			
-		/** ===== Constructor ===== */
-			%type <constructor> constructor
+		
 
 		/** ===== Implementactions ===== */
 			%type <implementationList> implementation

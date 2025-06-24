@@ -516,6 +516,7 @@ FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressi
 	return functionCall;
 }
 
+
 FunctionCall * SuperCallSemanticAction(ExpressionList * expressionList) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
@@ -524,17 +525,6 @@ FunctionCall * SuperCallSemanticAction(ExpressionList * expressionList) {
 	return functionCall;
 }
 
-FunctionCall * ThisFunctionCallSemanticAction(char * methodName, ExpressionList * expressionList) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
-	// Create the full method name as "this.methodName"
-	char * fullName = malloc(strlen("this.") + strlen(methodName) + 1);
-	strcpy(fullName, "this.");
-	strcat(fullName, methodName);
-	functionCall->name = fullName;
-	functionCall->expressionList = expressionList;
-	return functionCall;
-}
 
 Lambda * ConstructorSemanticAction(VariableDeclarationList * varList, Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
