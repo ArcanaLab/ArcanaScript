@@ -74,7 +74,6 @@ single_line_comment   "#"[^!].*
 
 "class"                             { return ClassLexemeAction(createLexicalAnalyzerContext()); }
 "interface"                         { return InterfaceLexemeAction(createLexicalAnalyzerContext()); }
-"constructor"                       { return ConstructorLexemeAction(createLexicalAnalyzerContext()); }
 
 "int"                               { return TypeLexemeAction(createLexicalAnalyzerContext(), V_INT); }
 "char"                              { return TypeLexemeAction(createLexicalAnalyzerContext(), V_CHAR); } 
