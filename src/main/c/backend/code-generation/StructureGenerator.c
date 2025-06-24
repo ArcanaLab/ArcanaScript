@@ -120,6 +120,26 @@ void generateScope(const unsigned int indentationLevel, Block* block) {
     generatorOutput(indentationLevel, "}\n");
 }
 
+char* generatePath(char* path) {
+    // Copiamos la ruta para no modificar el original
+    char* str = strdup(path);
+    if (!str) return NULL;
+    
+    // Buscamos el último '/'
+    char* last_slash = strrchr(str, '/');
+    if (last_slash) {
+        *last_slash = '\0'; // Cortamos el string en el último '/'
+    }
+    
+    // Reemplazamos los '/' por '.'
+    for (char* p = str; *p; ++p) {
+        if (*p == '/') {
+            *p = '.';
+        }
+    }
+    return str;
+}
+
 void generateProgram(const unsigned int indentationLevel, Program* program) {
     // Generar imports en sintaxis Java si existen
     if (program != NULL && program->importList != NULL) {
@@ -128,7 +148,11 @@ void generateProgram(const unsigned int indentationLevel, Program* program) {
             Import* importStatement = (Import*)current->data;
             if (importStatement != NULL && importStatement->PathToFile != NULL) {
                 // Imprimir el import en formato: import "ruta/original.arcx.java";
-                generatorOutput(0, "import \"%s.arcx.java\";\n", importStatement->PathToFile);
+                // Le quitamos el final (Nombre del archivo)
+                // Le cambiamos el / por .
+                char* path = generatePath(importStatement->PathToFile);
+                generatorOutput(0, "import \"%s\";\n", path);
+                free(path);
             }
             current = current->next;
         }
