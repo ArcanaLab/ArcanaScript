@@ -69,7 +69,7 @@ Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Exp
 	expression->rightExpression = rightExpression;
 	expression->type = type;
 	return expression;
-
+}
 Expression * FactorExpressionSemanticAction(Factor * factor) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Expression * expression = calloc(1, sizeof(Expression));
