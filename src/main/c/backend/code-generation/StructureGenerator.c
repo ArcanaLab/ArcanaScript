@@ -22,6 +22,43 @@ void generateReturn(const unsigned int indentationLevel, Instruction* instructio
 	}
 }
 
+void generateConstructor(const unsigned int indentationLevel, Lambda* constructor) {
+	if (constructor == NULL) {
+		return;
+	}
+	
+	// Generate constructor parameters
+	generatorOutput(indentationLevel, "(");
+	if (constructor->variableDeclarationList != NULL) {
+		VariableDeclarationNode* current = constructor->variableDeclarationList->first;
+		bool first = true;
+		while (current != NULL) {
+			VariableDeclaration* param = (VariableDeclaration*)current->data;
+			if (!first) {
+				generatorOutput(0, ", ");
+			}
+			// Generate parameter type and name
+			if (param->type == OBJECT && param->object != NULL) {
+				generatorOutput(0, "%s %s", param->object->name, param->name);
+			} else {
+				char* typeString = VariableTypeToString(param->type);
+				generatorOutput(0, "%s %s", typeString, param->name);
+			}
+			first = false;
+			current = current->next;
+		}
+	}
+	generatorOutput(0, ") ");
+	
+	// Generate constructor body
+	if (constructor->block != NULL) {
+		generateScope(indentationLevel, constructor->block);
+	} else {
+		generatorOutput(indentationLevel, "{\n");
+		generatorOutput(indentationLevel, "}\n");
+	}
+}
+
 void generateInstruction(const unsigned int indentationLevel, Instruction* instruction) {
     switch (instruction->type) {
         case INSTRUCTION_EXPRESSION:
@@ -51,6 +88,9 @@ void generateInstruction(const unsigned int indentationLevel, Instruction* instr
 			break;
 		case INSTRUCTION_INTERFACE:
 			generateInterface(indentationLevel, instruction->interface);
+			break;
+		case INSTRUCTION_CONSTRUCTOR:
+			generateConstructor(indentationLevel, instruction->constructor);
 			break;
 		default:
 			exit(140);

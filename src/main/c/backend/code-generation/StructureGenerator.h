@@ -45,4 +45,11 @@ void generateReturn(const unsigned int indentationLevel, Instruction* instructio
  */
 void generateScope(const unsigned int indentationLevel, Block* block);
 
+/**
+ * Generates a constructor.
+ * @param indentationLevel The current indentation level
+ * @param constructor The constructor lambda to generate
+ */
+void generateConstructor(const unsigned int indentationLevel, Lambda* constructor);
+
 #endif 

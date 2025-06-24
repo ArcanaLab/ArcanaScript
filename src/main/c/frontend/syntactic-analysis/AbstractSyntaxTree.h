@@ -268,6 +268,7 @@ struct Instruction {
 		Class * class;
 		Interface * interface;
 		Constructor * constructor;
+		Lambda * constructor;
 		Instruction * returnInstruction;
 	};
 

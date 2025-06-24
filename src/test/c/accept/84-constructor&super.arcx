@@ -1,0 +1,11 @@
+
+class Parent {
+    constructor() {
+    }
+}
+
+class Child is Parent {
+    constructor() {
+        super();
+    }
+}

@@ -293,11 +293,26 @@ PrivacyModifier * PrivacyModifierSemanticAction(PrivacyType privacyType);
 #pragma region Functions
 /**
  * Creates a function call with the specified name and expression list.
- * @param name The name of the function.
- * @param expressionList The list of expressions.
+ * @param name The function name.
+ * @param expressionList The list of expressions (arguments).
  * @return A pointer to the created function call.
  */
 FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressionList);
+
+/**
+ * Creates a super call with the specified expression list.
+ * @param expressionList The list of expressions (arguments).
+ * @return A pointer to the created super call.
+ */
+FunctionCall * SuperCallSemanticAction(ExpressionList * expressionList);
+
+/**
+ * Creates a constructor with the specified argument list and block.
+ * @param varList The list of variable declarations (parameters).
+ * @param block The constructor block.
+ * @return A pointer to the created constructor.
+ */
+Lambda * ConstructorSemanticAction(VariableDeclarationList * varList, Block * block);
 
 /**
  * Creates a this function call with the specified method name and expression list.

@@ -266,6 +266,22 @@ Token DecoratorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Tok
  * @return A Token representing the result of the this lexeme action.
  */
 Token ThisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+/**
+ * Processes a super lexeme during lexical analysis.
+ *
+ * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
+ * @return A Token representing the result of the super lexeme action.
+ */
+Token SuperLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+/**
+ * Processes a constructor lexeme during lexical analysis.
+ *
+ * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
+ * @return A Token representing the result of the constructor lexeme action.
+ */
+Token ConstructorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 #pragma endregion
 
 #pragma region Control Structures

@@ -119,6 +119,8 @@ single_line_comment   "#"[^!].*
 
 "return"                            { return ReturnLexemeAction(createLexicalAnalyzerContext()); }
 "pass"                              { return PassLexemeAction(createLexicalAnalyzerContext()); }
+"super"                             { return SuperLexemeAction(createLexicalAnalyzerContext()); }
+"constructor"                       { return ConstructorLexemeAction(createLexicalAnalyzerContext()); }
 
 "[" 								{ return BracketLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACKET); }
 "]" 								{ return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACKET); }

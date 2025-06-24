@@ -45,6 +45,14 @@ void generateImplementations(const unsigned int indentationLevel, Implementation
  */
 void generateImplementationList(const unsigned int indentationLevel, ImplementationList* implementationList);
 
+/**
+ * Generates code for a class body, handling constructors specially.
+ * @param indentationLevel The current indentation level
+ * @param block The class block to generate code for
+ * @param classObject The class object containing the class name
+ */
+void generateClassBody(const unsigned int indentationLevel, Block* block, Object* classObject);
+
 // void generateObject(const unsigned int indentationLevel, Object* object); // Removed: now static in .c file
 
 #endif 

@@ -517,6 +517,14 @@ FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressi
 	return functionCall;
 }
 
+FunctionCall * SuperCallSemanticAction(ExpressionList * expressionList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
+	functionCall->name = strdup("super");
+	functionCall->expressionList = expressionList;
+	return functionCall;
+}
+
 FunctionCall * ThisFunctionCallSemanticAction(char * methodName, ExpressionList * expressionList) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
@@ -527,6 +535,14 @@ FunctionCall * ThisFunctionCallSemanticAction(char * methodName, ExpressionList 
 	functionCall->name = fullName;
 	functionCall->expressionList = expressionList;
 	return functionCall;
+}
+
+Lambda * ConstructorSemanticAction(VariableDeclarationList * varList, Block * block) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Lambda * lambda = calloc(1, sizeof(Lambda));
+	lambda->variableDeclarationList = varList;
+	lambda->block = block;
+	return lambda;
 }
 
 Expression * FunctionCallExpressionSemanticAction(FunctionCall * functionCall) {

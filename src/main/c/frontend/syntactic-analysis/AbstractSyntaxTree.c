@@ -163,6 +163,7 @@ void releaseInstruction(Instruction * instruction) {
 			break;
 		case INSTRUCTION_CONSTRUCTOR:
 			releaseConstructor(instruction->constructor);
+			releaseLambda(instruction->constructor);
 			break;
 		case INSTRUCTION_RETURN:
 			releaseInstruction(instruction->returnInstruction);
