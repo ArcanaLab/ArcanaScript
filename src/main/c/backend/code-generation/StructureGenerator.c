@@ -151,7 +151,7 @@ void generateProgram(const unsigned int indentationLevel, Program* program) {
                 // Le quitamos el final (Nombre del archivo)
                 // Le cambiamos el / por .
                 char* path = generatePath(importStatement->PathToFile);
-                generatorOutput(0, "import \"%s\";\n", path);
+                generatorOutput(0, "import %s;\n", path);
                 free(path);
             }
             current = current->next;
