@@ -268,14 +268,23 @@ Block * BlockSemanticAction(Block * block, Instruction * instruction);
 // ================== [ Classes ] =========================
 #pragma region Classes
 /**
- * Creates a class with the specified object, inheritance, implementation list, and block.
+ * Creates a class with the specified object, inheritance, implementation list, privacy modifiers, and block.
  * @param object The class object.
  * @param inherits The object from which it inherits.
  * @param implementationList The list of implementations.
+ * @param privacyModifierList The list of privacy modifiers.
  * @param block The class block.
  * @return A pointer to the created class.
  */
-Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationList * implementationList, Block * block);
+Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationList * implementationList, PrivacyList * privacyModifierList, Block * block);
+
+/**
+ * Creates a constructor with the specified variable declaration list and block.
+ * @param variableDeclarationList The list of variable declarations.
+ * @param block The constructor block.
+ * @return A pointer to the created constructor.
+ */
+Constructor * ConstructorSemanticAction(VariableDeclarationList * variableDeclarationList, Block * block);
 #pragma endregion
 // ========================================================
 
@@ -314,11 +323,26 @@ PrivacyModifier * PrivacyModifierSemanticAction(PrivacyType privacyType);
 #pragma region Functions
 /**
  * Creates a function call with the specified name and expression list.
- * @param name The name of the function.
- * @param expressionList The list of expressions.
+ * @param name The function name.
+ * @param expressionList The list of expressions (arguments).
  * @return A pointer to the created function call.
  */
 FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressionList);
+
+/**
+ * Creates a super call with the specified expression list.
+ * @param expressionList The list of expressions (arguments).
+ * @return A pointer to the created super call.
+ */
+FunctionCall * SuperCallSemanticAction(ExpressionList * expressionList);
+
+/**
+ * Creates a constructor with the specified argument list and block.
+ * @param varList The list of variable declarations (parameters).
+ * @param block The constructor block.
+ * @return A pointer to the created constructor.
+ */
+Lambda * ConstructorSemanticAction(VariableDeclarationList * varList, Block * block);
 
 /**
  * Creates a this function call with the specified method name and expression list.

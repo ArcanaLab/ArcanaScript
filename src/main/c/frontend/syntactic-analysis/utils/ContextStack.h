@@ -14,6 +14,7 @@ enum ContextStackType {
     CLASS_CONTEXT,
     INTERFACE_CONTEXT,
     LOOP_CONTEXT,
+    CONSTRUCTOR_CONTEXT,
 };
 
 struct ContextStackNode {
@@ -70,6 +71,13 @@ boolean isContextStackEmpty(void);
  * @return true if the specified context type is active, false otherwise.
  */
 boolean inContext(ContextStackType type);
+
+/**
+ * Checks if the specified context type is the immediate context on the top of the stack.
+ * @param type The context type to check for.
+ * @return true if the specified context type is the immediate context on the top of the stack, false otherwise.
+ */
+boolean inmediateContext(ContextStackType type);
 #pragma endregion
 // =====================================================================
 

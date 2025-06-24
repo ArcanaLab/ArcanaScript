@@ -69,7 +69,6 @@ Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Exp
 	expression->rightExpression = rightExpression;
 	expression->type = type;
 	return expression;
-}
 
 Expression * FactorExpressionSemanticAction(Factor * factor) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -328,6 +327,14 @@ void ValidateContext(ContextStackType contextType, const char * errorMessage){
 	}
 }
 
+void ValidateImmediateContext(ContextStackType contextType, const char * errorMessage){
+	if(!inmediateContext(contextType)) {
+		logError(_logger, errorMessage);
+		yyerror(errorMessage);
+		_abort_parse = 1;
+	}
+}
+
 Instruction * InstructionSemanticAction(void * value, InstructionType instructionType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
@@ -387,6 +394,10 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 			printf("INSTRUCTION_INTERFACE\n");
 			break;
 
+		case INSTRUCTION_CONSTRUCTOR:
+			printf("INSTRUCTION_CONSTRUCTOR\n");
+			break;
+
 		case INSTRUCTION_RETURN:
 			printf("INSTRUCTION_RETURN\n");
 			ValidateContext(LAMBDA_CONTEXT, "Return statements are not allowed outside functions.");
@@ -435,6 +446,12 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 			instruction->interface = value;
 			break;
 
+		case INSTRUCTION_CONSTRUCTOR:
+			instruction->constructor = value;
+			ValidateContext(CLASS_CONTEXT, "Constructors are not allowed outside classes.");
+			ValidateImmediateContext(CLASS_CONTEXT, "Constructors must be declared in the class body.");
+			break;
+
 		case INSTRUCTION_RETURN:
 			instruction->returnInstruction = value;
 			ValidateContext(LAMBDA_CONTEXT, "Return statements are not allowed outside functions.");
@@ -480,12 +497,13 @@ Program * BlockProgramSemanticAction(CompilerState * compilerState,ImportList * 
 	return program;
 }
 
-Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationList * implementationList, Block * block) {
+Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationList * implementationList, PrivacyList * privacyModifierList, Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Class * class = calloc(1, sizeof(Class));
 	class->object = object;
 	class->inherits = inherits;
 	class->implementationList = implementationList;
+	class->privacyModifierList = privacyModifierList;
 	class->block = block;
 	return class;
 }
@@ -498,7 +516,33 @@ FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressi
 	return functionCall;
 }
 
+FunctionCall * SuperCallSemanticAction(ExpressionList * expressionList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
+	functionCall->name = strdup("super");
+	functionCall->expressionList = expressionList;
+	return functionCall;
+}
 
+FunctionCall * ThisFunctionCallSemanticAction(char * methodName, ExpressionList * expressionList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
+	// Create the full method name as "this.methodName"
+	char * fullName = malloc(strlen("this.") + strlen(methodName) + 1);
+	strcpy(fullName, "this.");
+	strcat(fullName, methodName);
+	functionCall->name = fullName;
+	functionCall->expressionList = expressionList;
+	return functionCall;
+}
+
+Lambda * ConstructorSemanticAction(VariableDeclarationList * varList, Block * block) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Lambda * lambda = calloc(1, sizeof(Lambda));
+	lambda->variableDeclarationList = varList;
+	lambda->block = block;
+	return lambda;
+}
 
 Expression * FunctionCallExpressionSemanticAction(FunctionCall * functionCall) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -557,6 +601,15 @@ Interface * InterfaceSemanticAction(Object * object, ImplementationList * extend
 	interface->extends = extends;
 	interface->block = block;
 	return interface;
+}
+
+Constructor * ConstructorSemanticAction(VariableDeclarationList * variableDeclarationList, Block * block){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+
+	Constructor * constructor = calloc(1, sizeof(Constructor));
+	constructor->variableDeclarationList = variableDeclarationList;
+	constructor->block = block;
+	return constructor;
 }
 
 // ===== Imports =====
