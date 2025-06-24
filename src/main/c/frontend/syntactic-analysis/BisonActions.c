@@ -670,3 +670,19 @@ Factor * ArrayAccessFactorSemanticAction(char * arrayName, Expression * index) {
 	factor->type = ARRAY_ACCESS;
 	return factor;
 }
+
+Expression * ThisDotExpressionSemanticAction(char * memberName) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->thisDotName = memberName;
+	expression->type = THIS_DOT_EXPRESSION;
+	return expression;
+}
+
+Expression * ThisDotFunctionCallExpressionSemanticAction(FunctionCall * functionCall) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->thisDotFunctionCall = functionCall;
+	expression->type = THIS_DOT_FUNCTION_CALL;
+	return expression;
+}

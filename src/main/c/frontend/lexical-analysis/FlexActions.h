@@ -259,13 +259,7 @@ Token InterfaceLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
  */
 Token DecoratorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
-/**
- * Processes a this lexeme during lexical analysis.
- *
- * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
- * @return A Token representing the result of the this lexeme action.
- */
-Token ThisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 #pragma endregion
 
 #pragma region Control Structures
@@ -371,13 +365,8 @@ Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
  */
 Token ExtensionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
-/**
- * Processes a dot lexeme during lexical analysis.
- *
- * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
- * @return A Token representing the result of the dot lexeme action.
- */
-Token DotLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token ThisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 #pragma endregion
 
 #endif

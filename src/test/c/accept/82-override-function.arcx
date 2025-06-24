@@ -1,14 +1,14 @@
 class BaseClass {
     @exposed
     baseMethod: Function<void> = () {
-        // Base implementation
+        # Base implementation
     };
 }
 
 class DerivedClass is BaseClass {
     @override
     baseMethod: Function<void> = () {
-        // Override implementation
+        # Override implementation
     };
     
     @override @exposed

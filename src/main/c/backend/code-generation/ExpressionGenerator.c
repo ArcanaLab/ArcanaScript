@@ -106,6 +106,13 @@ void generateExpression(const unsigned int indentationLevel, Expression* express
         case FUNCTION_CALL:
             generateFunctionCall(indentationLevel, expression->functionCall);
             break;
+        case THIS_DOT_EXPRESSION:
+            generatorOutput(indentationLevel, "this.%s", expression->thisDotName);
+            break;
+        case THIS_DOT_FUNCTION_CALL:
+            generatorOutput(indentationLevel, "this.");
+            generateFunctionCall(indentationLevel, expression->thisDotFunctionCall);
+            break;
         default:
             break;
     }

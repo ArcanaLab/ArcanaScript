@@ -195,6 +195,9 @@
 		%token <token> IS
 		%token <token> USING
 
+		/** ===== Access ===== */
+		%token <token> THIS_DOT
+
 
 	// ------------------ [ Functions ] -------------------
 		/** ===== Return ===== */
@@ -455,6 +458,8 @@
 			| factor																									{ $$ = FactorExpressionSemanticAction($1); }
 			| function_call																								{ $$ = FunctionCallExpressionSemanticAction($1); }
 			| lambda																									{ $$ = LambdaExpressionSemanticAction($1); }
+			| THIS_DOT NAME																								{ $$ = ThisDotExpressionSemanticAction($2); }
+			| THIS_DOT function_call																					{ $$ = ThisDotFunctionCallExpressionSemanticAction($2); }
 			;
 
 		/** ===== Factor ===== */

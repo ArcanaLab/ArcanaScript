@@ -92,6 +92,8 @@ enum ExpressionType {
 	GREATER_EQUAL_TYPE,
 	EQUAL_EQUAL_TYPE,
 	NOT_EQUAL_TYPE,
+	THIS_DOT_EXPRESSION,
+	THIS_DOT_FUNCTION_CALL,
 };
 
 enum ConditionalType {
@@ -213,6 +215,8 @@ struct Expression {
 		};
 		FunctionCall * functionCall;
 		Lambda * lambda;
+		char * thisDotName;
+		FunctionCall * thisDotFunctionCall;
 	};
 	ExpressionType type;
 };

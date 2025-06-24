@@ -80,6 +80,20 @@ Expression * LambdaExpressionSemanticAction(Lambda * lambda);
  * @return A pointer to the created expression.
  */
 Expression * FunctionCallExpressionSemanticAction(FunctionCall * functionCall);
+
+/**
+ * Creates a this dot expression with the specified member name.
+ * @param memberName The name of the member to access.
+ * @return A pointer to the created expression.
+ */
+Expression * ThisDotExpressionSemanticAction(char * memberName);
+
+/**
+ * Creates a this dot function call expression with the specified function call.
+ * @param functionCall The function call to execute on this.
+ * @return A pointer to the created expression.
+ */
+Expression * ThisDotFunctionCallExpressionSemanticAction(FunctionCall * functionCall);
 #pragma endregion
 // ========================================================
 

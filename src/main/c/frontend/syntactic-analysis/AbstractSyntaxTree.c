@@ -54,6 +54,12 @@ void releaseExpression(Expression * expression) {
 		case LAMBDA:
 			releaseLambda(expression->lambda);
 			break;
+		case THIS_DOT_EXPRESSION:
+			releaseName(expression->thisDotName);
+			break;
+		case THIS_DOT_FUNCTION_CALL:
+			releaseFunctionCall(expression->thisDotFunctionCall);
+			break;
 	}
 	free(expression);
 }
