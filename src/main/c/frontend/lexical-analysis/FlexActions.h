@@ -230,7 +230,7 @@ Token TypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Variable
 
 /**
  * @brief Processes a class lexeme during lexical analysis.
- *
+ *ThisDotExpressionSemanticAction
  * This function is called when a class-related lexeme is recognized by the lexical analyzer.
  * It performs the necessary actions to create and return a Token representing the class lexeme.
  *
@@ -267,6 +267,7 @@ Token DecoratorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Tok
  */
 Token ThisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
+
 /**
  * Processes a super lexeme during lexical analysis.
  *
@@ -282,6 +283,7 @@ Token SuperLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
  * @return A Token representing the result of the constructor lexeme action.
  */
 Token ConstructorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 #pragma endregion
 
 #pragma region Control Structures
@@ -387,11 +389,17 @@ Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
  */
 Token ExtensionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 
+
+Token ThisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 /**
- * Processes a dot lexeme during lexical analysis.
+ * @brief Handles the lexeme action for a dot (.) token during lexical analysis.
+ *
+ * This function is called when a dot character is encountered in the input stream.
+ * It processes the dot character and returns a corresponding Token object.
  *
  * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
- * @return A Token representing the result of the dot lexeme action.
+ * @return Token representing the dot lexeme.
  */
 Token DotLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 #pragma endregion

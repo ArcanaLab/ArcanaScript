@@ -113,12 +113,6 @@ Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	return COMMA;
 }
 
-Token DotLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = DOT;
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return DOT;
-}
 
 void ApostropheLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	if (_logIgnoredLexemes) {
@@ -251,12 +245,6 @@ Token DecoratorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext,Toke
 	return token;
 }
 
-Token ThisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = THIS;
-	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
-	return THIS;
-}
 
 Token SuperLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
@@ -352,4 +340,20 @@ Token BracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token
 	lexicalAnalyzerContext->semanticValue->token = token;
 	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
 	return token;
+}
+
+Token ThisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext)
+{
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = THIS_DOT;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return THIS_DOT;
+}
+
+Token DotLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext)
+{
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = DOT;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return DOT;
 }

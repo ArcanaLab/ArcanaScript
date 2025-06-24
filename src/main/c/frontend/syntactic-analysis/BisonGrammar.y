@@ -162,8 +162,6 @@
 		/** ===== Comma ===== */
 		%token <token> COMMA
 
-		/** ===== Dot ===== */
-		%token <token> DOT
 
 		/** ===== Assignation ===== */
 		%token <token> ASSIGN
@@ -197,7 +195,10 @@
 		/** ===== Inheritance ===== */
 		%token <token> IS
 		%token <token> USING
-		%token <token> THIS
+
+		/** ===== Access ===== */
+		%token <token> THIS_DOT
+		%token <token> DOT
 
 
 	// ------------------ [ Functions ] -------------------
@@ -224,6 +225,7 @@
 	// ------------------ [ Expressions ] ------------------
 		%type <expression> expression
 		%type <expression> comparator_expression
+		%type <expression> this_expression
 		%type <expressionList> expression_list
 		%type <expressionList> array_elements
 
@@ -474,12 +476,20 @@
 			| function_call																								{ $$ = FunctionCallExpressionSemanticAction($1); }
 			| super_call																								{ $$ = FunctionCallExpressionSemanticAction($1); }
 			| lambda																									{ $$ = LambdaExpressionSemanticAction($1); }
+			| this_expression																							{ $$ = $1; }
+			;
+
+		/** ===== This Expressions ===== */
+		this_expression:
+			THIS_DOT NAME																								{ $$ = ThisDotExpressionSemanticAction($2); }
+			| THIS_DOT function_call																					{ $$ = ThisDotFunctionCallExpressionSemanticAction($2); }
+			| this_expression DOT NAME																					{ $$ = ChainedThisDotExpressionSemanticAction($1, $3); }
+			| this_expression DOT function_call																			{ $$ = ChainedThisDotFunctionCallExpressionSemanticAction($1, $3); }
 			;
 
 		/** ===== Factor ===== */
 		factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS															{ $$ = ExpressionFactorSemanticAction($2); }
 			| NAME																										{ $$ = VariableExpressionSemanticAction($1); }	
-			| THIS																										{ $$ = ThisExpressionSemanticAction(); }
 			| NAME INCREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, INCREMENT_TYPE); }
 			| NAME DECREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, DECREMENT_TYPE); }
 			| constant																									{ $$ = ConstantFactorSemanticAction($1); }
@@ -508,8 +518,6 @@
 		function_call:
 			NAME OPEN_PARENTHESIS CLOSE_PARENTHESIS																		{ $$ = FunctionCallSemanticAction($1, NULL); }
 			| NAME OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS													{ $$ = FunctionCallSemanticAction($1, $3); }
-			| THIS DOT NAME OPEN_PARENTHESIS CLOSE_PARENTHESIS															{ $$ = ThisFunctionCallSemanticAction($3, NULL); }
-			| THIS DOT NAME OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS											{ $$ = ThisFunctionCallSemanticAction($3, $5); }
 			;
 
 		/** ===== Super Call ===== */

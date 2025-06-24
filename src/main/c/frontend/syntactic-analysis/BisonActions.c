@@ -70,7 +70,6 @@ Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Exp
 	expression->type = type;
 	return expression;
 }
-
 Expression * FactorExpressionSemanticAction(Factor * factor) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Expression * expression = calloc(1, sizeof(Expression));
@@ -517,6 +516,7 @@ FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressi
 	return functionCall;
 }
 
+
 FunctionCall * SuperCallSemanticAction(ExpressionList * expressionList) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
@@ -525,17 +525,6 @@ FunctionCall * SuperCallSemanticAction(ExpressionList * expressionList) {
 	return functionCall;
 }
 
-FunctionCall * ThisFunctionCallSemanticAction(char * methodName, ExpressionList * expressionList) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
-	// Create the full method name as "this.methodName"
-	char * fullName = malloc(strlen("this.") + strlen(methodName) + 1);
-	strcpy(fullName, "this.");
-	strcat(fullName, methodName);
-	functionCall->name = fullName;
-	functionCall->expressionList = expressionList;
-	return functionCall;
-}
 
 Lambda * ConstructorSemanticAction(VariableDeclarationList * varList, Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -561,13 +550,6 @@ Factor * VariableExpressionSemanticAction(char * variable){
 	return factor;
 }
 
-Factor * ThisExpressionSemanticAction() {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Factor * factor = calloc(1, sizeof(Factor));
-	factor->variable = strdup("this");
-	factor->type = VARIABLE_TYPE;
-	return factor;
-}
 
 PrivacyModifier * PrivacyModifierSemanticAction(PrivacyType privacyType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -721,4 +703,38 @@ Factor * ArrayAccessFactorSemanticAction(char * arrayName, Expression * index) {
 	factor->arrayAccess.index = index;
 	factor->type = ARRAY_ACCESS;
 	return factor;
+}
+
+Expression * ThisDotExpressionSemanticAction(char * memberName) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->thisDotName = memberName;
+	expression->type = THIS_DOT_EXPRESSION;
+	return expression;
+}
+
+Expression * ThisDotFunctionCallExpressionSemanticAction(FunctionCall * functionCall) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->thisDotFunctionCall = functionCall;
+	expression->type = THIS_DOT_FUNCTION_CALL;
+	return expression;
+}
+
+Expression * ChainedThisDotExpressionSemanticAction(Expression * baseExpression, char * memberName) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->chainedThisDot.baseExpression = baseExpression;
+	expression->chainedThisDot.memberName = memberName;
+	expression->type = CHAINED_THIS_DOT_EXPRESSION;
+	return expression;
+}
+
+Expression * ChainedThisDotFunctionCallExpressionSemanticAction(Expression * baseExpression, FunctionCall * functionCall) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->chainedThisDotFunction.baseExpression = baseExpression;
+	expression->chainedThisDotFunction.functionCall = functionCall;
+	expression->type = CHAINED_THIS_DOT_FUNCTION_CALL;
+	return expression;
 }

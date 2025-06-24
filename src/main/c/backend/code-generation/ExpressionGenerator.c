@@ -106,6 +106,22 @@ void generateExpression(const unsigned int indentationLevel, Expression* express
         case FUNCTION_CALL:
             generateFunctionCall(indentationLevel, expression->functionCall);
             break;
+        case THIS_DOT_EXPRESSION:
+            generatorOutput(indentationLevel, "this.%s", expression->thisDotName);
+            break;
+        case THIS_DOT_FUNCTION_CALL:
+            generatorOutput(indentationLevel, "this.");
+            generateFunctionCall(indentationLevel, expression->thisDotFunctionCall);
+            break;
+        case CHAINED_THIS_DOT_EXPRESSION:
+            generateExpression(indentationLevel, expression->chainedThisDot.baseExpression);
+            generatorOutput(indentationLevel, ".%s", expression->chainedThisDot.memberName);
+            break;
+        case CHAINED_THIS_DOT_FUNCTION_CALL:
+            generateExpression(indentationLevel, expression->chainedThisDotFunction.baseExpression);
+            generatorOutput(indentationLevel, ".");
+            generateFunctionCall(indentationLevel, expression->chainedThisDotFunction.functionCall);
+            break;
         default:
             break;
     }

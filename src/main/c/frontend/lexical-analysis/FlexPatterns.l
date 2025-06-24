@@ -51,8 +51,6 @@ single_line_comment   "#"[^!].*
 
 ","									{ return CommaLexemeAction(createLexicalAnalyzerContext()); }
 
-"."									{ return DotLexemeAction(createLexicalAnalyzerContext()); }
-
 "'"                                 { BEGIN(CHAR_CONSTANT); ApostropheLexemeAction(createLexicalAnalyzerContext()); }
 <CHAR_CONSTANT>[^(\n|')]             { return ConstantLexemeAction(createLexicalAnalyzerContext(), C_CHARACTER); }
 <CHAR_CONSTANT>"'"                  { ApostropheLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
@@ -115,7 +113,8 @@ single_line_comment   "#"[^!].*
 
 "is"                                { return ExtensionLexemeAction(createLexicalAnalyzerContext(), IS); }
 "using"                             { return ExtensionLexemeAction(createLexicalAnalyzerContext(), USING); }
-"this"                              { return ThisLexemeAction(createLexicalAnalyzerContext()); }
+"this."								{ return ThisLexemeAction(createLexicalAnalyzerContext()); }
+"."                                 { return DotLexemeAction(createLexicalAnalyzerContext()); }
 
 "return"                            { return ReturnLexemeAction(createLexicalAnalyzerContext()); }
 "pass"                              { return PassLexemeAction(createLexicalAnalyzerContext()); }
