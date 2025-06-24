@@ -1,6 +1,7 @@
 #include "ClassGenerator.h"
 #include "Generator.h"
 #include "StructureGenerator.h"
+#include "VariableGenerator.h"
 #include "../../shared/Logger.h"
 #include "../../shared/String.h"
 #include <stdio.h>
@@ -109,8 +110,16 @@ void generateClass(const unsigned int indentationLevel, Class* class) {
         return;
     }
     
+    // Generate privacy modifiers if present
+    if (class->privacyModifierList != NULL) {
+        generatePrivacyModifiers(indentationLevel, class->privacyModifierList);
+    } else {
+        // Default to public if no privacy modifier is specified
+        generatorOutput(indentationLevel, "public ");
+    }
+    
     // Generate class declaration
-    generatorOutput(indentationLevel, "public class ");
+    generatorOutput(indentationLevel, "class ");
     
     // Generate class name and generics
     if (class->object != NULL) {

@@ -195,6 +195,7 @@ void releaseClass(Class * class) {
 	releaseObject(class->object);
 	releaseObject(class->inherits);
 	releaseImplementationList(class->implementationList);
+	releasePrivacyList(class->privacyModifierList);
 	free(class);
 }
 

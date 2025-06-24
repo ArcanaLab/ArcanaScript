@@ -232,14 +232,15 @@ Block * BlockSemanticAction(Block * block, Instruction * instruction);
 // ================== [ Classes ] =========================
 #pragma region Classes
 /**
- * Creates a class with the specified object, inheritance, implementation list, and block.
+ * Creates a class with the specified object, inheritance, implementation list, privacy modifiers, and block.
  * @param object The class object.
  * @param inherits The object from which it inherits.
  * @param implementationList The list of implementations.
+ * @param privacyModifierList The list of privacy modifiers.
  * @param block The class block.
  * @return A pointer to the created class.
  */
-Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationList * implementationList, Block * block);
+Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationList * implementationList, PrivacyList * privacyModifierList, Block * block);
 #pragma endregion
 // ========================================================
 

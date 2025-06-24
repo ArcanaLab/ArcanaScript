@@ -18,4 +18,34 @@ class ClassName2 {
         fgh = 2;
     };
 }
+
+@exposed class ClassName2 {
+    @eternal abc: int = 1;
+    @eternal fgh: int = 2;
     
+    fun : Function<Void> = (a:int) {
+        abc = 1;
+        fgh = 2;
+    };
+}
+    
+@hidden class ClassName3 {
+    @eternal abc: int = 1;
+    @eternal fgh: int = 2;
+    
+    fun : Function<Void> = (a:int) {
+        abc = 1;
+        fgh = 2;
+    };
+}
+
+@shielded class ClassName4 {
+    @eternal abc: int = 1;
+    @eternal fgh: int = 2;
+    
+    fun : Function<Void> = (a:int) {
+        abc = 1;
+        fgh = 2;
+    };
+}
+   

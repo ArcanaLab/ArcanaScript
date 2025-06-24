@@ -480,12 +480,13 @@ Program * BlockProgramSemanticAction(CompilerState * compilerState,ImportList * 
 	return program;
 }
 
-Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationList * implementationList, Block * block) {
+Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationList * implementationList, PrivacyList * privacyModifierList, Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Class * class = calloc(1, sizeof(Class));
 	class->object = object;
 	class->inherits = inherits;
 	class->implementationList = implementationList;
+	class->privacyModifierList = privacyModifierList;
 	class->block = block;
 	return class;
 }

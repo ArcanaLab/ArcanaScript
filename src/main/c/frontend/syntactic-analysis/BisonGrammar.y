@@ -326,10 +326,14 @@
 		/** ===== DECLARATION ===== */
 
 			class: 
-				CLASS object[obj] { pushContext(CLASS_CONTEXT); } scope[scope_block]																	{ $$ = ClassSemanticAction($obj, NULL, NULL, $scope_block); popContext(); }
-				| CLASS object[obj] inheritance_class[inherit] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, $inherit, NULL, $scope_block); popContext(); }
-				| CLASS object[obj] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, NULL, $implement, $scope_block); popContext(); }
-				| CLASS object[obj] inheritance_class[inherit] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]				{ $$ = ClassSemanticAction($obj, $inherit, $implement, $scope_block); popContext(); }
+				CLASS object[obj] { pushContext(CLASS_CONTEXT); } scope[scope_block]																	{ $$ = ClassSemanticAction($obj, NULL, NULL, NULL, $scope_block); popContext(); }
+				| CLASS object[obj] inheritance_class[inherit] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, $inherit, NULL, NULL, $scope_block); popContext(); }
+				| CLASS object[obj] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, NULL, $implement, NULL, $scope_block); popContext(); }
+				| CLASS object[obj] inheritance_class[inherit] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]				{ $$ = ClassSemanticAction($obj, $inherit, $implement, NULL, $scope_block); popContext(); }
+				| privacy_list[priv] CLASS object[obj] { pushContext(CLASS_CONTEXT); } scope[scope_block]																	{ $$ = ClassSemanticAction($obj, NULL, NULL, $priv, $scope_block); popContext(); }
+				| privacy_list[priv] CLASS object[obj] inheritance_class[inherit] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, $inherit, NULL, $priv, $scope_block); popContext(); }
+				| privacy_list[priv] CLASS object[obj] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]										{ $$ = ClassSemanticAction($obj, NULL, $implement, $priv, $scope_block); popContext(); }
+				| privacy_list[priv] CLASS object[obj] inheritance_class[inherit] implementation[implement] { pushContext(CLASS_CONTEXT); } scope[scope_block]				{ $$ = ClassSemanticAction($obj, $inherit, $implement, $priv, $scope_block); popContext(); }
 				;
 
 			interface:

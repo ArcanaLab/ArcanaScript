@@ -283,6 +283,7 @@ struct Class {
 	Object * inherits;
 	ImplementationList * implementationList;
 	Block * block;
+	PrivacyList * privacyModifierList;
 };
 
 struct Interface {
