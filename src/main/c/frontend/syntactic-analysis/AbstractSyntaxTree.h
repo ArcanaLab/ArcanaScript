@@ -116,6 +116,7 @@ enum PrivacyType {
 	PROTECTED_A,
 	CONST_A,
 	STATIC_A,
+	OVERRIDE_A,
 };
 
 enum VariableType {

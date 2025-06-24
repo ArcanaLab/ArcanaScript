@@ -116,6 +116,7 @@
 		%token <token> C_SHIELDED //Protected
 		%token <token> C_ETERNAL //Static
 		%token <token> C_IMMUTABLE //Const
+		%token <token> C_OVERRIDE //Override
 
 	// ------------------ [ Comparasions ] ----------------
 		/** ===== Comparator ===== */
@@ -160,6 +161,9 @@
 		/** ===== Comma ===== */
 		%token <token> COMMA
 
+		/** ===== Dot ===== */
+		%token <token> DOT
+
 		/** ===== Assignation ===== */
 		%token <token> ASSIGN
 		%token <token> ADD_ASSIGN
@@ -192,6 +196,7 @@
 		/** ===== Inheritance ===== */
 		%token <token> IS
 		%token <token> USING
+		%token <token> THIS
 
 
 	// ------------------ [ Functions ] -------------------
@@ -398,6 +403,7 @@
 			| C_SHIELDED																								{ $$ = PrivacyModifierSemanticAction(PROTECTED_A); }
 			| C_ETERNAL																									{ $$ = PrivacyModifierSemanticAction(STATIC_A); }
 			| C_IMMUTABLE																								{ $$ = PrivacyModifierSemanticAction(CONST_A);; }
+			| C_OVERRIDE																								{ $$ = PrivacyModifierSemanticAction(OVERRIDE_A); }
 			;
 			
 		variable_type:
@@ -435,7 +441,7 @@
 			| NAME ADD_ASSIGN expression																				{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
 			| NAME SUB_ASSIGN expression																				{ $$ = AssignmentOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
 			| NAME MUL_ASSIGN expression																				{ $$ = AssignmentOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
-			| NAME OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression { $$ = ArrayAssignmentOperatorSemanticAction($1, $3, $6); }
+			| NAME OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression 												{ $$ = ArrayAssignmentOperatorSemanticAction($1, $3, $6); }
 			;
 	// ------------------ [ Comparasions ] -----------------------
 		comparator_expression: 	factor[left] GREATER factor[right]														{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_TYPE); }
@@ -461,6 +467,7 @@
 		/** ===== Factor ===== */
 		factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS															{ $$ = ExpressionFactorSemanticAction($2); }
 			| NAME																										{ $$ = VariableExpressionSemanticAction($1); }	
+			| THIS																										{ $$ = ThisExpressionSemanticAction(); }
 			| NAME INCREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, INCREMENT_TYPE); }
 			| NAME DECREMENT 																							{ $$ = UnaryExpressionSemanticAction($1, DECREMENT_TYPE); }
 			| constant																									{ $$ = ConstantFactorSemanticAction($1); }
@@ -489,6 +496,8 @@
 		function_call:
 			NAME OPEN_PARENTHESIS CLOSE_PARENTHESIS																		{ $$ = FunctionCallSemanticAction($1, NULL); }
 			| NAME OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS													{ $$ = FunctionCallSemanticAction($1, $3); }
+			| THIS DOT NAME OPEN_PARENTHESIS CLOSE_PARENTHESIS															{ $$ = ThisFunctionCallSemanticAction($3, NULL); }
+			| THIS DOT NAME OPEN_PARENTHESIS expression_list CLOSE_PARENTHESIS											{ $$ = ThisFunctionCallSemanticAction($3, $5); }
 			;
 
 		/** ===== Argument List (Function Call) ===== */

@@ -95,9 +95,15 @@ Factor * ConstantFactorSemanticAction(Constant * constant);
 /**
  * Creates a variable expression with the specified name.
  * @param variable The name of the variable.
- * @return A pointer to the created variable expression.
+ * @return A pointer to the created factor.
  */
 Factor * VariableExpressionSemanticAction(char * variable);
+
+/**
+ * Creates a this expression.
+ * @return A pointer to the created factor.
+ */
+Factor * ThisExpressionSemanticAction();
 
 /**
  * Creates a unary expression with the specified name and type.
@@ -284,6 +290,14 @@ PrivacyModifier * PrivacyModifierSemanticAction(PrivacyType privacyType);
  * @return A pointer to the created function call.
  */
 FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressionList);
+
+/**
+ * Creates a this function call with the specified method name and expression list.
+ * @param methodName The name of the method.
+ * @param expressionList The list of expressions.
+ * @return A pointer to the created function call.
+ */
+FunctionCall * ThisFunctionCallSemanticAction(char * methodName, ExpressionList * expressionList);
 #pragma endregion
 // ========================================================
 

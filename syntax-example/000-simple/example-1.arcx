@@ -13,7 +13,7 @@ class SimpleCardGame is ArcanaGame {
     init: Function<void> = () {
         // Generar todas las cartas
         @eternal
-        allCards: List<SimpleCard> = [
+        allCards: SimpleCard[] = [
            _generateNumberCards(),
         ];
         

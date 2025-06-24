@@ -1,0 +1,17 @@
+class ThisTest {
+    @exposed
+    property: int = 42;
+    
+    @exposed
+    testMethod: Function<void> = () {
+        #! Test this keyword functionality !#
+        
+        value = this.property;
+        this.anotherMethod();
+    };
+    
+    @hidden
+    anotherMethod: Function<void> = () {
+        #! Another method to test this calls !#
+    };
+} 
