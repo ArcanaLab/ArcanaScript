@@ -94,6 +94,22 @@ Expression * ThisDotExpressionSemanticAction(char * memberName);
  * @return A pointer to the created expression.
  */
 Expression * ThisDotFunctionCallExpressionSemanticAction(FunctionCall * functionCall);
+
+/**
+ * Creates a chained this dot expression with the specified base expression and member name.
+ * @param baseExpression The base this expression.
+ * @param memberName The name of the member to access.
+ * @return A pointer to the created expression.
+ */
+Expression * ChainedThisDotExpressionSemanticAction(Expression * baseExpression, char * memberName);
+
+/**
+ * Creates a chained this dot function call expression with the specified base expression and function call.
+ * @param baseExpression The base this expression.
+ * @param functionCall The function call to execute.
+ * @return A pointer to the created expression.
+ */
+Expression * ChainedThisDotFunctionCallExpressionSemanticAction(Expression * baseExpression, FunctionCall * functionCall);
 #pragma endregion
 // ========================================================
 

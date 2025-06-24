@@ -367,6 +367,17 @@ Token ExtensionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Tok
 
 
 Token ThisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+/**
+ * @brief Handles the lexeme action for a dot (.) token during lexical analysis.
+ *
+ * This function is called when a dot character is encountered in the input stream.
+ * It processes the dot character and returns a corresponding Token object.
+ *
+ * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
+ * @return Token representing the dot lexeme.
+ */
+Token DotLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 #pragma endregion
 
 #endif

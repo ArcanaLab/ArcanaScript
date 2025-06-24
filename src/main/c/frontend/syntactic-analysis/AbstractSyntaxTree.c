@@ -60,6 +60,14 @@ void releaseExpression(Expression * expression) {
 		case THIS_DOT_FUNCTION_CALL:
 			releaseFunctionCall(expression->thisDotFunctionCall);
 			break;
+		case CHAINED_THIS_DOT_EXPRESSION:
+			releaseExpression(expression->chainedThisDot.baseExpression);
+			releaseName(expression->chainedThisDot.memberName);
+			break;
+		case CHAINED_THIS_DOT_FUNCTION_CALL:
+			releaseExpression(expression->chainedThisDotFunction.baseExpression);
+			releaseFunctionCall(expression->chainedThisDotFunction.functionCall);
+			break;
 	}
 	free(expression);
 }

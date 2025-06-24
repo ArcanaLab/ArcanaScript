@@ -686,3 +686,21 @@ Expression * ThisDotFunctionCallExpressionSemanticAction(FunctionCall * function
 	expression->type = THIS_DOT_FUNCTION_CALL;
 	return expression;
 }
+
+Expression * ChainedThisDotExpressionSemanticAction(Expression * baseExpression, char * memberName) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->chainedThisDot.baseExpression = baseExpression;
+	expression->chainedThisDot.memberName = memberName;
+	expression->type = CHAINED_THIS_DOT_EXPRESSION;
+	return expression;
+}
+
+Expression * ChainedThisDotFunctionCallExpressionSemanticAction(Expression * baseExpression, FunctionCall * functionCall) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * expression = calloc(1, sizeof(Expression));
+	expression->chainedThisDotFunction.baseExpression = baseExpression;
+	expression->chainedThisDotFunction.functionCall = functionCall;
+	expression->type = CHAINED_THIS_DOT_FUNCTION_CALL;
+	return expression;
+}

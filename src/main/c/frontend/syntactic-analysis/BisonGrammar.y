@@ -197,6 +197,7 @@
 
 		/** ===== Access ===== */
 		%token <token> THIS_DOT
+		%token <token> DOT
 
 
 	// ------------------ [ Functions ] -------------------
@@ -218,6 +219,7 @@
 	// ------------------ [ Expressions ] ------------------
 		%type <expression> expression
 		%type <expression> comparator_expression
+		%type <expression> this_expression
 		%type <expressionList> expression_list
 		%type <expressionList> array_elements
 
@@ -458,8 +460,15 @@
 			| factor																									{ $$ = FactorExpressionSemanticAction($1); }
 			| function_call																								{ $$ = FunctionCallExpressionSemanticAction($1); }
 			| lambda																									{ $$ = LambdaExpressionSemanticAction($1); }
-			| THIS_DOT NAME																								{ $$ = ThisDotExpressionSemanticAction($2); }
+			| this_expression																							{ $$ = $1; }
+			;
+
+		/** ===== This Expressions ===== */
+		this_expression:
+			THIS_DOT NAME																								{ $$ = ThisDotExpressionSemanticAction($2); }
 			| THIS_DOT function_call																					{ $$ = ThisDotFunctionCallExpressionSemanticAction($2); }
+			| this_expression DOT NAME																					{ $$ = ChainedThisDotExpressionSemanticAction($1, $3); }
+			| this_expression DOT function_call																			{ $$ = ChainedThisDotFunctionCallExpressionSemanticAction($1, $3); }
 			;
 
 		/** ===== Factor ===== */
