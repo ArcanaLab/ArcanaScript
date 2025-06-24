@@ -328,6 +328,14 @@ void ValidateContext(ContextStackType contextType, const char * errorMessage){
 	}
 }
 
+void ValidateImmediateContext(ContextStackType contextType, const char * errorMessage){
+	if(!inmediateContext(contextType)) {
+		logError(_logger, errorMessage);
+		yyerror(errorMessage);
+		_abort_parse = 1;
+	}
+}
+
 Instruction * InstructionSemanticAction(void * value, InstructionType instructionType) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
@@ -575,6 +583,17 @@ Interface * InterfaceSemanticAction(Object * object, ImplementationList * extend
 	interface->extends = extends;
 	interface->block = block;
 	return interface;
+}
+
+Constructor * ConstructorSemanticAction(VariableDeclarationList * variableDeclarationList, Block * block){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	ValidateContext(CLASS_CONTEXT, "Constructors are not allowed outside classes.");
+	ValidateImmediateContext(CLASS_CONTEXT, "Constructors must be declared in the class body.");
+
+	Constructor * constructor = calloc(1, sizeof(Constructor));
+	constructor->variableDeclarationList = variableDeclarationList;
+	constructor->block = block;
+	return constructor;
 }
 
 // ===== Imports =====

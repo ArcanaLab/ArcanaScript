@@ -36,6 +36,8 @@ typedef struct Instruction Instruction;
 typedef struct Lambda Lambda;
 typedef struct Class Class;
 typedef struct Interface Interface;
+typedef struct Constructor Constructor;
+
 typedef struct Import Import;
 
 typedef struct FunctionCall FunctionCall;
@@ -293,6 +295,11 @@ struct Interface {
 	Block * block;
 };
 
+struct Constructor {
+	VariableDeclarationList * variableDeclarationList;
+	Block * block;
+};
+
 struct FunctionCall {
 	char * name;
 	ExpressionList * expressionList;
@@ -470,6 +477,12 @@ void releaseImplementationList(ImplementationList * implementationList);
  * @param interface Pointer to the interface to be released.
  */
 void releaseInterface(Interface * interface);
+
+/**
+ * Releases the memory used by a constructor and its components.
+ * @param constructor Pointer to the constructor to be released.
+ */
+void releaseConstructor(Constructor * constructor);
 
 /**
  * @brief Releases all resources associated with the given ImportList.

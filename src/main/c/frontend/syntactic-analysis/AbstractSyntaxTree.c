@@ -252,6 +252,15 @@ void releaseInterface(Interface * interface) {
 	free(interface);
 }
 
+void releaseConstructor(Constructor * constructor) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(constructor == NULL) return;
+
+	releaseVariableDeclarationList(constructor->variableDeclarationList);
+	releaseBlock(constructor->block);
+	free(constructor);
+}
+
 /** 
  * 
  * How to release Nodes List in General.

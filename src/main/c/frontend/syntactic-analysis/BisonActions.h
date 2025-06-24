@@ -247,6 +247,14 @@ Block * BlockSemanticAction(Block * block, Instruction * instruction);
  * @return A pointer to the created class.
  */
 Class * ClassSemanticAction(Object * object, Object * inherits, ImplementationList * implementationList, PrivacyList * privacyModifierList, Block * block);
+
+/**
+ * Creates a constructor with the specified variable declaration list and block.
+ * @param variableDeclarationList The list of variable declarations.
+ * @param block The constructor block.
+ * @return A pointer to the created constructor.
+ */
+Constructor * ConstructorSemanticAction(VariableDeclarationList * variableDeclarationList, Block * block);
 #pragma endregion
 // ========================================================
 
