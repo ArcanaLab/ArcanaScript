@@ -203,6 +203,56 @@ AssignmentOperation * ArrayAssignmentOperatorSemanticAction(char * arrayName, Ex
 	return op;
 }
 
+AssignmentOperation * AssignmentThisOperatorSemanticAction(Expression * thisExpr, Expression * expression, AssignmentOperatorType assignmentOperatorType) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+
+	// Debug prints for assignment operator verification
+	printf("=== BISON ASSIGNMENT THIS OPERATOR DEBUG ===\n");
+	printf("Function: %s\n", __FUNCTION__);
+	printf("this_expression: %p\n", (void*)thisExpr);
+	printf("Expression: %p\n", (void*)expression);
+	if (expression != NULL) {
+		printf("  - Expression type: %d\n", expression->type);
+	}
+	printf("Assignment operator type: %d\n", assignmentOperatorType);
+	printf("Operator type: ");
+	switch(assignmentOperatorType) {
+		case ASSIGN_TYPE:
+			printf("ASSIGN_TYPE (=)\n");
+			break;
+		case ADD_ASSIGN_TYPE:
+			printf("ADD_ASSIGN_TYPE (+=)\n");
+			break;
+		case SUB_ASSIGN_TYPE:
+			printf("SUB_ASSIGN_TYPE (-=)\n");
+			break;
+		case MUL_ASSIGN_TYPE:
+			printf("MUL_ASSIGN_TYPE (*=)\n");
+			break;
+		default:
+			printf("UNKNOWN\n");
+			break;
+	}
+	printf("=====================================\n");
+
+	AssignmentOperation * assignmentOperation = calloc(1, sizeof(AssignmentOperation));
+	assignmentOperation->thisExpr = thisExpr;
+	assignmentOperation->assignmentOperator = assignmentOperatorType;
+	assignmentOperation->expression = expression;
+
+	return assignmentOperation;
+}
+
+AssignmentOperation * ArrayAssignmentThisOperatorSemanticAction(Expression * thisExpr, Expression * index, Expression * value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	AssignmentOperation * op = calloc(1, sizeof(AssignmentOperation));
+	op->thisExpr = thisExpr;
+	op->index = index;
+	op->expression = value;
+	op->assignmentOperator = ASSIGN_TYPE;
+	return op;
+}
+
 Conditional * ConditionalSemanticAction(Expression * expression, ConditionalType conditionalType,Block * block) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	

@@ -139,6 +139,7 @@ void releaseAssignmentOperation(AssignmentOperation * assignmentOperation) {
 	if (assignmentOperation == NULL) return;
 
 	releaseName(assignmentOperation->name);
+	releaseExpression(assignmentOperation->thisExpr);
 	releaseExpression(assignmentOperation->expression);
 	releaseExpression(assignmentOperation->index);
 	free(assignmentOperation);
