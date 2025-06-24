@@ -8,28 +8,28 @@ class SimpleCardGame is ArcanaGame {
 
     @override
     init: Function<void> = () {
-
-        allCards: SimpleCard[] = ["ayuda"];
+        @eternal
+        allCards: Cards[] = ["Cartita1", "Cartita2"];
         
         this.cards = SimpleDeck(allCards);
         this.table = SimpleTable(this.cards, this.players);
     };
 
     @hidden
-    _generateNumberCards:  Function<SimpleCard[]> = (){
+    _generateNumberCards:  Function<SimpleCard> = (){
         @eternal
         colors: string[] = ["red", "blue"];
         
         @eternal
-        cards: SimpleCard[] = [];
-        
-        for (color: String in colors) {
-            // Una carta de cada número (1-3) por color
-            for (num: int in 1..3) {
+        cards: Cards[] = [];
+        MAX_CARDS: int = 6;
+        for (color: colors) {
+            # Una carta de cada número (1-3) por color
+            for (num:MAX_CARDS) {
                 #cards.add(SimpleCard("${color}_${num}", null, color, num, PlayCardAction()));
             }
         }
         
         return cards;
-    }
+    };
 }
