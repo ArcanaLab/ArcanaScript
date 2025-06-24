@@ -1,0 +1,5 @@
+class ThisTest {
+    constructor(){
+        #! Test constructor functionality !#
+    }
+} 

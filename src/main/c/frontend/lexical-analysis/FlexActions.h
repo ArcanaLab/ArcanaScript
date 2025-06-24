@@ -251,6 +251,17 @@ Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token InterfaceLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 /**
+ * @brief Processes a constructor lexeme during lexical analysis.
+ *
+ * This function is called when a constructor-related lexeme is recognized by the lexical analyzer.
+ * It performs the necessary actions to create and return a Token representing the constructor lexeme.
+ *
+ * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.
+ * @return Token representing the identified constructor lexeme.
+ */
+Token ConstructorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+/**
  * Processes a decorator lexeme during lexical analysis.
  *
  * @param lexicalAnalyzerContext Pointer to the current lexical analyzer context.

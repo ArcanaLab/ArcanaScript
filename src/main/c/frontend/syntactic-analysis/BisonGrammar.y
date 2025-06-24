@@ -192,7 +192,10 @@
 
 		/** ===== Interface ===== */
 		%token <token> INTERFACE
-		
+
+		/** ===== Constructor ===== */
+		%token <token> CONSTRUCTOR
+
 		/** ===== Inheritance ===== */
 		%token <token> IS
 		%token <token> USING
