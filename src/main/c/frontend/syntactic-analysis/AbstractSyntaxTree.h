@@ -165,6 +165,7 @@ enum InstructionType {
 	INSTRUCTION_LOOP,
 	INSTRUCTION_CLASS,
 	INSTRUCTION_INTERFACE,
+	INSTRUCTION_CONSTRUCTOR,
 	INSTRUCTION_RETURN,
 	INSTRUCTION_PASS,
 };
@@ -264,6 +265,7 @@ struct Instruction {
 		Conditional * conditional;
 		Class * class;
 		Interface * interface;
+		Lambda * constructor;
 		Instruction * returnInstruction;
 	};
 

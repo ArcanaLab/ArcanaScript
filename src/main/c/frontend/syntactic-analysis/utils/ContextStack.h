@@ -14,6 +14,7 @@ enum ContextStackType {
     CLASS_CONTEXT,
     INTERFACE_CONTEXT,
     LOOP_CONTEXT,
+    CONSTRUCTOR_CONTEXT,
 };
 
 struct ContextStackNode {

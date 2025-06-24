@@ -161,6 +161,9 @@ void releaseInstruction(Instruction * instruction) {
 		case INSTRUCTION_INTERFACE:
 			releaseInterface(instruction->interface);
 			break;
+		case INSTRUCTION_CONSTRUCTOR:
+			releaseLambda(instruction->constructor);
+			break;
 		case INSTRUCTION_RETURN:
 			releaseInstruction(instruction->returnInstruction);
 			break;

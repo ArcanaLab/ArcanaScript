@@ -387,6 +387,10 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 			printf("INSTRUCTION_INTERFACE\n");
 			break;
 
+		case INSTRUCTION_CONSTRUCTOR:
+			printf("INSTRUCTION_CONSTRUCTOR\n");
+			break;
+
 		case INSTRUCTION_RETURN:
 			printf("INSTRUCTION_RETURN\n");
 			ValidateContext(LAMBDA_CONTEXT, "Return statements are not allowed outside functions.");
@@ -433,6 +437,10 @@ Instruction * InstructionSemanticAction(void * value, InstructionType instructio
 
 		case INSTRUCTION_INTERFACE:
 			instruction->interface = value;
+			break;
+
+		case INSTRUCTION_CONSTRUCTOR:
+			instruction->constructor = value;
 			break;
 
 		case INSTRUCTION_RETURN:
@@ -499,6 +507,14 @@ FunctionCall * FunctionCallSemanticAction(char * name, ExpressionList * expressi
 	return functionCall;
 }
 
+FunctionCall * SuperCallSemanticAction(ExpressionList * expressionList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
+	functionCall->name = strdup("super");
+	functionCall->expressionList = expressionList;
+	return functionCall;
+}
+
 FunctionCall * ThisFunctionCallSemanticAction(char * methodName, ExpressionList * expressionList) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	FunctionCall * functionCall = calloc(1, sizeof(FunctionCall));
@@ -509,6 +525,14 @@ FunctionCall * ThisFunctionCallSemanticAction(char * methodName, ExpressionList 
 	functionCall->name = fullName;
 	functionCall->expressionList = expressionList;
 	return functionCall;
+}
+
+Lambda * ConstructorSemanticAction(VariableDeclarationList * varList, Block * block) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Lambda * lambda = calloc(1, sizeof(Lambda));
+	lambda->variableDeclarationList = varList;
+	lambda->block = block;
+	return lambda;
 }
 
 Expression * FunctionCallExpressionSemanticAction(FunctionCall * functionCall) {

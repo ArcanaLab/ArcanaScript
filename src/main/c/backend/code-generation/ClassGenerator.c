@@ -138,7 +138,9 @@ void generateClass(const unsigned int indentationLevel, Class* class) {
     
     // Generate class body
     if (class->block != NULL) {
-        generateScope(indentationLevel, class->block);
+        generatorOutput(indentationLevel, " {\n");
+        generateClassBody(indentationLevel, class->block, class->object);
+        generatorOutput(indentationLevel, "}\n");
     } else {
         generatorOutput(indentationLevel, " {\n");
         generatorOutput(indentationLevel, "}\n");
@@ -174,4 +176,28 @@ void generateInterface(const unsigned int indentationLevel, Interface* interface
     }
     
     generatorOutput(indentationLevel, "\n");
+}
+
+void generateClassBody(const unsigned int indentationLevel, Block* block, Object* classObject) {
+    if (block == NULL) {
+        return;
+    }
+    
+    InstructionNode* currentInstruction = block->first;
+    while (currentInstruction != NULL) {
+        Instruction* instruction = (Instruction*)currentInstruction->data;
+        
+        if (instruction->type == INSTRUCTION_CONSTRUCTOR) {
+            // Handle constructor specially - add class name without public modifier
+            if (classObject != NULL) {
+                generatorOutput(indentationLevel + 1, "%s", classObject->name);
+            }
+            generateConstructor(indentationLevel + 1, instruction->constructor);
+        } else {
+            // Handle other instructions normally
+            generateInstruction(indentationLevel + 1, instruction);
+        }
+        
+        currentInstruction = currentInstruction->next;
+    }
 } 

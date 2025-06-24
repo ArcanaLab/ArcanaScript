@@ -258,6 +258,20 @@ Token ThisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	return THIS;
 }
 
+Token SuperLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = SUPER;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return SUPER;
+}
+
+Token ConstructorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = CONSTRUCTOR;
+	destroyLexicalAnalyzerContext(lexicalAnalyzerContext);
+	return CONSTRUCTOR;
+}
+
 Token ComparatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	Token token;
