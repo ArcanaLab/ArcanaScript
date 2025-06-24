@@ -90,7 +90,6 @@ static void generateObject(const unsigned int indentationLevel, Object* object) 
     } else {
         generatorOutput(indentationLevel, "%s", object->name);
     }
-    // TODO: Hacer bien esta funcion cuando lleguemos al tema Objets.
 }
 
 void generateVariableDeclaration(const unsigned int indentationLevel, VariableDeclaration* variableDeclaration) {
@@ -98,14 +97,10 @@ void generateVariableDeclaration(const unsigned int indentationLevel, VariableDe
         return;
     }
     
-    // Check if it is a function declaration (variable assigned a lambda)
     if (variableDeclaration->expression != NULL && variableDeclaration->expression->type == LAMBDA) {
-        // Check if this is a function with explicit return type (has object type)
         if (variableDeclaration->type == OBJECT && variableDeclaration->object != NULL) {
-            // This is a function declaration with return type
             generateFunction(indentationLevel, variableDeclaration);
         } else {
-            // This is a lambda assignment
             generateLambda(indentationLevel, variableDeclaration);
         }
         return;
@@ -128,7 +123,6 @@ void generateVariableDeclaration(const unsigned int indentationLevel, VariableDe
     if (variableDeclaration->expression != NULL) {
         generatorOutput(indentationLevel, " = ");
         
-        // Special handling for array literals with typed variables
         if (variableDeclaration->expression->type == FACTOR && 
             variableDeclaration->expression->factor->type == ARRAY_LITERAL &&
             (variableDeclaration->type == V_INT_ARRAY || 
@@ -140,10 +134,8 @@ void generateVariableDeclaration(const unsigned int indentationLevel, VariableDe
              variableDeclaration->type == V_LONG_ARRAY || 
              variableDeclaration->type == V_SHORT_ARRAY ||
              variableDeclaration->type == V_OBJECT_ARRAY)) {
-            // Use typed array literal generation
             generateArrayLiteralWithType(indentationLevel, &variableDeclaration->expression->factor->arrayLiteral, variableDeclaration->type);
         } else {
-            // Use regular expression generation
             generateExpression(indentationLevel, variableDeclaration->expression);
         }
     }

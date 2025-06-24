@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* PRIVATE FUNCTIONS */
 static char* _indentation(const unsigned int level);
 static char* _expressionTypeToOperator(const ExpressionType type);
 
@@ -131,8 +130,6 @@ void generateFunctionCall(const unsigned int indentationLevel, FunctionCall* fun
     if (functionCall == NULL) {
         return;
     }
-    
-    // Special handling for 'print' function
     if (functionCall->name != NULL && strcmp(functionCall->name, "print") == 0) {
         generatorOutput(indentationLevel, "System.out.println(");
         if (functionCall->expressionList != NULL) {
@@ -150,9 +147,7 @@ void generateFunctionCall(const unsigned int indentationLevel, FunctionCall* fun
         }
         generatorOutput(0, ")");
     } else {
-        // Generate function name
         generatorOutput(indentationLevel, "%s(", functionCall->name);
-        // Generate function arguments
         if (functionCall->expressionList != NULL) {
             ExpressionNode* currentExpr = functionCall->expressionList->first;
             bool first = true;
@@ -170,10 +165,7 @@ void generateFunctionCall(const unsigned int indentationLevel, FunctionCall* fun
     }
 }
 
-// Helper: Generate array literal as new Type[] { ... }
 void generateArrayLiteral(const unsigned int indentationLevel, const typeof(((Factor*)0)->arrayLiteral)* arrayLiteral) {
-    // TODO: Type inference for array type (for now, use int[] as default)
-    // In a real implementation, you would pass the type down or infer from context
     generatorOutput(indentationLevel, "new int[] {");
     if (arrayLiteral && arrayLiteral->elements) {
         ExpressionNode* current = arrayLiteral->elements->first;
@@ -188,7 +180,6 @@ void generateArrayLiteral(const unsigned int indentationLevel, const typeof(((Fa
     generatorOutput(0, "}");
 }
 
-// Helper: Generate array literal with specific type
 void generateArrayLiteralWithType(const unsigned int indentationLevel, const typeof(((Factor*)0)->arrayLiteral)* arrayLiteral, VariableType arrayType) {
     char* typeString = VariableTypeToString(arrayType);
     generatorOutput(indentationLevel, "new %s {", typeString);
@@ -205,7 +196,6 @@ void generateArrayLiteralWithType(const unsigned int indentationLevel, const typ
     generatorOutput(0, "}");
 }
 
-// Helper: Generate array access as name[index]
 void generateArrayAccess(const unsigned int indentationLevel, const typeof(((Factor*)0)->arrayAccess)* arrayAccess) {
     if (arrayAccess && arrayAccess->arrayName && arrayAccess->index) {
         generatorOutput(indentationLevel, "%s[", arrayAccess->arrayName);

@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* PRIVATE FUNCTIONS */
 static char* _comparisonTypeToOperator(const ExpressionType type);
 
 static char* _comparisonTypeToOperator(const ExpressionType type) {

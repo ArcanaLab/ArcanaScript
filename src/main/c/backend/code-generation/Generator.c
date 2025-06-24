@@ -5,8 +5,6 @@
 #include <sys/stat.h>
 #include "JavaFileUtils.h"
 
-/* MODULE INTERNAL STATE */
-
 const char _indentationCharacter = ' ';
 const char _indentationSize = 4;
 static Logger * _logger = NULL;
@@ -27,24 +25,14 @@ void shutdownGeneratorModule() {
 	}
 }
 
-/** PRIVATE FUNCTIONS */
-
 static char * _indentation(const unsigned int indentationLevel);
 static void _output(const unsigned int indentationLevel, const char * const format, ...);
 static bool _ensureTestResultsDirectory(void);
 
-/**
- * Generates an indentation string for the specified level.
- */
 static char * _indentation(const unsigned int level) {
 	return indentation(_indentationCharacter, level, _indentationSize);
 }
 
-/**
- * Outputs a formatted string to standard output. The "fflush" instruction
- * allows to see the output even close to a failure, because it drops the
- * buffering.
- */
 static void _output(const unsigned int indentationLevel, const char * const format, ...) {
 	va_list arguments;
 	va_start(arguments, format);
@@ -64,9 +52,6 @@ static void _output(const unsigned int indentationLevel, const char * const form
 	va_end(arguments);
 }
 
-/**
- * Public wrapper for the output function that other modules can use.
- */
 void generatorOutput(const unsigned int indentationLevel, const char * const format, ...) {
 	va_list arguments;
 	va_start(arguments, format);
@@ -88,7 +73,6 @@ void generatorOutput(const unsigned int indentationLevel, const char * const for
 		fflush(stdout);
 	}
 	
-	// Check if the format ends with a newline to track line starts
 	size_t formatLen = strlen(format);
 	if (formatLen > 0 && format[formatLen - 1] == '\n') {
 		_atLineStart = true;
@@ -100,10 +84,6 @@ void generatorOutput(const unsigned int indentationLevel, const char * const for
 	va_end(arguments);
 }
 
-/**
- * Ensures the test_results directory exists.
- * @return true if the directory exists or was created successfully, false otherwise
- */
 static bool _ensureTestResultsDirectory(void) {
 	struct stat st = {0};
 	if (stat("test_results", &st) == -1) {
@@ -122,14 +102,11 @@ static bool _ensureTestResultsDirectory(void) {
 	return true;
 }
 
-/** PUBLIC FUNCTIONS */
-
 bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testName) {
 	if (!_ensureTestResultsDirectory()) {
 		return false;
 	}
 
-	// Buscar el nombre de la clase principal
 	char* className = getMainClassName((Program*)compilerState->abstractSyntaxtTree);
 	const char* fileBaseName = className ? className : testName;
 
@@ -142,7 +119,7 @@ bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testNa
 		return false;
 	}
 
-	_atLineStart = true; // Reset line start flag for new file
+	_atLineStart = true;
 	logDebugging(_logger, "Writing generated output to file for test: %s", fileBaseName);
 	generateProgram(0, (Program*)compilerState->abstractSyntaxtTree);
 	
@@ -153,7 +130,7 @@ bool writeGeneratedOutputToFile(CompilerState* compilerState, const char* testNa
 
 void generate(CompilerState * compilerState) {
 	logDebugging(_logger, "Generating final output...");
-	_atLineStart = true; // Reset line start flag
-	generateProgram(0, (Program*)compilerState->abstractSyntaxtTree); //ESTE CASTEO ES DUDOSISIMO AYUDAME LOCO
+	_atLineStart = true; 
+	generateProgram(0, (Program*)compilerState->abstractSyntaxtTree); 
 	logDebugging(_logger, "Generation is done.");
 }
