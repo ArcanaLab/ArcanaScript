@@ -52,8 +52,7 @@
 
 	Class * class;
 	Interface * inter;
-	Constructor * constructor;
-
+	
 	FunctionCall * functionCall;
 	ExpressionList * expressionList;
 
@@ -208,6 +207,7 @@
 		%token <token> SUPER
 		/** ===== Constructor ===== */
 		%token <token> CONSTRUCTOR
+		
 	// ------------------ [ Unknown ] ---------------------
 		%token <token> UNKNOWN
 
@@ -275,9 +275,6 @@
 			%type <genericList> generic_list
 		/** ===== Interfaces ===== */
 			%type <inter> interface
-			
-		/** ===== Constructor ===== */
-			%type <constructor> constructor
 
 		/** ===== Implementactions ===== */
 			%type <implementationList> implementation
@@ -377,11 +374,6 @@
 				object																										{ $$ = ImplementationListSemanticAction(NULL, $1); }
 				| implementation_list COMMA object																			{ $$ = ImplementationListSemanticAction($1, $3); }
 				;
-		/** ===== Constructor ===== */
-		constructor:
-			CONSTRUCTOR OPEN_PARENTHESIS CLOSE_PARENTHESIS { pushContext(CONSTRUCTOR_CONTEXT); } scope[scope_block]						{ popContext(); $$ = ConstructorSemanticAction(NULL, $scope_block); }
-			| CONSTRUCTOR OPEN_PARENTHESIS var_list[args] CLOSE_PARENTHESIS { pushContext(CONSTRUCTOR_CONTEXT); } scope[scope_block]	{ popContext(); $$ = ConstructorSemanticAction($args, $scope_block); }
-			;
 
 	// ------------------ [ Control Structures ] -----------------
 		/** ===== Loops ===== */

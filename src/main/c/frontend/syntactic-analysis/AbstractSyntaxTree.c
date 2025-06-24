@@ -162,7 +162,6 @@ void releaseInstruction(Instruction * instruction) {
 			releaseInterface(instruction->interface);
 			break;
 		case INSTRUCTION_CONSTRUCTOR:
-			releaseConstructor(instruction->constructor);
 			releaseLambda(instruction->constructor);
 			break;
 		case INSTRUCTION_RETURN:
@@ -254,15 +253,6 @@ void releaseInterface(Interface * interface) {
 	releaseImplementationList(interface->extends);
 	releaseBlock(interface->block);
 	free(interface);
-}
-
-void releaseConstructor(Constructor * constructor) {
-	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if(constructor == NULL) return;
-
-	releaseVariableDeclarationList(constructor->variableDeclarationList);
-	releaseBlock(constructor->block);
-	free(constructor);
 }
 
 /** 
