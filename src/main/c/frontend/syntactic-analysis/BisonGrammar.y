@@ -450,11 +450,16 @@
 
 		/** ===== Assignations ===== */
 		assignment_operation: 
-			NAME ASSIGN expression																						{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
+			NAME ASSIGN expression 																						{ $$ = AssignmentOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
+			| this_expression ASSIGN expression 																		{ $$ = AssignmentThisOperatorSemanticAction($1, $3, ASSIGN_TYPE); }
 			| NAME ADD_ASSIGN expression																				{ $$ = AssignmentOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
+			| this_expression ADD_ASSIGN expression																		{ $$ = AssignmentThisOperatorSemanticAction($1, $3, ADD_ASSIGN_TYPE); }
 			| NAME SUB_ASSIGN expression																				{ $$ = AssignmentOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
+			| this_expression SUB_ASSIGN expression																		{ $$ = AssignmentThisOperatorSemanticAction($1, $3, SUB_ASSIGN_TYPE); }
 			| NAME MUL_ASSIGN expression																				{ $$ = AssignmentOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
-			| NAME OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression 												{ $$ = ArrayAssignmentOperatorSemanticAction($1, $3, $6); }
+			| this_expression MUL_ASSIGN expression																		{ $$ = AssignmentThisOperatorSemanticAction($1, $3, MUL_ASSIGN_TYPE); }
+			| NAME OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression												{ $$ = ArrayAssignmentOperatorSemanticAction($1, $3, $6); }
+			| this_expression OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression									{ $$ = ArrayAssignmentThisOperatorSemanticAction($1, $3, $6); }
 			;
 	// ------------------ [ Comparasions ] -----------------------
 		comparator_expression: 	factor[left] GREATER factor[right]														{ $$ = ComparatorExpressionSemanticAction($left, $right, GREATER_TYPE); }

@@ -251,6 +251,7 @@ struct AssignmentOperation {
 		char * name;
 		VariableDeclaration * variableDeclaration;
 	};
+	Expression * thisExpr;
 	Expression * expression;
 	AssignmentOperatorType assignmentOperator;
 	Expression * index;

@@ -222,6 +222,24 @@ AssignmentOperation * AssignmentDeclarationSemanticAction(VariableDeclaration * 
  * @return A pointer to the created assignment operation.
  */
 AssignmentOperation * AssignmentOperatorSemanticAction(char * name, Expression * expression, AssignmentOperatorType assignmentOperatorType);
+
+/**
+ * Creates an assignment operation with a this_expression as lvalue, an expression as rvalue, and assignment operator type.
+ * @param thisExpr The this_expression (Expression*)
+ * @param expression The expression to assign.
+ * @param assignmentOperatorType The type of assignment operator.
+ * @return A pointer to the created assignment operation.
+ */
+AssignmentOperation * AssignmentThisOperatorSemanticAction(Expression * thisExpr, Expression * expression, AssignmentOperatorType assignmentOperatorType);
+
+/**
+ * Creates an assignment operation for an array with a this_expression as lvalue.
+ * @param thisExpr The this_expression (Expression*)
+ * @param index The index expression.
+ * @param value The value to assign.
+ * @return A pointer to the created assignment operation.
+ */
+AssignmentOperation * ArrayAssignmentThisOperatorSemanticAction(Expression * thisExpr, Expression * index, Expression * value);
 #pragma endregion
 // ========================================================
 
